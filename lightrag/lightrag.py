@@ -1892,6 +1892,22 @@ class LightRAG:
                                 )
                             )
                             chunk_results = await entity_relation_task
+                            
+                            # Log extraction statistics
+                            try:
+                                total_entities = 0
+                                total_relations = 0
+                                for chunk_res in chunk_results:
+                                    if chunk_res and isinstance(chunk_res, tuple) and len(chunk_res) >= 2:
+                                        entities, relations = chunk_res[0], chunk_res[1]
+                                        if isinstance(entities, dict):
+                                            total_entities += len(entities)
+                                        if isinstance(relations, dict):
+                                            total_relations += len(relations)
+                                logger.info(f"Document Extraction Stats: Found {total_entities} entities and {total_relations} relations (raw count before merging) in {len(chunks)} chunks for file: {file_path}")
+                            except Exception as e:
+                                logger.warning(f"Failed to calculate extraction stats: {e}")
+
                             file_extraction_stage_ok = True
 
                         except Exception as e:

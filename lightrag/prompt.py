@@ -57,14 +57,17 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
 8.  **Completion Signal:** Output the literal string `{completion_delimiter}` only after all entities and relationships, following all criteria, have been completely extracted and outputted.
 
 9.  **Entity Value Filtering (CRITICAL):**
-    *   **Extract ONLY named entities with unique identifiers.** Do NOT extract generic category nouns or common type words.
-        *   Extract: "青花缠枝莲纹梅瓶" (specific artifact name), "景德镇官窑" (specific kiln name), "永乐年间" (specific period)
-        *   Do NOT extract: "盘", "碗", "壶", "罐" (generic object types), "瓷器" (generic category), "造型" (abstract concept)
-        *   Do NOT extract ceramic category names: "白瓷", "青瓷", "黑瓷", "青花瓷", "粉彩瓷", "釉里红" etc. These are ceramic classification terms, not specific artifacts.
-    *   **For enumerated lists:** When text contains lists like "盘、碗、壶、罐、桶", do NOT extract each item as a separate entity. These are generic descriptions, not named entities worth tracking.
-    *   **For time periods/dynasties:** Only extract as entities when the text specifically discusses their unique characteristics. Do NOT create relationships between a dynasty/period and every object mentioned in that context.
-    *   **Quality over quantity:** It is better to extract 3-5 high-value entities than 20+ low-value generic terms. Focus on entities that would be meaningful nodes in a knowledge graph.
-    *   **Relationship restraint:** Only create relationships that convey meaningful, specific connections. Avoid creating relationships like "朝代 - 包含 - 普通器物类型".
+    *   **Rule 1: NO Generic Categories as Nodes (Avoid Supernode Explosion):**
+        *   **Strictly PROHIBITED**: Do NOT create entities for broad categories like "瓷器" (Porcelain), "玉器" (Jade), "文物" (Artifact), "博物馆" (Museum), "造型" (Shape), "白瓷", "青瓷", "黑瓷", "青花瓷", "粉彩瓷", "釉里红".
+        *   **Mandatory Solution**: You MUST incorporate these categorical/type details into the **description** of the specific entity.
+            *   *Bad*: Entity: "青花瓶", Relation: "is a", Target: "瓷器".
+            *   *Good*: Entity: "青花瓶", Description: "一件明代的精美**瓷器**，属于青花瓷类别..."
+    *   **Rule 2: Allow Contextual Supernodes (Time, Location, Person, Event):**
+        *   **Allowed**: You MAY extract specific **Dynasties/Periods** (e.g., "明代", "永乐年间"), **Institutions** (e.g., "故宫博物院"), **People** (e.g., "乾隆皇帝", "唐英"), and **Events** (e.g., "郑和下西洋") as entities.
+        *   **Reason**: These serve as valuable hubs for grouping related artifacts (Community Detection).
+    *   **Rule 3: Extract ONLY Named Entities:**
+        *   Extract specific, unique identifiers: "青花缠枝莲纹梅瓶" (Specific Artifact), "景德镇御窑" (Specific Kiln).
+        *   Do NOT extract lists of generic items mentioned in passing (e.g., "bowls, plates, cups").
 
 ---Examples---
 {examples}
@@ -283,6 +286,10 @@ Consider the conversation history if provided to maintain conversational flow an
   - Carefully determine the user's query intent in the context of the conversation history to fully understand the user's information need.
   - Scrutinize both `Knowledge Graph Data` and `Document Chunks` in the **Context**. Identify and extract all pieces of information that are directly relevant to answering the user query.
   - Weave the extracted facts into a coherent and logical response. Your own knowledge must ONLY be used to formulate fluent sentences and connect ideas, NOT to introduce any external information.
+  - **MANDATORY REQUIREMENT**: You MUST include a section titled "### 历史故事脉络" (Historical Story Thread). In this section, structure the information chronologically (from earliest to latest) to tell a cohesive story.
+    - For each time period or key event, integrate **Time**, **People**, and **Event** into a single narrative flow.
+    - Do NOT separate People, Events, and Time into isolated lists. Instead, describe *who* did *what* at *what time* within the narrative.
+    - Ensure the chronological order is strictly followed (e.g., dynasties should be in order: 唐 -> 宋 -> 元 -> 明 -> 清).
   - Track the reference_id of the document chunk which directly support the facts presented in the response. Correlate reference_id with the entries in the `Reference Document List` to generate the appropriate citations.
   - Generate a references section at the end of the response. Each reference document must directly support the facts presented in the response.
   - Do not generate anything after the reference section.

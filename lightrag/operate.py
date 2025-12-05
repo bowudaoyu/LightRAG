@@ -402,6 +402,45 @@ async def _handle_single_entity_extraction(
             )
             return None
 
+        # Check against prohibited entities (Generic Categories that should be attributes)
+        PROHIBITED_ENTITIES = {
+            "瓷器",
+            "玉器",
+            "文物",
+            "博物馆",
+            "造型",
+            "青铜器",
+            "书画",
+            "漆器",
+            "家具",
+            "陶瓷",
+            "陶器",
+            "石刻",
+            "金银器",
+            "玺印",
+            "钱币",
+            "织绣",
+            "绘画",
+            "法书",
+            "碑帖",
+            "铭刻",
+            "文具",
+            "生活用品",
+            "生产工具",
+            "建筑构件",
+            "雕塑",
+            "工艺品",
+            "杂项",
+            "器物",
+            "object",
+            "entity",
+            "unknown",
+            "n/a",
+        }
+        if entity_name in PROHIBITED_ENTITIES:
+            logger.info(f"Skipping prohibited generic entity: {entity_name}")
+            return None
+
         # Process entity type with same cleaning pipeline
         entity_type = sanitize_and_normalize_extracted_text(
             record_attributes[2], remove_inner_quotes=True
