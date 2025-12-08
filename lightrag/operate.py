@@ -3154,7 +3154,13 @@ async def kg_query(
     )
 
     # Build system prompt
-    sys_prompt_temp = system_prompt if system_prompt else PROMPTS["rag_response"]
+    if system_prompt:
+        sys_prompt_temp = system_prompt
+    elif response_type == "Gossip":
+        sys_prompt_temp = PROMPTS["artifact_gossip_response"]
+    else:
+        sys_prompt_temp = PROMPTS["rag_response"]
+
     sys_prompt = sys_prompt_temp.format(
         response_type=response_type,
         user_prompt=user_prompt,

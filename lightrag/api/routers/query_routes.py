@@ -454,6 +454,101 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
             raise HTTPException(status_code=500, detail=str(e))
 
     @router.post(
+        "/gossip",
+        response_model=QueryResponse,
+        dependencies=[Depends(combined_auth)],
+        responses={
+            200: {
+                "description": "Successful Gossip RAG query response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "response": {
+                                    "type": "string",
+                                    "description": "The generated gossip response",
+                                },
+                                "references": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "reference_id": {"type": "string"},
+                                            "file_path": {"type": "string"},
+                                            "content": {
+                                                "type": "array",
+                                                "items": {"type": "string"},
+                                                "description": "List of chunk contents",
+                                            },
+                                        },
+                                    },
+                                    "description": "Reference list",
+                                },
+                            },
+                            "required": ["response"],
+                        },
+                    }
+                },
+            },
+        },
+    )
+    async def gossip(request: QueryRequest):
+        """
+        Gossip-style RAG query endpoint.
+
+        This endpoint behaves like /query but returns the response in a "Gossip" style
+        using the artifact_gossip_response prompt.
+        """
+        try:
+            # Create params with stream=False
+            param = request.to_query_params(False)
+            param.stream = False
+            
+            # Force response_type to "Gossip" to trigger the artifact_gossip_response prompt
+            param.response_type = "Gossip"
+
+            # Execute query
+            result = await rag.aquery_llm(request.query, param=param)
+
+            # Extract response and references
+            llm_response = result.get("llm_response", {})
+            data = result.get("data", {})
+            references = data.get("references", [])
+            response_content = llm_response.get("content", "")
+            
+            if not response_content:
+                response_content = "No relevant context found for the gossip."
+
+            # Enrich references if needed
+            if request.include_references and request.include_chunk_content:
+                chunks = data.get("chunks", [])
+                ref_id_to_content = {}
+                for chunk in chunks:
+                    ref_id = chunk.get("reference_id", "")
+                    content = chunk.get("content", "")
+                    if ref_id and content:
+                        ref_id_to_content.setdefault(ref_id, []).append(content)
+                
+                enriched_references = []
+                for ref in references:
+                    ref_copy = ref.copy()
+                    ref_id = ref.get("reference_id", "")
+                    if ref_id in ref_id_to_content:
+                        ref_copy["content"] = ref_id_to_content[ref_id]
+                    enriched_references.append(ref_copy)
+                references = enriched_references
+
+            return QueryResponse(
+                response=response_content,
+                references=references if request.include_references else None
+            )
+
+        except Exception as e:
+            logger.error(f"Error processing gossip: {str(e)}", exc_info=True)
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @router.post(
         "/query/stream",
         dependencies=[Depends(combined_auth)],
         responses={
