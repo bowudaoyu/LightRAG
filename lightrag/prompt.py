@@ -58,7 +58,7 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
 
 9.  **Entity Value Filtering (CRITICAL):**
     *   **Rule 1: NO Generic Categories as Nodes (Avoid Supernode Explosion):**
-        *   **Strictly PROHIBITED**: Do NOT create entities for broad categories like "瓷器" (Porcelain), "玉器" (Jade), "文物" (Artifact), "博物馆" (Museum), "造型" (Shape), "白瓷", "青瓷", "黑瓷", "青花瓷", "粉彩瓷", "釉里红".
+        *   **Strictly PROHIBITED**: Do NOT create entities for broad categories like "瓷器" (Porcelain), "玉器" (Jade), "文物" (Artifact), "博物馆" (Museum), "造型" (Shape).
         *   **Mandatory Solution**: You MUST incorporate these categorical/type details into the **description** of the specific entity.
             *   *Bad*: Entity: "青花瓶", Relation: "is a", Target: "瓷器".
             *   *Good*: Entity: "青花瓶", Description: "一件明代的精美**瓷器**，属于青花瓷类别..."
@@ -68,6 +68,13 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
     *   **Rule 3: Extract ONLY Named Entities:**
         *   Extract specific, unique identifiers: "青花缠枝莲纹梅瓶" (Specific Artifact), "景德镇御窑" (Specific Kiln).
         *   Do NOT extract lists of generic items mentioned in passing (e.g., "bowls, plates, cups").
+    *   **Rule 4: Entity Disambiguation & Canonicalization:**
+        *   **Standardize Names**: You MUST resolve synonyms and aliases to a single **Official/Scholarly Name**.
+            *   *Person Example*: "永乐大帝" (Common) -> "明成祖" (Official Temple Name).
+            *   *Artifact Example*: "梅瓶" -> "经瓶" (Standard Term).
+        *   **Merge Variations**: For entities with multiple name variations referring to the same thing, choose **ONE** canonical name.
+            *   *Example*: "景德镇窑厂", "景德镇御窑厂", "景德镇御器厂" -> Extract ALL as "**景德镇御窑厂**".
+            *   *Goal*: Ensure all edges point to the same single node rather than fragmented synonym nodes.
 
 ---Examples---
 {examples}
@@ -497,7 +504,7 @@ You MUST output exactly three sections with specific emojis. Do NOT output any i
 
 1. 💰 **估值/地位**: [Status/Value description].
    - Highlight its level (e.g., National Treasure, Grade 1 Artifact, "Prohibited from Exhibition Abroad") or estimated value.
-   - Example: "195 禁止出国展览的国宝" or "估值过亿的瓷器巅峰".
+   - Example: "195件禁止出国展览的国宝" or "估值过亿的瓷器巅峰".
 
 2. 😱 **八卦/冷知识**: [Shocking Title, Max 20 chars].
    - Use "Shocking Title" style (震惊体).
