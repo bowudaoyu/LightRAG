@@ -3207,12 +3207,24 @@ async def kg_query(
         )
         response = cached_response
     else:
+        # Determine extra kwargs based on response type
+        extra_kwargs = {}
+        if query_param.response_type == "Gossip":
+            extra_kwargs = {"extra_body": {
+                "enable_search": True,
+                "search_options": {
+                    "forced_search": True,  # 强制联网搜索
+                    "search_strategy": "max"  # 最大可能搜索
+                }
+            }}
+
         response = await use_model_func(
             user_query,
             system_prompt=sys_prompt,
             history_messages=query_param.conversation_history,
             enable_cot=True,
             stream=query_param.stream,
+            **extra_kwargs,
         )
 
         if hashing_kv and hashing_kv.global_config.get("enable_llm_cache"):
