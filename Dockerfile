@@ -8,6 +8,9 @@ WORKDIR /app
 # Copy frontend source code
 COPY lightrag_webui/ ./lightrag_webui/
 
+# Set Bun registry to Taobao mirror
+RUN bun config set registry https://registry.npmmirror.com/
+
 # Build frontend assets for inclusion in the API package
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     cd lightrag_webui \
@@ -20,17 +23,26 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 ENV DEBIAN_FRONTEND=noninteractive
 ENV UV_SYSTEM_PYTHON=1
 ENV UV_COMPILE_BYTECODE=1
+# Use domestic mirror for UV and pip
+ENV UV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
+ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 
 WORKDIR /app
 
 # Install system deps (Rust is required by some wheels)
-RUN apt-get update \
+# Replace Debian sources with TUNA mirror
+RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
         build-essential \
         pkg-config \
     && rm -rf /var/lib/apt/lists/* \
-    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal --no-modify-path
+# Set Rustup mirror
+ENV RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+ENV RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+
 
 ENV PATH="/root/.cargo/bin:/root/.local/bin:${PATH}"
 
@@ -60,6 +72,7 @@ RUN --mount=type=cache,target=/root/.local/share/uv \
 # Prepare offline cache directory and pre-populate tiktoken data
 # Use uv run to execute commands from the virtual environment
 RUN mkdir -p /app/data/tiktoken \
+    && export TIKTOKEN_CACHE_DIR=/app/data/tiktoken \
     && uv run lightrag-download-cache --cache-dir /app/data/tiktoken || status=$?; \
     if [ -n "${status:-}" ] && [ "$status" -ne 0 ] && [ "$status" -ne 2 ]; then exit "$status"; fi
 
@@ -72,6 +85,9 @@ WORKDIR /app
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 ENV UV_SYSTEM_PYTHON=1
+# Use domestic mirror for UV and pip in final stage
+ENV UV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
+ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Copy installed packages and application code
 COPY --from=builder /root/.local /root/.local
