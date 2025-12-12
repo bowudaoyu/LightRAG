@@ -96,7 +96,7 @@ DEFAULT_TIMEOUT = 300
 
 # Default llm and embedding timeout
 DEFAULT_LLM_TIMEOUT = 180
-DEFAULT_EMBEDDING_TIMEOUT = 30
+DEFAULT_EMBEDDING_TIMEOUT = 600
 
 # Logging configuration defaults
 DEFAULT_LOG_MAX_BYTES = 10485760  # Default 10MB
