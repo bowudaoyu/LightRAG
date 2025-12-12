@@ -8,11 +8,10 @@ WORKDIR /app
 # Copy frontend source code
 COPY lightrag_webui/ ./lightrag_webui/
 
-# Set Bun registry to Taobao mirror
-RUN bun config set registry https://registry.npmmirror.com/
-
 # Build frontend assets for inclusion in the API package
-RUN --mount=type=cache,target=/root/.bun/install/cache \
+# Set Bun registry to Taobao mirror by creating bunfig.toml
+RUN echo '[install]\nregistry = "https://registry.npmmirror.com/"' > /root/.bunfig.toml \
+    && --mount=type=cache,target=/root/.bun/install/cache \
     cd lightrag_webui \
     && bun install --frozen-lockfile \
     && bun run build
