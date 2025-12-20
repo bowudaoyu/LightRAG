@@ -444,12 +444,14 @@ Given a user query, your task is to extract two distinct types of keywords:
 2. **Source of Truth**: All keywords must be explicitly derived from the user query, with both high-level and low-level keyword categories are required to contain content.
 3. **Concise & Meaningful**: Keywords should be concise words or meaningful phrases. Prioritize multi-word phrases when they represent a single concept. For example, from "latest financial report of Apple Inc.", you should extract "latest financial report" and "Apple Inc." rather than "latest", "financial", "report", and "Apple".
 4. **Handle Edge Cases**: For queries that are too simple, vague, or nonsensical (e.g., "hello", "ok", "asdfghjkl"), you must return a JSON object with empty lists for both keyword types.
+5. **Output Language: {language}** - All keywords MUST be output in this language. Do NOT translate to other languages.
 
 ---Examples---
 {examples}
 
 ---Real Data---
 User Query: {query}
+Required Output Language: {language}
 
 ---Output---
 Output:"""
@@ -485,6 +487,17 @@ Output:
 {
   "high_level_keywords": ["Education", "Poverty reduction", "Socioeconomic development"],
   "low_level_keywords": ["School access", "Literacy rates", "Job training", "Income inequality"]
+}
+
+""",
+    """Example 4 (Chinese - 中文示例):
+
+Query: "越王勾践剑的历史价值是什么？"
+
+Output:
+{
+  "high_level_keywords": ["历史价值", "文物研究", "古代兵器"],
+  "low_level_keywords": ["越王勾践剑", "春秋时期", "青铜剑", "越国"]
 }
 
 """,

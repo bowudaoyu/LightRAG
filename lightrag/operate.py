@@ -3345,6 +3345,7 @@ async def extract_keywords_only(
     examples = "\n".join(PROMPTS["keywords_extraction_examples"])
 
     language = global_config["addon_params"].get("language", DEFAULT_SUMMARY_LANGUAGE)
+    logger.debug(f"[extract_keywords] language={language}, addon_params={global_config.get('addon_params', {})}")
 
     # 3. Build the keyword-extraction prompt
     kw_prompt = PROMPTS["keywords_extraction"].format(

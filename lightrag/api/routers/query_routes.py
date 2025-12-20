@@ -497,31 +497,63 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
         """
         Gossip-style RAG query endpoint.
 
-        This endpoint behaves like /query but returns the response in a "Gossip" style
-        using the artifact_gossip_response prompt.
+        This endpoint generates "gossip" style content about artifacts/items.
+        It first tries to retrieve context from the knowledge base, then always
+        calls LLM to generate the response - with or without KB context.
         """
-        try:
-            # Create params with stream=False
-            param = request.to_query_params(False)
-            param.stream = False
-            
-            # Force response_type to "Gossip" to trigger the artifact_gossip_response prompt
-            param.response_type = "Gossip"
+        from lightrag.prompt import PROMPTS
+        from functools import partial
 
-            # Execute query
+        try:
+            # Step 1: Try to get context from knowledge base
+            param = request.to_query_params(False)
+            param.only_need_context = True  # Only retrieve context, don't call LLM yet
+            param.stream = False
+
             result = await rag.aquery_llm(request.query, param=param)
 
-            # Extract response and references
+            # Extract context and references
             llm_response = result.get("llm_response", {})
             data = result.get("data", {})
             references = data.get("references", [])
-            response_content = llm_response.get("content", "")
-            
-            if not response_content:
-                response_content = "No relevant context found for the gossip."
+            context_content = llm_response.get("content", "")
+
+            # Determine if we have valid context from KB
+            # When only_need_context=True, no LLM is called, so we just check:
+            # 1. status is not failure (context retrieval succeeded)
+            # 2. context_content is not empty
+            has_kb_context = (
+                result.get("status") != "failure"
+                and bool(context_content)
+            )
+
+            # Step 2: Build prompt and call LLM (always, regardless of KB context)
+            if has_kb_context:
+                context_data = context_content
+                logger.info("[gossip] Using knowledge base context")
+            else:
+                context_data = "（知识库中暂无相关信息，请基于你的通用知识为用户提供有趣的八卦内容）"
+                references = []  # No references when no KB context
+                logger.info("[gossip] No KB context, using LLM built-in knowledge")
+
+            # Format the gossip prompt
+            gossip_prompt = PROMPTS["artifact_gossip_response"].format(
+                user_prompt=request.query,
+                context_data=context_data,
+            )
+
+            # Call LLM to generate gossip response
+            use_llm_func = rag.llm_model_func
+            use_llm_func = partial(use_llm_func, _priority=5)
+
+            response_content = await use_llm_func(
+                request.query,
+                system_prompt=gossip_prompt,
+                stream=False,
+            )
 
             # Enrich references if needed
-            if request.include_references and request.include_chunk_content:
+            if has_kb_context and request.include_references and request.include_chunk_content:
                 chunks = data.get("chunks", [])
                 ref_id_to_content = {}
                 for chunk in chunks:
@@ -529,7 +561,7 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
                     content = chunk.get("content", "")
                     if ref_id and content:
                         ref_id_to_content.setdefault(ref_id, []).append(content)
-                
+
                 enriched_references = []
                 for ref in references:
                     ref_copy = ref.copy()
