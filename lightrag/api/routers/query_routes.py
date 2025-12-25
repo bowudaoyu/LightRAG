@@ -580,6 +580,389 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
             logger.error(f"Error processing gossip: {str(e)}", exc_info=True)
             raise HTTPException(status_code=500, detail=str(e))
 
+    # ========================================================================
+    # 新版智能气泡端点
+    # ========================================================================
+
+    class BubbleRequest(BaseModel):
+        """智能气泡请求模型"""
+        query: str = Field(
+            min_length=1,
+            description="文物名称",
+        )
+        artifact_type: Optional[str] = Field(
+            default=None,
+            description="文物类型（如瓷器、青铜器、书画等）。如不提供，将尝试自动推断。",
+        )
+        mode: Literal["local", "global", "hybrid", "naive", "mix"] = Field(
+            default="mix",
+            description="知识库检索模式",
+        )
+        top_k: Optional[int] = Field(
+            ge=1,
+            default=10,
+            description="检索的实体/关系数量",
+        )
+        include_references: bool = Field(
+            default=True,
+            description="是否返回参考来源",
+        )
+        include_detail: bool = Field(
+            default=False,
+            description="是否返回详情内容（开发调试用，会增加响应时间）",
+        )
+
+    class BubbleItem(BaseModel):
+        """单个气泡"""
+        type: str = Field(description="话题类型")
+        emoji: str = Field(description="表情符号")
+        title: str = Field(description="气泡标题（10-15字）")
+        detail: Optional[str] = Field(default=None, description="详情内容（50-100字），需通过 /bubble/detail 接口获取")
+
+    class BubbleResponse(BaseModel):
+        """智能气泡响应模型"""
+        artifact_name: str = Field(description="文物名称")
+        artifact_type: str = Field(description="文物类型")
+        bubbles: List[BubbleItem] = Field(description="气泡列表")
+        references: Optional[List[Dict[str, Any]]] = Field(
+            default=None,
+            description="参考来源列表"
+        )
+
+    @router.post(
+        "/bubble",
+        response_model=BubbleResponse,
+        dependencies=[Depends(combined_auth)],
+        responses={
+            200: {
+                "description": "智能气泡响应（默认只包含标题，设置 include_detail=true 可同时返回详情）",
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "artifact_name": "越王勾践剑",
+                            "artifact_type": "兵器",
+                            "bubbles": [
+                                {
+                                    "type": "实战能力",
+                                    "emoji": "⚔️",
+                                    "title": "削20层纸不卷刃",
+                                    "detail": None
+                                },
+                                {
+                                    "type": "黑科技",
+                                    "emoji": "🔬",
+                                    "title": "防锈配方至今成谜",
+                                    "detail": None
+                                },
+                                {
+                                    "type": "名人八卦",
+                                    "emoji": "🎭",
+                                    "title": "卧薪尝胆那位的剑",
+                                    "detail": None
+                                }
+                            ],
+                            "references": [
+                                {"reference_id": "1", "file_path": "/docs/越王勾践剑.pdf"}
+                            ]
+                        }
+                    }
+                },
+            },
+        },
+    )
+    async def bubble(request: BubbleRequest):
+        """
+        智能气泡端点 - 根据文物类型智能生成3个有趣的气泡标题
+
+        特性：
+        - 根据文物类型（瓷器、青铜器、书画等）智能选择最合适的话题
+        - 每个气泡包含简短标题（10-15字）
+        - 支持15+种话题类型：值多少钱、谁用过它、现代等价物、鉴定秘籍等
+        - 默认不返回 detail（用户点击时通过 /bubble/detail 按需获取）
+        - 设置 include_detail=true 可同时返回详情（开发调试用，会增加响应时间）
+        """
+        from lightrag.prompt import (
+            PROMPTS,
+            select_bubble_topics,
+            format_topic_pool_for_prompt,
+            ARTIFACT_TOPIC_RULES
+        )
+        from functools import partial
+        import re
+
+        try:
+            # Step 1: 确定文物类型
+            artifact_type = request.artifact_type
+            if not artifact_type:
+                # 尝试从知识库推断文物类型，或使用默认值
+                artifact_type = "default"
+                # 可以通过简单规则推断
+                name = request.query
+                if any(kw in name for kw in ["剑", "刀", "戟", "矛", "弓", "弩", "戈"]):
+                    artifact_type = "兵器"
+                elif any(kw in name for kw in ["瓶", "碗", "盘", "壶", "罐", "杯", "盏", "窑"]):
+                    artifact_type = "瓷器"
+                elif any(kw in name for kw in ["鼎", "簋", "尊", "彝", "觥", "铜"]):
+                    artifact_type = "青铜器"
+                elif any(kw in name for kw in ["画", "帖", "卷", "图", "书法"]):
+                    artifact_type = "书画"
+                elif any(kw in name for kw in ["玉", "璧", "琮", "佩"]):
+                    artifact_type = "玉器"
+                elif any(kw in name for kw in ["金", "银"]):
+                    artifact_type = "金银器"
+                elif any(kw in name for kw in ["佛", "菩萨", "罗汉", "观音"]):
+                    artifact_type = "佛像"
+                elif any(kw in name for kw in ["印", "玺"]):
+                    artifact_type = "印章"
+                elif any(kw in name for kw in ["漆"]):
+                    artifact_type = "漆器"
+                elif any(kw in name for kw in ["钱", "币", "通宝"]):
+                    artifact_type = "钱币"
+                elif any(kw in name for kw in ["琴", "瑟", "笛", "箫", "钟", "磬"]):
+                    artifact_type = "乐器"
+
+            logger.info(f"[bubble] Artifact: {request.query}, Type: {artifact_type}, include_detail: {request.include_detail}")
+
+            # Step 2: 智能选择话题
+            selected_topics = select_bubble_topics(artifact_type, num_topics=3)
+            topic_pool_str = format_topic_pool_for_prompt(selected_topics)
+            logger.info(f"[bubble] Selected topics: {[t['type'] for t in selected_topics]}")
+
+            # Step 3: 从知识库检索上下文
+            param = QueryParam(
+                mode=request.mode,
+                top_k=request.top_k or 10,
+                only_need_context=True,
+                stream=False,
+            )
+
+            result = await rag.aquery_llm(request.query, param=param)
+
+            # 提取上下文和引用
+            llm_response = result.get("llm_response", {})
+            data = result.get("data", {})
+            references = data.get("references", [])
+            context_content = llm_response.get("content", "")
+
+            has_kb_context = (
+                result.get("status") != "failure"
+                and bool(context_content)
+            )
+
+            if has_kb_context:
+                context_data = context_content
+                logger.info("[bubble] Using knowledge base context")
+            else:
+                context_data = "（知识库中暂无相关信息，请基于你的通用知识生成内容）"
+                references = []
+                logger.info("[bubble] No KB context, using LLM built-in knowledge")
+
+            # Step 4: 构建 prompt 并调用 LLM
+            # 根据 include_detail 选择不同的 prompt
+            prompt_key = "artifact_bubble_response_with_detail" if request.include_detail else "artifact_bubble_response"
+            bubble_prompt = PROMPTS[prompt_key].format(
+                artifact_name=request.query,
+                artifact_type=artifact_type if artifact_type != "default" else "通用文物",
+                topic_pool=topic_pool_str,
+                context_data=context_data,
+            )
+
+            use_llm_func = rag.llm_model_func
+            use_llm_func = partial(use_llm_func, _priority=5)
+
+            response_content = await use_llm_func(
+                request.query,
+                system_prompt=bubble_prompt,
+                stream=False,
+            )
+
+            # Step 5: 解析 JSON 响应
+            # 尝试从响应中提取 JSON
+            json_match = re.search(r'```json\s*(.*?)\s*```', response_content, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(1)
+            else:
+                # 尝试直接解析整个响应
+                json_str = response_content.strip()
+                # 移除可能的前缀文字
+                if '{' in json_str:
+                    json_str = json_str[json_str.index('{'):]
+                if '}' in json_str:
+                    json_str = json_str[:json_str.rindex('}')+1]
+
+            try:
+                parsed_response = json.loads(json_str)
+                bubbles_data = parsed_response.get("bubbles", [])
+            except json.JSONDecodeError as e:
+                logger.warning(f"[bubble] Failed to parse JSON response: {e}")
+                # 如果解析失败，构造一个默认响应（不含 detail，detail 通过 /bubble/detail 接口获取）
+                bubbles_data = [
+                    {
+                        "type": topic["type"],
+                        "emoji": topic["emoji"],
+                        "title": f"关于{request.query}的{topic['type']}",
+                    }
+                    for topic in selected_topics
+                ]
+
+            # Step 6: 构造响应
+            bubbles = [
+                BubbleItem(
+                    type=b.get("type", "未知"),
+                    emoji=b.get("emoji", "💡"),
+                    title=b.get("title", ""),
+                    # 如果请求了 include_detail，则从 LLM 响应中获取 detail
+                    detail=b.get("detail") if request.include_detail else None
+                )
+                for b in bubbles_data[:3]  # 最多返回3个气泡
+            ]
+
+            return BubbleResponse(
+                artifact_name=request.query,
+                artifact_type=artifact_type if artifact_type != "default" else "通用文物",
+                bubbles=bubbles,
+                references=references if request.include_references else None
+            )
+
+        except Exception as e:
+            logger.error(f"Error processing bubble: {str(e)}", exc_info=True)
+            raise HTTPException(status_code=500, detail=str(e))
+
+    # ========================================================================
+    # 气泡详情端点 - 用户点击气泡时按需生成 detail
+    # ========================================================================
+
+    class BubbleDetailRequest(BaseModel):
+        """气泡详情请求模型"""
+        artifact_name: str = Field(
+            min_length=1,
+            description="文物名称",
+        )
+        artifact_type: Optional[str] = Field(
+            default=None,
+            description="文物类型（如瓷器、青铜器、书画等）",
+        )
+        topic_type: str = Field(
+            min_length=1,
+            description="话题类型（如：值多少钱、黑科技、名人八卦等）",
+        )
+        bubble_title: str = Field(
+            min_length=1,
+            description="气泡标题（用户点击的那个标题）",
+        )
+        mode: Literal["local", "global", "hybrid", "naive", "mix"] = Field(
+            default="mix",
+            description="知识库检索模式",
+        )
+        top_k: Optional[int] = Field(
+            ge=1,
+            default=10,
+            description="检索的实体/关系数量",
+        )
+
+    class BubbleDetailResponse(BaseModel):
+        """气泡详情响应模型"""
+        artifact_name: str = Field(description="文物名称")
+        topic_type: str = Field(description="话题类型")
+        bubble_title: str = Field(description="气泡标题")
+        detail: str = Field(description="详情内容（50-100字）")
+
+    @router.post(
+        "/bubble/detail",
+        response_model=BubbleDetailResponse,
+        dependencies=[Depends(combined_auth)],
+        responses={
+            200: {
+                "description": "气泡详情响应",
+                "content": {
+                    "application/json": {
+                        "example": {
+                            "artifact_name": "越王勾践剑",
+                            "topic_type": "实战能力",
+                            "bubble_title": "削20层纸不卷刃",
+                            "detail": "1965年出土时，考古人员用它轻松划破20多层纸，2500年前的剑至今锋利无比。剑身的菱形暗纹不是装饰，是古人独创的复合金属工艺，让剑既硬又韧。"
+                        }
+                    }
+                },
+            },
+        },
+    )
+    async def bubble_detail(request: BubbleDetailRequest):
+        """
+        气泡详情端点 - 用户点击气泡后按需生成详情内容
+
+        特性：
+        - 根据气泡标题和话题类型生成50-100字的详情内容
+        - 只在用户点击时才调用，节省 API 成本
+        - 从知识库检索相关上下文，确保内容准确
+        """
+        from lightrag.prompt import PROMPTS
+        from functools import partial
+
+        try:
+            # Step 1: 确定文物类型
+            artifact_type = request.artifact_type or "通用文物"
+
+            logger.info(f"[bubble/detail] Artifact: {request.artifact_name}, Topic: {request.topic_type}, Title: {request.bubble_title}")
+
+            # Step 2: 从知识库检索上下文
+            param = QueryParam(
+                mode=request.mode,
+                top_k=request.top_k or 10,
+                only_need_context=True,
+                stream=False,
+            )
+
+            result = await rag.aquery_llm(request.artifact_name, param=param)
+
+            # 提取上下文
+            llm_response = result.get("llm_response", {})
+            context_content = llm_response.get("content", "")
+
+            has_kb_context = (
+                result.get("status") != "failure"
+                and bool(context_content)
+            )
+
+            if has_kb_context:
+                context_data = context_content
+                logger.info("[bubble/detail] Using knowledge base context")
+            else:
+                context_data = "（知识库中暂无相关信息，请基于你的通用知识生成内容）"
+                logger.info("[bubble/detail] No KB context, using LLM built-in knowledge")
+
+            # Step 3: 构建 prompt 并调用 LLM
+            detail_prompt = PROMPTS["artifact_bubble_detail"].format(
+                artifact_name=request.artifact_name,
+                artifact_type=artifact_type,
+                topic_type=request.topic_type,
+                bubble_title=request.bubble_title,
+                context_data=context_data,
+            )
+
+            use_llm_func = rag.llm_model_func
+            use_llm_func = partial(use_llm_func, _priority=5)
+
+            detail_content = await use_llm_func(
+                request.bubble_title,
+                system_prompt=detail_prompt,
+                stream=False,
+            )
+
+            # 清理响应内容（去除可能的多余空白）
+            detail_content = detail_content.strip()
+
+            return BubbleDetailResponse(
+                artifact_name=request.artifact_name,
+                topic_type=request.topic_type,
+                bubble_title=request.bubble_title,
+                detail=detail_content
+            )
+
+        except Exception as e:
+            logger.error(f"Error processing bubble detail: {str(e)}", exc_info=True)
+            raise HTTPException(status_code=500, detail=str(e))
+
     @router.post(
         "/query/stream",
         dependencies=[Depends(combined_auth)],
