@@ -730,14 +730,14 @@ PROMPTS["artifact_bubble_response"] = """---角色---
 你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
 
 ---任务---
-为识别出的文物生成3个"气泡标题"，每个气泡只需要：
+为识别出的文物生成{bubble_count}个"气泡标题"，每个气泡只需要：
 - **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
 
 ---文物信息---
 名称：{artifact_name}
 类型：{artifact_type}
 
----话题方向（你必须按这3个方向生成气泡）---
+---话题方向（你必须按这些方向生成气泡）---
 {topic_pool}
 
 ---上下文（来自知识库）---
@@ -745,11 +745,10 @@ PROMPTS["artifact_bubble_response"] = """---角色---
 
 ---输出要求---
 严格按以下JSON格式输出，不要输出任何其他内容：
+bubbles 数量必须等于 {bubble_count}，不足时用通用方向补齐。
 ```json
 {{
   "bubbles": [
-    {{"type": "话题类型", "emoji": "表情", "title": "10-15字标题"}},
-    {{"type": "话题类型", "emoji": "表情", "title": "10-15字标题"}},
     {{"type": "话题类型", "emoji": "表情", "title": "10-15字标题"}}
   ]
 }}
@@ -824,7 +823,7 @@ PROMPTS["artifact_bubble_response_with_detail"] = """---角色---
 你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
 
 ---任务---
-为识别出的文物生成3个"气泡"，每个气泡包含：
+为识别出的文物生成{bubble_count}个"气泡"，每个气泡包含：
 - **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
 - **detail**: 50-100字的详情内容（解释标题背后的故事）
 
@@ -832,7 +831,7 @@ PROMPTS["artifact_bubble_response_with_detail"] = """---角色---
 名称：{artifact_name}
 类型：{artifact_type}
 
----话题方向（你必须按这3个方向生成气泡）---
+---话题方向（你必须按这些方向生成气泡）---
 {topic_pool}
 
 ---上下文（来自知识库）---
@@ -840,11 +839,10 @@ PROMPTS["artifact_bubble_response_with_detail"] = """---角色---
 
 ---输出要求---
 严格按以下JSON格式输出，不要输出任何其他内容：
+bubbles 数量必须等于 {bubble_count}，不足时用通用方向补齐。
 ```json
 {{
   "bubbles": [
-    {{"type": "话题类型", "emoji": "表情", "title": "10-15字标题", "detail": "50-100字详情"}},
-    {{"type": "话题类型", "emoji": "表情", "title": "10-15字标题", "detail": "50-100字详情"}},
     {{"type": "话题类型", "emoji": "表情", "title": "10-15字标题", "detail": "50-100字详情"}}
   ]
 }}
@@ -873,4 +871,3 @@ PROMPTS["artifact_bubble_response_with_detail"] = """---角色---
 }}
 ```
 """
-

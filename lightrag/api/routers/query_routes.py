@@ -611,6 +611,12 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
             default=False,
             description="是否返回详情内容（开发调试用，会增加响应时间）",
         )
+        bubble_count: int = Field(
+            default=3,
+            ge=1,
+            le=10,
+            description="气泡数量，默认 3，最大 10",
+        )
 
     class BubbleItem(BaseModel):
         """单个气泡"""
@@ -672,12 +678,13 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
     )
     async def bubble(request: BubbleRequest):
         """
-        智能气泡端点 - 根据文物类型智能生成3个有趣的气泡标题
+        智能气泡端点 - 根据文物类型智能生成气泡标题
 
         特性：
         - 根据文物类型（瓷器、青铜器、书画等）智能选择最合适的话题
         - 每个气泡包含简短标题（10-15字）
         - 支持15+种话题类型：值多少钱、谁用过它、现代等价物、鉴定秘籍等
+        - bubble_count 控制气泡数量，默认 3，最大 10
         - 默认不返回 detail（用户点击时通过 /bubble/detail 按需获取）
         - 设置 include_detail=true 可同时返回详情（开发调试用，会增加响应时间）
         """
@@ -721,10 +728,14 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
                 elif any(kw in name for kw in ["琴", "瑟", "笛", "箫", "钟", "磬"]):
                     artifact_type = "乐器"
 
-            logger.info(f"[bubble] Artifact: {request.query}, Type: {artifact_type}, include_detail: {request.include_detail}")
+            logger.info(
+                f"[bubble] Artifact: {request.query}, Type: {artifact_type}, "
+                f"include_detail: {request.include_detail}, bubble_count: {request.bubble_count}"
+            )
 
             # Step 2: 智能选择话题
-            selected_topics = select_bubble_topics(artifact_type, num_topics=3)
+            bubble_count = request.bubble_count or 3
+            selected_topics = select_bubble_topics(artifact_type, num_topics=bubble_count)
             topic_pool_str = format_topic_pool_for_prompt(selected_topics)
             logger.info(f"[bubble] Selected topics: {[t['type'] for t in selected_topics]}")
 
@@ -765,6 +776,7 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
                 artifact_type=artifact_type if artifact_type != "default" else "通用文物",
                 topic_pool=topic_pool_str,
                 context_data=context_data,
+                bubble_count=bubble_count,
             )
 
             use_llm_func = rag.llm_model_func
@@ -814,7 +826,7 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
                     # 如果请求了 include_detail，则从 LLM 响应中获取 detail
                     detail=b.get("detail") if request.include_detail else None
                 )
-                for b in bubbles_data[:3]  # 最多返回3个气泡
+                for b in bubbles_data[:bubble_count]  # 最多返回 bubble_count 个气泡
             ]
 
             return BubbleResponse(
