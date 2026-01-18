@@ -105,3 +105,32 @@ detail | string | 详情内容（50-100 字）
 
 ## 认证与依赖
 两个接口均挂载了 `Depends(combined_auth)`，是否要求认证取决于环境配置与认证实现。
+
+## 3) POST /bubble/detail/stream
+气泡详情流式返回（NDJSON），用于实时展示详情内容生成过程。
+
+### 请求体
+字段 | 类型 | 必填 | 说明
+--- | --- | --- | ---
+artifact_name | string | 是 | 文物名称（min_length=1）
+artifact_type | string | 否 | 文物类型（如瓷器、青铜器、书画等）
+topic_type | string | 是 | 话题类型（如“值多少钱”“黑科技”等）
+bubble_title | string | 是 | 用户点击的气泡标题
+mode | string | 否 | 知识库检索模式，默认 `mix`，可选 `local`/`global`/`hybrid`/`naive`/`mix`
+top_k | integer | 否 | 检索的实体/关系数量，默认 10，最小 1
+
+### 响应格式（NDJSON）
+每行一个 JSON 对象：
+- 首行：包含 `artifact_name` / `topic_type` / `bubble_title`
+- 后续：`{"detail": "..."}` 内容片段，或 `{"error": "..."}`
+
+### 示例响应
+```json
+{"artifact_name":"越王勾践剑","topic_type":"实战能力","bubble_title":"削20层纸不卷刃"}
+{"detail":"1965年出土时，考古人员用它轻松划破20多层纸，"}
+{"detail":"剑身的菱形暗纹不是装饰，是古人独创的复合金属工艺。"}
+```
+
+### 逻辑要点
+- 同 `/bubble/detail` 使用 `mode/top_k` 检索上下文，失败则用通用知识兜底。
+- 返回 `Content-Type: application/x-ndjson`，适合逐行解析。

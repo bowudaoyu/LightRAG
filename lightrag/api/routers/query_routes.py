@@ -879,6 +879,14 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
         bubble_title: str = Field(description="气泡标题")
         detail: str = Field(description="详情内容（50-100字）")
 
+    class BubbleDetailStreamChunk(BaseModel):
+        """气泡详情流式响应块模型（NDJSON）"""
+        artifact_name: Optional[str] = Field(default=None, description="文物名称")
+        topic_type: Optional[str] = Field(default=None, description="话题类型")
+        bubble_title: Optional[str] = Field(default=None, description="气泡标题")
+        detail: Optional[str] = Field(default=None, description="详情内容片段")
+        error: Optional[str] = Field(default=None, description="错误信息")
+
     @router.post(
         "/bubble/detail",
         response_model=BubbleDetailResponse,
@@ -973,6 +981,143 @@ def create_query_routes(rag, api_key: Optional[str] = None, top_k: int = 60):
 
         except Exception as e:
             logger.error(f"Error processing bubble detail: {str(e)}", exc_info=True)
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @router.post(
+        "/bubble/detail/stream",
+        dependencies=[Depends(combined_auth)],
+        responses={
+            200: {
+                "description": "气泡详情流式响应（NDJSON）",
+                "content": {
+                    "application/x-ndjson": {
+                        "schema": {
+                            "type": "string",
+                            "format": "ndjson",
+                            "description": "每行一个 JSON 对象。首行包含元信息，后续为 detail 片段或 error。",
+                            "example": (
+                                '{"artifact_name":"越王勾践剑","topic_type":"实战能力","bubble_title":"削20层纸不卷刃"}\n'
+                                '{"detail":"1965年出土时，考古人员用它轻松划破20多层纸，"}\n'
+                                '{"detail":"剑身菱形暗纹并非装饰，而是复合金属工艺的体现。"}'
+                            ),
+                        }
+                    }
+                },
+            },
+            500: {
+                "description": "Internal Server Error - Bubble detail streaming failed",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {"detail": {"type": "string"}},
+                        },
+                        "example": {"detail": "Failed to stream bubble detail"},
+                    }
+                },
+            },
+        },
+    )
+    async def bubble_detail_stream(request: BubbleDetailRequest):
+        """
+        气泡详情流式端点 - 以 NDJSON 格式返回详情内容片段
+
+        返回格式：
+        - 首行：包含 artifact_name/topic_type/bubble_title
+        - 后续行：{"detail": "..."} 或 {"error": "..."}
+        """
+        from lightrag.prompt import PROMPTS
+        from functools import partial
+        from fastapi.responses import StreamingResponse
+
+        try:
+            artifact_type = request.artifact_type or "通用文物"
+
+            logger.info(
+                "[bubble/detail/stream] Artifact: %s, Topic: %s, Title: %s",
+                request.artifact_name,
+                request.topic_type,
+                request.bubble_title,
+            )
+
+            param = QueryParam(
+                mode=request.mode,
+                top_k=request.top_k or 10,
+                only_need_context=True,
+                stream=False,
+            )
+
+            result = await rag.aquery_llm(request.artifact_name, param=param)
+
+            llm_response = result.get("llm_response", {})
+            context_content = llm_response.get("content", "")
+
+            has_kb_context = (
+                result.get("status") != "failure"
+                and bool(context_content)
+            )
+
+            if has_kb_context:
+                context_data = context_content
+                logger.info("[bubble/detail/stream] Using knowledge base context")
+            else:
+                context_data = "（知识库中暂无相关信息，请基于你的通用知识生成内容）"
+                logger.info("[bubble/detail/stream] No KB context, using LLM built-in knowledge")
+
+            detail_prompt = PROMPTS["artifact_bubble_detail"].format(
+                artifact_name=request.artifact_name,
+                artifact_type=artifact_type,
+                topic_type=request.topic_type,
+                bubble_title=request.bubble_title,
+                context_data=context_data,
+            )
+
+            use_llm_func = rag.llm_model_func
+            use_llm_func = partial(use_llm_func, _priority=5)
+
+            async def stream_generator():
+                header = {
+                    "artifact_name": request.artifact_name,
+                    "topic_type": request.topic_type,
+                    "bubble_title": request.bubble_title,
+                }
+                yield f"{json.dumps(header)}\n"
+
+                try:
+                    response = await use_llm_func(
+                        request.bubble_title,
+                        system_prompt=detail_prompt,
+                        stream=True,
+                    )
+
+                    if hasattr(response, "__aiter__"):
+                        async for chunk in response:
+                            if chunk:
+                                yield f"{json.dumps({'detail': chunk})}\n"
+                    else:
+                        detail_content = str(response).strip()
+                        if not detail_content:
+                            detail_content = "No detail content generated."
+                        yield f"{json.dumps({'detail': detail_content})}\n"
+                except Exception as e:
+                    logger.error(f"Streaming bubble detail error: {str(e)}")
+                    yield f"{json.dumps({'error': str(e)})}\n"
+
+            return StreamingResponse(
+                stream_generator(),
+                media_type="application/x-ndjson",
+                headers={
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive",
+                    "Content-Type": "application/x-ndjson",
+                    "X-Accel-Buffering": "no",
+                },
+            )
+        except Exception as e:
+            logger.error(
+                f"Error processing bubble detail stream: {str(e)}",
+                exc_info=True,
+            )
             raise HTTPException(status_code=500, detail=str(e))
 
     @router.post(
