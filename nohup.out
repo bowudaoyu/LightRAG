@@ -1,0 +1,2669 @@
+WARNING:root:>> Forcing workers=1 in uvicorn mode(Ignoring workers=2)
+
+LightRAG log file: /opt/LightRAG/lightrag.log
+
+[36m
+    ╔══════════════════════════════════════════════════════════════╗
+    ║                LightRAG Server v1.4.9.9/0259                 ║
+    ║         Fast, Lightweight RAG Server Implementation          ║
+    ╚══════════════════════════════════════════════════════════════╝
+    [0m
+[35m
+📡 Server Configuration:[0m
+[37m    ├─ Host: [0m[33m0.0.0.0[0m
+[37m    ├─ Port: [0m[33m8004[0m
+[37m    ├─ Workers: [0m[33m1[0m
+[37m    ├─ Timeout: [0m[33m300[0m
+[37m    ├─ CORS Origins: [0m[33m*[0m
+[37m    ├─ SSL Enabled: [0m[33mFalse[0m
+[37m    ├─ Ollama Emulating Model: [0m[33mlightrag:latest[0m
+[37m    ├─ Log Level: [0m[33mDEBUG[0m
+[37m    ├─ Verbose Debug: [0m[33mFalse[0m
+[37m    ├─ API Key: [0m[33mSet[0m
+[37m    └─ JWT Auth: [0m[33mEnabled[0m
+[35m
+📂 Directory Configuration:[0m
+[37m    ├─ Working Directory: [0m[33m/opt/LightRAG/rag_storage[0m
+[37m    └─ Input Directory: [0m[33m/opt/LightRAG/inputs[0m
+[35m
+🤖 LLM Configuration:[0m
+[37m    ├─ Binding: [0m[33mopenai[0m
+[37m    ├─ Host: [0m[33mhttps://dashscope.aliyuncs.com/compatible-mode/v1[0m
+[37m    ├─ Model: [0m[33mqwen3-max[0m
+[37m    ├─ Max Async for LLM: [0m[33m4[0m
+[37m    ├─ Summary Context Size: [0m[33m12000[0m
+[37m    ├─ LLM Cache Enabled: [0m[33mTrue[0m
+[37m    └─ LLM Cache for Extraction Enabled: [0m[33mTrue[0m
+[35m
+📊 Embedding Configuration:[0m
+[37m    ├─ Binding: [0m[33mopenai[0m
+[37m    ├─ Host: [0m[33mhttps://dashscope.aliyuncs.com/compatible-mode/v1[0m
+[37m    ├─ Model: [0m[33mtext-embedding-v4[0m
+[37m    └─ Dimensions: [0m[33m1024[0m
+[35m
+⚙️ RAG Configuration:[0m
+[37m    ├─ Summary Language: [0m[33mChinese[0m
+[37m    ├─ Entity Types: [0m[33m['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍'][0m
+[37m    ├─ Max Parallel Insert: [0m[33m2[0m
+[37m    ├─ Chunk Size: [0m[33m1200[0m
+[37m    ├─ Chunk Overlap Size: [0m[33m100[0m
+[37m    ├─ Cosine Threshold: [0m[33m0.2[0m
+[37m    ├─ Top-K: [0m[33m40[0m
+[37m    └─ Force LLM Summary on Merge: [0m[33m8[0m
+[35m
+💾 Storage Configuration:[0m
+[37m    ├─ KV Storage: [0m[33mPGKVStorage[0m
+[37m    ├─ Vector Storage: [0m[33mPGVectorStorage[0m
+[37m    ├─ Graph Storage: [0m[33mPGGraphStorage[0m
+[37m    ├─ Document Status Storage: [0m[33mPGDocStatusStorage[0m
+[37m    └─ Workspace: [0m[33m-[0m
+[32m
+✨ Server starting up...
+[0m
+[35m
+🌐 Server Access Information:[0m
+[37m    ├─ WebUI (local): [0m[33mhttp://localhost:8004[0m
+[37m    ├─ Remote Access: [0m[33mhttp://<your-ip-address>:8004[0m
+[37m    ├─ API Documentation (local): [0m[33mhttp://localhost:8004/docs[0m
+[37m    └─ Alternative Documentation (local): [0m[33mhttp://localhost:8004/redoc[0m
+[35m
+📝 Note:[0m
+[36m    Since the server is running on 0.0.0.0:
+    - Use 'localhost' or '127.0.0.1' for local access
+    - Use your machine's IP address for remote access
+    - To find your IP address:
+      • Windows: Run 'ipconfig' in terminal
+      • Linux/Mac: Run 'ifconfig' or 'ip addr' in terminal
+    [0m
+[33m
+⚠️  Security Notice:[0m
+[37m    API Key authentication is enabled.
+    Make sure to include the X-API-Key header in all your requests.
+    [0m
+[33m
+⚠️  Security Notice:[0m
+[37m    JWT authentication is enabled.
+    Make sure to login before making the request, and include the 'Authorization' in the header.
+    [0m
+INFO: Frontend build is up-to-date
+INFO: OpenAI LLM Options: {}
+DEBUG: Langfuse environment variables not configured, using standard OpenAI client
+DEBUG: Extracted from openai provider: max_token_size=8192, embedding_dim=1536
+INFO: Embedding config: binding=openai model=text-embedding-v4 embedding_dim=1024 max_token_size=8192
+INFO: Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+INFO: Embedding max_token_size: 8192 (from openai provider default)
+INFO: Reranking is enabled: gte-rerank-v2 using aliyun provider
+DEBUG: Process 2384259 Shared-Data created for Single Process
+DEBUG: LightRAG init with param:
+  working_dir = /opt/LightRAG/rag_storage,
+  kv_storage = PGKVStorage,
+  vector_storage = PGVectorStorage,
+  graph_storage = PGGraphStorage,
+  doc_status_storage = PGDocStatusStorage,
+  workspace = ,
+  log_level = None,
+  log_file_path = None,
+  top_k = 40,
+  chunk_top_k = 20,
+  max_entity_tokens = 6000,
+  max_relation_tokens = 8000,
+  max_total_tokens = 30000,
+  cosine_threshold = 0.2,
+  related_chunk_number = 5,
+  kg_chunk_pick_method = VECTOR,
+  entity_extract_max_gleaning = 1,
+  force_llm_summary_on_merge = 8,
+  chunk_token_size = 1200,
+  chunk_overlap_token_size = 100,
+  tokenizer = <lightrag.utils.TiktokenTokenizer object at 0x714381b197f0>,
+  tiktoken_model_name = gpt-4o-mini,
+  chunking_func = <function chunking_by_token_size at 0x714383daefc0>,
+  embedding_func = {'embedding_dim': 1024, 'func': <function create_app.<locals>.create_optimized_embedding_function.<locals>.optimized_embedding_function at 0x71438318b560>, 'max_token_size': 8192, 'send_dimensions': False},
+  embedding_token_limit = None,
+  embedding_batch_num = 10,
+  embedding_func_max_async = 8,
+  embedding_cache_config = {'enabled': False, 'similarity_threshold': 0.95, 'use_llm_check': False},
+  default_embedding_timeout = 600,
+  llm_model_func = <function create_app.<locals>.create_optimized_openai_llm_func.<locals>.optimized_openai_alike_model_complete at 0x714381e4ac00>,
+  llm_model_name = qwen3-max,
+  summary_max_tokens = 1200,
+  summary_context_size = 12000,
+  summary_length_recommended = 600,
+  llm_model_max_async = 4,
+  llm_model_kwargs = {},
+  default_llm_timeout = 180,
+  rerank_model_func = <function create_app.<locals>.server_rerank_func at 0x71438318b420>,
+  min_rerank_score = 0.0,
+  vector_db_storage_cls_kwargs = {'cosine_better_than_threshold': 0.2},
+  enable_llm_cache = True,
+  enable_llm_cache_for_entity_extract = True,
+  max_parallel_insert = 2,
+  max_graph_nodes = 1000,
+  max_source_ids_per_entity = 300,
+  max_source_ids_per_relation = 300,
+  source_ids_limit_method = FIFO,
+  max_file_paths = 100,
+  file_path_more_placeholder = truncated,
+  addon_params = {'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']},
+  auto_manage_storages_states = False,
+  cosine_better_than_threshold = 0.2,
+  ollama_server_infos = <lightrag.base.OllamaServerInfos object at 0x714381cef710>,
+  _storages_status = StoragesStatus.NOT_CREATED
+
+DEBUG: Captured embedding max_token_size: 8192
+INFO: WebUI assets mounted at /webui
+INFO: Started server process [2384259]
+INFO: Waiting for application startup.
+DEBUG: Default workspace set to: '' (empty means global)
+DEBUG: Process 2384259 Pipeline namespace 'pipeline_status' initialized
+INFO: PostgreSQL, Retry config: attempts=3, backoff=0.5s, backoff_max=5.0s, pool_close_timeout=5.0s
+INFO: PostgreSQL, VECTOR extension enabled
+INFO: PostgreSQL, Connected to database at localhost:5432/lightrag without SSL
+INFO: PostgreSQL, Create vector indexs, type: HNSW
+INFO: HNSW vector index idx_lightrag_vdb_chunks_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS
+INFO: HNSW vector index idx_lightrag_vdb_entity_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY
+INFO: HNSW vector index idx_lightrag_vdb_relation_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION
+DEBUG: Column LIGHTRAG_VDB_ENTITY.create_time is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_VDB_ENTITY.update_time is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_VDB_RELATION.create_time is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_VDB_RELATION.update_time is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_DOC_CHUNKS.create_time is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_DOC_CHUNKS.update_time is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_DOC_STATUS.created_at is already witimezone-free, no migration needed
+DEBUG: Column LIGHTRAG_DOC_STATUS.updated_at is already witimezone-free, no migration needed
+INFO: chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+INFO: cache_type column already exists in LIGHTRAG_LLM_CACHE table
+INFO: queryparam column already exists in LIGHTRAG_LLM_CACHE table
+INFO: mode column does not exist in LIGHTRAG_LLM_CACHE table
+INFO: Skipping migration: LIGHTRAG_VDB_CHUNKS already contains data.
+INFO: chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+INFO: llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+DEBUG: Column LIGHTRAG_VDB_ENTITY.entity_name already has correct type, no migration needed
+DEBUG: Column LIGHTRAG_VDB_RELATION.source_id already has correct type, no migration needed
+DEBUG: Column LIGHTRAG_VDB_RELATION.target_id already has correct type, no migration needed
+DEBUG: Column LIGHTRAG_DOC_CHUNKS.file_path already has correct type, no migration needed
+DEBUG: Column LIGHTRAG_VDB_CHUNKS.file_path already has correct type, no migration needed
+INFO: track_id column already exists in LIGHTRAG_DOC_STATUS table
+INFO: Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+INFO: metadata column already exists in LIGHTRAG_DOC_STATUS table
+INFO: error_msg column already exists in LIGHTRAG_DOC_STATUS table
+DEBUG: Index already exists: idx_lightrag_doc_status_workspace_status_updated_at
+DEBUG: Index already exists: idx_lightrag_doc_status_workspace_status_created_at
+DEBUG: Index already exists: idx_lightrag_doc_status_workspace_updated_at
+DEBUG: Index already exists: idx_lightrag_doc_status_workspace_created_at
+DEBUG: Index already exists: idx_lightrag_doc_status_workspace_id
+DEBUG: Index already exists: idx_lightrag_doc_status_workspace_file_path
+DEBUG: Table LIGHTRAG_FULL_ENTITIES already exists
+DEBUG: Table LIGHTRAG_FULL_RELATIONS already exists
+INFO: [default] PostgreSQL Graph initialized: graph_name='chunk_entity_relation'
+INFO: PostgreSQL, AGE extension enabled
+DEBUG: PostgreSQL, ignoring duplicate during execute: InvalidSchemaNameError('graph "chunk_entity_relation" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: InvalidSchemaNameError('label "base" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: InvalidSchemaNameError('label "DIRECTED" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "vertex_idx_node_id" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "edge_sid_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "edge_eid_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "edge_seid_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "directed_p_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "directed_eid_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "directed_sid_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "directed_seid_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "entity_p_idx" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "entity_idx_node_id" already exists')
+DEBUG: PostgreSQL, ignoring duplicate during execute: DuplicateTableError('relation "entity_node_id_gin_idx" already exists')
+DEBUG: All storage types initialized
+DEBUG: Full entities/relations data already exists, no migration needed
+INFO: Application startup complete.
+INFO: Uvicorn running on http://0.0.0.0:8004 (Press CTRL+C to quit)
+INFO: [bubble] Artifact: 清明上河图, Type: 书画, include_detail: False
+INFO: [bubble] Selected topics: ['名人八卦', '值多少钱', '命运多舛']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:7373a7b387aed1bb8d6b4c2393b52cbd)
+DEBUG: High-level keywords: ['艺术价值', '历史画卷', '宋代社会生活']
+DEBUG: Low-level  keywords: ['清明上河图', '张择端', '北宋', '风俗画']
+INFO: Embedding func: 8 new workers initialized (Timeouts: Func: 600s, Worker: 1200s, Health Check: 1215s)
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 清明上河图, 张择端, 北宋, 风俗画 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 14 relations
+INFO: Query edges: 艺术价值, 历史画卷, 宋代社会生活 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 26 entities, 24 relations, 20 vector chunks
+DEBUG: Before truncation: 26 entities, 24 relations
+INFO: After truncation: 26 entities, 24 relations
+DEBUG: Finding text chunks from 26 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=65, entity_info_count=26
+DEBUG: Vector similarity chunk selection: 26 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 26 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 26 chunks from 26 candidates
+INFO: Selecting 26 from 26 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 24 relations
+INFO: Find no additional relations-related chunks from 24 relations
+INFO: Round-robin merged chunks: 46 -> 41 (deduplicated 5)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 5, KG: 4135, Buffer: 200, Available for chunks: 24956
+DEBUG: Rerank request: 41 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 41 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 41)
+DEBUG: Token truncation: 19 chunks from 20 (chunk available tokens: 24956, source: mix)
+INFO: Final context: 26 entities, 24 relations, 19 chunks
+INFO: Final chunks S+F/O: E1/19 E1/3 C1/9 C1/3 C1/11 C1/20 C1/17 C1/14 E3/14 C1/15 C1/8 E3/2 C1/12 E2/16 E2/15 E2/17 C1/18 E2/13 E1/26
+DEBUG: [_build_context_str] Converting to user format: 26 entities, 24 relations, 19 chunks
+DEBUG: [convert_to_user_format] Formatted 19/19 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36953
+DEBUG: [_build_query_context] Raw data entities: 26, relationships: 24, chunks: 19
+INFO: [bubble] Using knowledge base context
+INFO: LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡标题"，每个气泡只需要：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+---文物信息-...
+DEBUG: Query: 清明上河图
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 205
+DEBUG: Response: ChatCompletion(id='chatcmpl-566f54eb-3d68-9777-950f-ea4ce905bc14', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:58182 - "POST /bubble HTTP/1.1" 200
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+INFO: 192.168.10.1:54196 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:40562 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:56122 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:37720 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:37720 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:37720 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:37730 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:37720 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:37730 - "GET /webui/favicon.png HTTP/1.1" 200
+INFO: 192.168.10.1:37730 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:34514 - "POST /login HTTP/1.1" 200
+INFO: 192.168.10.1:34514 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: 192.168.10.1:34524 - "GET /static/swagger-ui/swagger-ui.css HTTP/1.1" 200
+INFO: 192.168.10.1:34552 - "GET /static/swagger-ui/swagger-ui-bundle.js HTTP/1.1" 200
+DEBUG: [default] Retrieved 300 popular labels (limit: 300)
+INFO: 192.168.10.1:34520 - "GET /graph/label/popular?limit=300 HTTP/1.1" 200
+INFO: [default] Total nodes: 1852, Selected nodes: 1000
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1409
+INFO: 192.168.10.1:34536 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:34552 - "GET /openapi.json HTTP/1.1" 200
+INFO: 192.168.10.1:33432 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:33452 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:33466 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:33476 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:41022 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:41022 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:41024 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:41022 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:41028 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:41042 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:38282 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:38294 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:38282 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:38294 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:60304 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:60322 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:60328 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:60328 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:60340 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:49630 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:49630 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:39014 - "HEAD /webui/ HTTP/1.1" 200
+INFO: 192.168.10.1:39032 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:39034 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:39046 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:39056 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:39072 - "GET /webui/favicon.png HTTP/1.1" 200
+INFO: 192.168.10.1:58044 - "HEAD /webui/ HTTP/1.1" 200
+INFO: 192.168.10.1:49116 - "HEAD /webui/ HTTP/1.1" 200
+INFO: 192.168.10.1:50900 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:50914 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:55076 - "GET /graph/label/popular?limit=300 HTTP/1.1" 401
+INFO: 192.168.10.1:50562 - "GET /docs HTTP/1.1" 200
+INFO: 192.168.10.1:50564 - "GET /static/swagger-ui/swagger-ui-bundle.js HTTP/1.1" 200
+INFO: 192.168.10.1:50576 - "GET /docs HTTP/1.1" 200
+INFO: 192.168.10.1:50576 - "GET /static/swagger-ui/swagger-ui.css HTTP/1.1" 200
+INFO: 192.168.10.1:50590 - "GET /static/swagger-ui/swagger-ui-bundle.js HTTP/1.1" 200
+INFO: 192.168.10.1:38468 - "GET /webui/favicon.png HTTP/1.1" 200
+INFO: 192.168.10.1:50590 - "GET /openapi.json HTTP/1.1" 200
+INFO: 192.168.10.1:38478 - "GET /webui/favicon.png HTTP/1.1" 200
+INFO: 192.168.10.1:38486 - "POST /documents/upload HTTP/1.1" 200
+DEBUG: [default] Inserting 1 to full_docs
+DEBUG: [default] Inserting 1 to doc_status
+DEBUG: Stored 1 new unique documents
+INFO: Successfully extracted and enqueued file: 金瓯永固杯.md
+DEBUG: Moved file to enqueued directory: 金瓯永固杯.md -> 金瓯永固杯.md
+INFO: Processing 1 document(s)
+INFO: Extracting stage 1/1: 金瓯永固杯.md
+INFO: Processing d-id: doc-8b60b38f63a0100499572bcd2848357c
+DEBUG: [default] Inserting 1 to doc_status
+DEBUG: [default] Inserting 1 to chunks
+DEBUG: [default] Inserting 1 to text_chunks
+DEBUG: Cache missed(mode:default type:extract)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---Role---
+You are a Knowledge Graph Specialist responsible for extracting entities and relationships from the input text.
+---Instruct...
+DEBUG: Query: ---Task---
+Extract entities and relationships from the input text to be processed.
+---Instructions---
+1.  **Strict Adherence to Format:** Stri...
+DEBUG: ===== Sending Query to LLM =====
+INFO: 192.168.10.1:42098 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:42112 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:42132 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:42138 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:42138 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:42138 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:42140 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:35328 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:35328 - "GET /webui/logo.svg HTTP/1.1" 200
+DEBUG: Response content len: 1245
+DEBUG: Response: ChatCompletion(id='chatcmpl-312806b4-7ba7-9422-812e-ef06f6ebb5fc', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:extract:1e046e36f8db03136de0aed1163d0df0
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: Cache missed(mode:default type:extract)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 2
+DEBUG: System prompt: ---Role---
+You are a Knowledge Graph Specialist responsible for extracting entities and relationships from the input text.
+---Instruct...
+DEBUG: Query: ---Task---
+Based on the last extraction task, identify and extract any **missed or incorrectly formatted** entities and relationships from the ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 300
+DEBUG: Response: ChatCompletion(id='chatcmpl-f3d3a29e-4bd9-9e6f-bfff-cc33181e90db', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:extract:528872014301378c29ea51288c676b59
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: [default] Inserting 1 to text_chunks
+DEBUG: Updated chunk chunk-8b60b38f63a0100499572bcd2848357c with 2 cache keys (entity_extraction)
+INFO: Chunk 1 of 1 extracted 11 Ent + 12 Rel chunk-8b60b38f63a0100499572bcd2848357c
+INFO: Document Extraction Stats: Found 11 entities and 12 relations (raw count before merging) in 1 chunks for file: 金瓯永固杯.md
+INFO: Merging stage 1/1: 金瓯永固杯.md
+INFO: Phase 1: Processing 11 entities from doc-8b60b38f63a0100499572bcd2848357c (async: 8)
+DEBUG: Processing entity 金瓯永固杯
+DEBUG: Processing entity 清代
+DEBUG: Processing entity 乾隆年间
+DEBUG: Processing entity 清宫造办处
+DEBUG: Processing entity 金
+DEBUG: Processing entity 珍珠
+DEBUG: Processing entity 红宝石
+DEBUG: Processing entity 蓝宝石
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `乾隆年间` | 0+1
+DEBUG: Merged: `金瓯永固杯` | 0+1
+DEBUG: Merged: `清宫造办处` | 0+1
+INFO: Merged: `清代` | 1+1
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Merged: `红宝石` | 0+1
+INFO: Merged: `金` | 3+1
+DEBUG: Merged: `珍珠` | 0+1
+DEBUG: Merged: `蓝宝石` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 宝相花
+DEBUG: Processing entity 回纹
+DEBUG: Processing entity 乾隆皇帝
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+INFO: Merged: `乾隆皇帝` | 1+1
+DEBUG: Merged: `宝相花` | 0+1
+INFO: Merged: `回纹` | 1+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+INFO: Phase 2: Processing 12 relations from doc-8b60b38f63a0100499572bcd2848357c (async: 8)
+DEBUG: Processing relation ['乾隆年间', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `乾隆年间`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清宫造办处', '金瓯永固杯']
+DEBUG: Processing relation ['乾隆年间', '清代']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清宫造办处`~`金瓯永固杯` | 0+1
+DEBUG: Merged: `乾隆年间`~`清代` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['金', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `金`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['宝相花', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `宝相花`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['回纹', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `回纹`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['珍珠', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `珍珠`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['红宝石', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `红宝石`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['蓝宝石', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `蓝宝石`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['乾隆皇帝', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `乾隆皇帝`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['象首足', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `象首足`~`金瓯永固杯` | 0+1
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['金瓯永固杯', '龙耳']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `金瓯永固杯`~`龙耳` | 0+1
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+INFO: Phase 3: Updating final 13(11+2) entities and  12 relations from doc-8b60b38f63a0100499572bcd2848357c
+DEBUG: [default] Inserting 1 to full_entities
+DEBUG: [default] Inserting 1 to full_relations
+DEBUG: Updated entity-relation index for document doc-8b60b38f63a0100499572bcd2848357c: 13 entities (original: 11, added: 2), 12 relations
+INFO: Completed merging: 11 entities, 2 extra entities, 12 relations
+DEBUG: [default] Inserting 1 to doc_status
+INFO: In memory DB persist to disk
+INFO: Completed processing file 1/1: 金瓯永固杯.md
+INFO: Enqueued document processing pipeline stopped
+INFO: 192.168.10.1:33530 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: [default] Total nodes: 1861, Selected nodes: 1000
+INFO: 192.168.10.1:33530 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1404
+INFO: 192.168.10.1:33536 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:36108 - "GET /documents/paginated HTTP/1.1" 405
+INFO: 192.168.10.1:52718 - "GET /documents/upload HTTP/1.1" 405
+INFO: 192.168.10.1:37194 - "DELETE /documents/delete_document HTTP/1.1" 200
+INFO: Deleting document 1/1: doc-8b60b38f63a0100499572bcd2848357c
+INFO: Starting deletion process for document doc-8b60b38f63a0100499572bcd2848357c
+INFO: Collected 2 LLM cache entries for document doc-8b60b38f63a0100499572bcd2848357c
+INFO: Found 4 affected entities
+INFO: Found 0 affected relations
+DEBUG: [default] Inserting 4 to entity_chunks
+DEBUG: [default] Successfully deleted 1 vectors from chunks
+DEBUG: [default] Successfully deleted 1 records from text_chunks
+INFO: Successfully deleted 1 chunks from storage
+DEBUG: [default] Successfully deleted 24 vectors from relationships
+DEBUG: [default] Deleted edge from '乾隆年间' to '清代'
+DEBUG: [default] Deleted edge from '乾隆皇帝' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '金' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '金瓯永固杯' to '龙耳'
+DEBUG: [default] Deleted edge from '宝相花' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '蓝宝石' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '回纹' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '乾隆年间' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '象首足' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '红宝石' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '清宫造办处' to '金瓯永固杯'
+DEBUG: [default] Deleted edge from '珍珠' to '金瓯永固杯'
+DEBUG: [default] Successfully deleted 12 records from relation_chunks
+INFO: Successfully deleted 12 relations
+DEBUG: [default] Successfully deleted 9 vectors from entities
+DEBUG: [default] Successfully deleted 9 records from entity_chunks
+INFO: Successfully deleted 9 entities
+INFO: In memory DB persist to disk
+INFO: Rebuilding knowledge from 64 cached chunk extractions (parallel processing)
+INFO: Found 128 valid cache entries, 64 chunks with results
+INFO: Starting parallel rebuild of 4 entities and 0 relationships (async: 8)
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Cache missed(mode:default type:summary)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are a Knowledge Graph Specialist, proficient in data curation and synthesis.
+---Task---
+Your task is to synthesize a list of de...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Cache missed(mode:default type:summary)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are a Knowledge Graph Specialist, proficient in data curation and synthesis.
+---Task---
+Your task is to synthesize a list of de...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Cache missed(mode:default type:summary)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are a Knowledge Graph Specialist, proficient in data curation and synthesis.
+---Task---
+Your task is to synthesize a list of de...
+DEBUG: ===== Sending Query to LLM =====
+INFO: Rebuild `金` from 3 chunks
+DEBUG: Response content len: 343
+DEBUG: Response: ChatCompletion(id='chatcmpl-49b68d33-ae6c-9187-aeec-3001aedd7241', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:summary:626e70641f9517d15be236a62ece337c
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: [default] Inserting 1 to entities
+INFO: Rebuild `回纹` from 18 chunks
+DEBUG: Response content len: 324
+DEBUG: Response: ChatCompletion(id='chatcmpl-844be68e-ed86-93d2-8e8e-a399c688ed86', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:summary:b093caaa6a3dcbadc5bbd68ab88dc816
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Response content len: 409
+DEBUG: Response: ChatCompletion(id='chatcmpl-ae70c6f4-45c6-9a91-a059-405c82de0cfd', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:summary:fd7d454b5aa46e50b432a47c16b05a94
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: [default] Inserting 1 to entities
+INFO: Rebuild `清代` from 51 chunks
+INFO: Rebuild `乾隆皇帝` from 9 chunks
+INFO: KG rebuild completed: 4 entities and 0 relationships rebuilt successfully.
+DEBUG: [default] Successfully deleted 1 records from full_entities
+DEBUG: [default] Successfully deleted 1 records from full_relations
+DEBUG: [default] Successfully deleted 1 records from full_docs
+DEBUG: [default] Successfully deleted 1 records from doc_status
+DEBUG: [default] Successfully deleted 2 records from llm_response_cache
+INFO: Successfully deleted 2 LLM cache entries for document doc-8b60b38f63a0100499572bcd2848357c
+INFO: In memory DB persist to disk
+INFO: Document deleted 1/1: doc-8b60b38f63a0100499572bcd2848357c[金瓯永固杯.md]
+INFO: Successfully deleted enqueued file: 金瓯永固杯.md
+INFO: 192.168.10.1:46264 - "POST /documents/upload HTTP/1.1" 200
+DEBUG: [default] Inserting 1 to full_docs
+DEBUG: [default] Inserting 1 to doc_status
+DEBUG: Stored 1 new unique documents
+INFO: Successfully extracted and enqueued file: 金瓯永固杯.md
+DEBUG: Moved file to enqueued directory: 金瓯永固杯.md -> 金瓯永固杯.md
+INFO: Processing 1 document(s)
+INFO: Extracting stage 1/1: 金瓯永固杯.md
+INFO: Processing d-id: doc-4cd9270496aef70306b0e12910a143c3
+DEBUG: [default] Inserting 1 to doc_status
+DEBUG: [default] Inserting 2 to chunks
+DEBUG: [default] Inserting 2 to text_chunks
+DEBUG: Cache missed(mode:default type:extract)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---Role---
+You are a Knowledge Graph Specialist responsible for extracting entities and relationships from the input text.
+---Instruct...
+DEBUG: Query: ---Task---
+Extract entities and relationships from the input text to be processed.
+---Instructions---
+1.  **Strict Adherence to Format:** Stri...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Cache missed(mode:default type:extract)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---Role---
+You are a Knowledge Graph Specialist responsible for extracting entities and relationships from the input text.
+---Instruct...
+DEBUG: Query: ---Task---
+Extract entities and relationships from the input text to be processed.
+---Instructions---
+1.  **Strict Adherence to Format:** Stri...
+DEBUG: ===== Sending Query to LLM =====
+INFO: 192.168.10.1:37528 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: [default] Total nodes: 1852, Selected nodes: 1000
+INFO: 192.168.10.1:37550 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1409
+INFO: 192.168.10.1:37544 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:45694 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: 192.168.10.1:45684 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Total nodes: 1852, Selected nodes: 1000
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1409
+INFO: 192.168.10.1:45704 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+DEBUG: Response content len: 3269
+DEBUG: Response: ChatCompletion(id='chatcmpl-45663409-bfd6-99dc-8416-de1f57dc41ec', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:extract:d44b7a77a5af181690cdef1a1e421679
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: Cache missed(mode:default type:extract)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 2
+DEBUG: System prompt: ---Role---
+You are a Knowledge Graph Specialist responsible for extracting entities and relationships from the input text.
+---Instruct...
+DEBUG: Query: ---Task---
+Based on the last extraction task, identify and extract any **missed or incorrectly formatted** entities and relationships from the ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 3454
+DEBUG: Response: ChatCompletion(id='chatcmpl-e53cd537-0086-90db-ae0b-f97bedd44e9e', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:extract:061b1721f1b0bc317753c5ea2f588958
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: Cache missed(mode:default type:extract)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 2
+DEBUG: System prompt: ---Role---
+You are a Knowledge Graph Specialist responsible for extracting entities and relationships from the input text.
+---Instruct...
+DEBUG: Query: ---Task---
+Based on the last extraction task, identify and extract any **missed or incorrectly formatted** entities and relationships from the ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 1293
+DEBUG: Response: ChatCompletion(id='chatcmpl-38018cdf-10fc-92a2-9cfe-784235911fad', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:extract:87b7e7f9ba50c19e72378e24af6cafdd
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: [default] Inserting 1 to text_chunks
+DEBUG: Updated chunk chunk-19b67d1228df254842ea1dee11da1a29 with 2 cache keys (entity_extraction)
+INFO: Chunk 1 of 2 extracted 23 Ent + 39 Rel chunk-19b67d1228df254842ea1dee11da1a29
+INFO: 192.168.10.1:42280 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: [default] Total nodes: 1852, Selected nodes: 1000
+INFO: 192.168.10.1:42280 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1409
+INFO: 192.168.10.1:42288 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+DEBUG: Response content len: 660
+DEBUG: Response: ChatCompletion(id='chatcmpl-375f5534-adb4-9005-b0e1-39ac49e28d73', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:extract:7aceca4e20257e63e3185139be1a9c66
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: [default] Inserting 1 to text_chunks
+DEBUG: Updated chunk chunk-2ab49594e5acb2bc5c9b08f37fd6a511 with 2 cache keys (entity_extraction)
+INFO: Chunk 2 of 2 extracted 28 Ent + 30 Rel chunk-2ab49594e5acb2bc5c9b08f37fd6a511
+INFO: Document Extraction Stats: Found 51 entities and 69 relations (raw count before merging) in 2 chunks for file: 金瓯永固杯.md
+INFO: Merging stage 1/1: 金瓯永固杯.md
+INFO: Phase 1: Processing 40 entities from doc-4cd9270496aef70306b0e12910a143c3 (async: 8)
+DEBUG: Processing entity 金瓯永固杯
+DEBUG: Processing entity 清代
+DEBUG: Processing entity 乾隆年间
+DEBUG: Processing entity 嘉庆二年
+DEBUG: Processing entity 乾隆四年
+DEBUG: Processing entity 乾隆五年
+DEBUG: Processing entity 乾隆帝
+DEBUG: Processing entity 清宫造办处
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `金瓯永固杯` | 0+2
+DEBUG: Merged: `嘉庆二年` | 0+1
+INFO: Merged: `清代` | 1+1 (dd 1)
+DEBUG: Merged: `乾隆年间` | 0+2
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+INFO: Merged: `乾隆四年` | 2+1
+DEBUG: Merged: `乾隆帝` | 0+1
+DEBUG: Merged: `乾隆五年` | 0+1
+DEBUG: Merged: `清宫造办处` | 0+2
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 北京故宫博物院
+DEBUG: Processing entity 台北故宫博物院
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+INFO: Merged: `北京故宫博物院` | 1+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 伦敦华莱士典藏博物馆
+DEBUG: Cache missed(mode:default type:summary)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are a Knowledge Graph Specialist, proficient in data curation and synthesis.
+---Task---
+Your task is to synthesize a list of de...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Processing entity 圆明园
+DEBUG: Processing entity 杜潘
+DEBUG: Processing entity 华莱士爵士
+DEBUG: Processing entity 錾刻工艺
+DEBUG: Processing entity 点翠
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `伦敦华莱士典藏博物馆` | 0+2
+INFO: Merged: `圆明园` | 1+1
+DEBUG: Merged: `錾刻工艺` | 0+2
+DEBUG: Merged: `杜潘` | 0+1
+DEBUG: Merged: `点翠` | 0+1
+DEBUG: Merged: `华莱士爵士` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 黄金
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `黄金` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 铜鎏金
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `铜鎏金` | 0+1
+DEBUG: Processing entity 珍珠
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Processing entity 红宝石
+DEBUG: Processing entity 蓝宝石
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Merged: `珍珠` | 0+2
+DEBUG: Processing entity 粉色碧玺
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `红宝石` | 0+1
+DEBUG: Merged: `粉色碧玺` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Merged: `蓝宝石` | 0+2
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 宝相花
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `宝相花` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 缠枝花卉
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `缠枝花卉` | 0+2
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 回纹
+DEBUG: [default] Inserting 1 to entity_chunks
+INFO: Merged: `回纹` | 1+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 夔龙
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `夔龙` | 0+2
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 金嵌宝金瓯永固杯
+DEBUG: Processing entity 1860年圆明园劫掠事件
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `金嵌宝金瓯永固杯` | 0+1
+DEBUG: Merged: `1860年圆明园劫掠事件` | 0+1
+DEBUG: Processing entity 清乾隆金嵌宝金瓯永固杯
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Processing entity 南京博物院
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entities
+INFO: Merged: `南京博物院` | 3+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 故宫博物院
+DEBUG: [default] Inserting 1 to entity_chunks
+INFO: Merged: `故宫博物院` | 1+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 安徽博物院
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `安徽博物院` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 象首足
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `象首足` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 金胎
+DEBUG: Processing entity 红色尖晶石
+DEBUG: Processing entity 碧玺
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `金胎` | 0+1
+DEBUG: Merged: `红色尖晶石` | 0+1
+DEBUG: Merged: `碧玺` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 屠苏酒
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `屠苏酒` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 新年开笔仪式
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `新年开笔仪式` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 养心殿
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `养心殿` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Processing entity 甪端
+DEBUG: [default] Inserting 1 to entity_chunks
+DEBUG: Merged: `甪端` | 0+1
+DEBUG: [default] Inserting 1 to entities
+DEBUG: Response content len: 377
+DEBUG: Response: ChatCompletion(id='chatcmpl-5a7baf8f-23c6-98b7-aa54-f268e4d679b1', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: default:summary:d87ffabfeb5cdbab96eb1fe7259bd093
+DEBUG: [default] Inserting 1 to llm_response_cache
+INFO: LLMmrg: `台北故宫博物院` | 6+2
+DEBUG: [default] Inserting 1 to entities
+INFO: Phase 2: Processing 61 relations from doc-4cd9270496aef70306b0e12910a143c3 (async: 8)
+DEBUG: Processing relation ['乾隆帝', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `乾隆帝`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清宫造办处', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清宫造办处`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['乾隆四年', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `乾隆四年`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['乾隆五年', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `乾隆五年`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['嘉庆二年', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `嘉庆二年`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['北京故宫博物院', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `北京故宫博物院`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['台北故宫博物院', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `台北故宫博物院`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['伦敦华莱士典藏博物馆', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `伦敦华莱士典藏博物馆`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['圆明园', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `圆明园`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['杜潘', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `杜潘`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['华莱士爵士', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `华莱士爵士`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['金瓯永固杯', '錾刻工艺']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `金瓯永固杯`~`錾刻工艺` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['点翠', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `点翠`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['金瓯永固杯', '黄金']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `金瓯永固杯`~`黄金` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['金瓯永固杯', '铜鎏金']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `金瓯永固杯`~`铜鎏金` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['珍珠', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `珍珠`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['红宝石', '金瓯永固杯']
+DEBUG: Processing relation ['乾隆帝', '乾隆年间']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `红宝石`~`金瓯永固杯` | 0+1
+DEBUG: Merged: `乾隆帝`~`乾隆年间` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['嘉庆二年', '清代']
+DEBUG: Processing relation ['蓝宝石', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `嘉庆二年`~`清代` | 0+1
+DEBUG: Merged: `蓝宝石`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清代', '金嵌宝金瓯永固杯']
+DEBUG: Processing relation ['1860年圆明园劫掠事件', '圆明园']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清代`~`金嵌宝金瓯永固杯` | 0+1
+DEBUG: Merged: `1860年圆明园劫掠事件`~`圆明园` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['粉色碧玺', '金瓯永固杯']
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `粉色碧玺`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['1860年圆明园劫掠事件', '杜潘']
+DEBUG: Processing relation ['伦敦华莱士典藏博物馆', '华莱士爵士']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `伦敦华莱士典藏博物馆`~`华莱士爵士` | 0+1
+DEBUG: Merged: `1860年圆明园劫掠事件`~`杜潘` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['宝相花', '金瓯永固杯']
+DEBUG: Processing relation ['乾隆年间', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `宝相花`~`金瓯永固杯` | 0+1
+DEBUG: Merged: `乾隆年间`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['1860年圆明园劫掠事件', '金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `1860年圆明园劫掠事件`~`金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['缠枝花卉', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `缠枝花卉`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '清宫造办处']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`清宫造办处` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['回纹', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `回纹`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '清代']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`清代` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['夔龙', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `夔龙`~`金瓯永固杯` | 0+2
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '缠枝花卉']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`缠枝花卉` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '象首足']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`象首足` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '錾刻工艺']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`錾刻工艺` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '金胎']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`金胎` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '珍珠']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`珍珠` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '蓝宝石']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`蓝宝石` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['夔龙', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `夔龙`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '红色尖晶石']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`红色尖晶石` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '碧玺']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`碧玺` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['屠苏酒', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `屠苏酒`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['新年开笔仪式', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `新年开笔仪式`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['伦敦华莱士典藏博物馆', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: Processing relation ['养心殿', '新年开笔仪式']
+DEBUG: Processing relation ['乾隆年间', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `伦敦华莱士典藏博物馆`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `乾隆年间`~`金瓯永固杯` | 0+1
+DEBUG: Merged: `养心殿`~`新年开笔仪式` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['台北故宫博物院', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `台北故宫博物院`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清代', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清代`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['象首足', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `象首足`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['故宫博物院', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `故宫博物院`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['红色尖晶石', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `红色尖晶石`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['南京博物院', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `南京博物院`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: Processing relation ['碧玺', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Merged: `碧玺`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['安徽博物院', '清乾隆金嵌宝金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `安徽博物院`~`清乾隆金嵌宝金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['屠苏酒', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `屠苏酒`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['新年开笔仪式', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `新年开笔仪式`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['养心殿', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `养心殿`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['故宫博物院', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `故宫博物院`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['甪端', '金瓯永固杯']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `甪端`~`金瓯永固杯` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+DEBUG: Processing relation ['清乾隆金嵌宝金瓯永固杯', '甪端']
+DEBUG: [default] Inserting 1 to relation_chunks
+DEBUG: Merged: `清乾隆金嵌宝金瓯永固杯`~`甪端` | 0+1
+DEBUG: [default] Successfully deleted 2 vectors from relationships
+DEBUG: [default] Inserting 1 to relationships
+INFO: Phase 3: Updating final 40(40+0) entities and  61 relations from doc-4cd9270496aef70306b0e12910a143c3
+DEBUG: [default] Inserting 1 to full_entities
+DEBUG: [default] Inserting 1 to full_relations
+DEBUG: Updated entity-relation index for document doc-4cd9270496aef70306b0e12910a143c3: 40 entities (original: 40, added: 0), 61 relations
+INFO: Completed merging: 40 entities, 0 extra entities, 61 relations
+DEBUG: [default] Inserting 1 to doc_status
+INFO: In memory DB persist to disk
+INFO: Completed processing file 1/1: 金瓯永固杯.md
+INFO: Enqueued document processing pipeline stopped
+INFO: 192.168.10.1:43274 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:43276 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:43276 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:43274 - "GET /webui/favicon.png HTTP/1.1" 200
+INFO: 192.168.10.1:43276 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:35060 - "POST /login HTTP/1.1" 200
+INFO: 192.168.10.1:35060 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+DEBUG: [default] Retrieved 300 popular labels (limit: 300)
+INFO: 192.168.10.1:35072 - "GET /graph/label/popular?limit=300 HTTP/1.1" 200
+INFO: 192.168.10.1:35060 - "GET /static/swagger-ui/swagger-ui.css HTTP/1.1" 200
+INFO: [default] Total nodes: 1884, Selected nodes: 1000
+INFO: 192.168.10.1:35108 - "GET /static/swagger-ui/swagger-ui-bundle.js HTTP/1.1" 200
+INFO: 192.168.10.1:35108 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1424
+INFO: 192.168.10.1:35068 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:41616 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: [default] Total nodes: 1884, Selected nodes: 1000
+INFO: 192.168.10.1:41616 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1424
+INFO: 192.168.10.1:41638 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+WARNING: Invalid HTTP request received.
+DEBUG: [aquery_llm] Query param: QueryParam(mode='global', only_need_context=False, only_need_prompt=False, response_type='Multiple Paragraphs', stream=True, top_k=40, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt='', enable_rerank=True, include_references=True)
+DEBUG: Cache missed(mode:global type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 680 tokens (Prompt: 680)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+INFO: 192.168.10.1:52292 - "GET /webui/assets/index-Bc4bRqZx.js HTTP/1.1" 200
+DEBUG: Response content len: 118
+DEBUG: Response: ChatCompletion(id='chatcmpl-215b7067-96a5-97b9-99ee-25e1db99e0d2', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: global:keywords:478fb0eedc5c5b18e0713a2c0b2850d6
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: High-level keywords: ['历史文物', '宫廷珍宝', '文化价值']
+DEBUG: Low-level  keywords: ['金瓯永固杯', '清代', '乾隆年间', '黄金镶嵌', '皇家礼器']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query edges: 历史文物, 宫廷珍宝, 文化价值 (top_k:40, cosine:0.2)
+INFO: Global query: 55 entites, 40 relations
+INFO: Raw search results: 55 entities, 40 relations, 0 vector chunks
+DEBUG: Before truncation: 55 entities, 40 relations
+INFO: After truncation: 42 entities, 40 relations
+DEBUG: Finding text chunks from 42 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=105, entity_info_count=42
+DEBUG: Vector similarity chunk selection: 120 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 120 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 105 chunks from 120 candidates
+INFO: Selecting 105 from 120 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 40 relations
+INFO: Find no additional relations-related chunks from 40 relations
+INFO: Round-robin merged chunks: 105 -> 105 (deduplicated 0)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 8, KG: 8096, Buffer: 200, Available for chunks: 20992
+DEBUG: Rerank request: 105 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 105 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 105)
+DEBUG: Token truncation: 16 chunks from 20 (chunk available tokens: 20992, source: global)
+INFO: Final context: 42 entities, 40 relations, 16 chunks
+INFO: Final chunks S+F/O: E2/1 E5/2 E2/3 E2/9 E6/6 E1/17 E1/10 E1/35 E1/27 E1/53 E1/65 E2/31 E3/59 E6/51 E3/11 E2/50
+DEBUG: [_build_context_str] Converting to user format: 42 entities, 40 relations, 16 chunks
+DEBUG: [convert_to_user_format] Formatted 16/16 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 37356
+DEBUG: [_build_query_context] Raw data entities: 42, relationships: 40, chunks: 16
+DEBUG: [kg_query] Sending to LLM: 28,628 tokens (Query: 8, System: 28620)
+DEBUG: Cache missed(mode:global type:query)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---Role---
+You are an expert AI assistant specializing in synthesizing information from a provided knowledge base. Your primary functi...
+DEBUG: Query: 介绍一下金瓯永固杯
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Streaming response detected, skipping cache
+INFO: 192.168.10.1:52280 - "POST /query/stream HTTP/1.1" 200
+INFO: 192.168.10.1:50504 - "GET /favicon.ico HTTP/1.1" 404
+DEBUG: Successfully closed OpenAI client for streaming response
+INFO: 192.168.10.1:52640 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:52640 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:52652 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:37074 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:37074 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:56602 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: [default] Total nodes: 1884, Selected nodes: 1000
+INFO: 192.168.10.1:56602 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1424
+INFO: 192.168.10.1:36640 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:36944 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:36944 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:57690 - "GET /favicon.ico HTTP/1.1" 404
+INFO: 192.168.10.1:55810 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:55818 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:55818 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:51464 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:51464 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:51478 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:51464 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+INFO: 192.168.10.1:34816 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:34816 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:34816 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 206
+INFO: 192.168.10.1:34816 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 206
+INFO: 192.168.10.1:50390 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 206
+INFO: 192.168.10.1:34816 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 206
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+INFO: 192.168.10.1:58664 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:45096 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:45106 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:45114 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:34110 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:34112 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:34142 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:34146 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:34146 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:34146 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:34156 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:55400 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:55400 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:36298 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:53196 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:46604 - "GET /webui HTTP/1.1" 307
+WARNING: Invalid HTTP request received.
+INFO: 192.168.10.1:35160 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:35176 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:35182 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:37330 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:37330 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:37330 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:37342 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:37330 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:37330 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:37344 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:37362 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:52800 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:52800 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:52810 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:52800 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:52800 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:51266 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:51268 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:51278 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:51282 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:51282 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:51282 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:53590 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:53608 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:53608 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:34482 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:34482 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:48292 - "GET /favicon.ico HTTP/1.1" 404
+INFO: 192.168.10.1:53366 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:53366 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:46642 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:46656 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:46684 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:46688 - "GET / HTTP/1.1" 307
+INFO: 192.168.10.1:46688 - "GET /webui HTTP/1.1" 307
+INFO: 192.168.10.1:46688 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:46702 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:46688 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:46688 - "GET /webui/logo.svg HTTP/1.1" 200
+INFO: 192.168.10.1:42472 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:42476 - "GET /webui/assets/index-CGTeyxLW.js HTTP/1.1" 200
+INFO: 192.168.10.1:42490 - "GET /webui/assets/index-BpN3TGx4.css HTTP/1.1" 200
+INFO: 192.168.10.1:40612 - "GET /auth-status HTTP/1.1" 200
+INFO: 192.168.10.1:40612 - "GET /webui/logo.svg HTTP/1.1" 200
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+INFO: 192.168.10.1:58340 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: 192.168.10.1:58340 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Total nodes: 1884, Selected nodes: 1000
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1424
+INFO: 192.168.10.1:58356 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:47580 - "GET /docs HTTP/1.1" 200
+DEBUG: get_knowledge_graph called with label: '*' (length: 1, repr: '*')
+INFO: [default] Total nodes: 1884, Selected nodes: 1000
+INFO: 192.168.10.1:47580 - "GET /openapi.json HTTP/1.1" 200
+INFO: [default] Subgraph query successful | Node count: 1000 | Edge count: 1424
+INFO: 192.168.10.1:47566 - "GET /graphs?label=*&max_depth=3&max_nodes=1000 HTTP/1.1" 200
+INFO: 192.168.10.1:55880 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:55870 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:55896 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:55898 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:50300 - "GET /docs HTTP/1.1" 200
+INFO: 192.168.10.1:50302 - "GET /static/swagger-ui/swagger-ui-bundle.js HTTP/1.1" 200
+INFO: 192.168.10.1:50316 - "GET /docs HTTP/1.1" 200
+INFO: 192.168.10.1:50316 - "GET /static/swagger-ui/swagger-ui.css HTTP/1.1" 200
+INFO: 192.168.10.1:50332 - "GET /static/swagger-ui/swagger-ui-bundle.js HTTP/1.1" 200
+INFO: 192.168.10.1:50332 - "GET /openapi.json HTTP/1.1" 200
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+WARNING: Invalid HTTP request received.
+INFO: 192.168.10.1:43136 - "GET / HTTP/1.0" 307
+INFO: 192.168.10.1:40772 - "GET / HTTP/1.1" 307
+INFO: [bubble] Artifact: 清明上河图, Type: 书画, include_detail: True
+INFO: [bubble] Selected topics: ['名人八卦', '值多少钱', '世界之最']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:7373a7b387aed1bb8d6b4c2393b52cbd)
+DEBUG: High-level keywords: ['艺术价值', '历史画卷', '宋代社会生活']
+DEBUG: Low-level  keywords: ['清明上河图', '张择端', '北宋', '风俗画']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 清明上河图, 张择端, 北宋, 风俗画 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 14 relations
+INFO: Query edges: 艺术价值, 历史画卷, 宋代社会生活 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 26 entities, 24 relations, 20 vector chunks
+DEBUG: Before truncation: 26 entities, 24 relations
+INFO: After truncation: 26 entities, 24 relations
+DEBUG: Finding text chunks from 26 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=65, entity_info_count=26
+DEBUG: Vector similarity chunk selection: 26 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 26 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 26 chunks from 26 candidates
+INFO: Selecting 26 from 26 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 24 relations
+INFO: Find no additional relations-related chunks from 24 relations
+INFO: Round-robin merged chunks: 46 -> 41 (deduplicated 5)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 5, KG: 4135, Buffer: 200, Available for chunks: 24956
+DEBUG: Rerank request: 41 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 41 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 41)
+DEBUG: Token truncation: 19 chunks from 20 (chunk available tokens: 24956, source: mix)
+INFO: Final context: 26 entities, 24 relations, 19 chunks
+INFO: Final chunks S+F/O: E1/19 E1/3 C1/9 C1/3 C1/11 C1/20 C1/17 C1/14 E3/14 C1/15 C1/8 E3/2 C1/12 E2/16 E2/15 E2/17 C1/18 E2/13 E1/26
+DEBUG: [_build_context_str] Converting to user format: 26 entities, 24 relations, 19 chunks
+DEBUG: [convert_to_user_format] Formatted 19/19 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36953
+DEBUG: [_build_query_context] Raw data entities: 26, relationships: 24, chunks: 19
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 清明上河图
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 517
+DEBUG: Response: ChatCompletion(id='chatcmpl-a94a51b6-c2c6-92da-b158-b6b0b548ca7a', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:42832 - "POST /bubble HTTP/1.1" 200
+INFO: 192.168.10.1:47630 - "GET /bubble HTTP/1.1" 405
+INFO: [bubble] Artifact: 清明上河图, Type: 书画, include_detail: True
+INFO: [bubble] Selected topics: ['名人八卦', '震惊冷知识', '命运多舛']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:7373a7b387aed1bb8d6b4c2393b52cbd)
+DEBUG: High-level keywords: ['艺术价值', '历史画卷', '宋代社会生活']
+DEBUG: Low-level  keywords: ['清明上河图', '张择端', '北宋', '风俗画']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 清明上河图, 张择端, 北宋, 风俗画 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 14 relations
+INFO: Query edges: 艺术价值, 历史画卷, 宋代社会生活 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 26 entities, 24 relations, 20 vector chunks
+DEBUG: Before truncation: 26 entities, 24 relations
+INFO: After truncation: 26 entities, 24 relations
+DEBUG: Finding text chunks from 26 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=65, entity_info_count=26
+DEBUG: Vector similarity chunk selection: 26 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 26 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 26 chunks from 26 candidates
+INFO: Selecting 26 from 26 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 24 relations
+INFO: Find no additional relations-related chunks from 24 relations
+INFO: Round-robin merged chunks: 46 -> 41 (deduplicated 5)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 5, KG: 4135, Buffer: 200, Available for chunks: 24956
+DEBUG: Rerank request: 41 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 41 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 41)
+DEBUG: Token truncation: 19 chunks from 20 (chunk available tokens: 24956, source: mix)
+INFO: Final context: 26 entities, 24 relations, 19 chunks
+INFO: Final chunks S+F/O: E1/19 E1/3 C1/9 C1/3 C1/11 C1/20 C1/17 C1/14 E3/14 C1/15 C1/8 E3/2 C1/12 E2/16 E2/15 E2/17 C1/18 E2/13 E1/26
+DEBUG: [_build_context_str] Converting to user format: 26 entities, 24 relations, 19 chunks
+DEBUG: [convert_to_user_format] Formatted 19/19 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36953
+DEBUG: [_build_query_context] Raw data entities: 26, relationships: 24, chunks: 19
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 清明上河图
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 543
+DEBUG: Response: ChatCompletion(id='chatcmpl-28212852-437e-95d1-b786-8480d7c3eb40', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:41850 - "POST /bubble HTTP/1.1" 200
+INFO: 192.168.10.1:47898 - "GET /bubble HTTP/1.1" 405
+INFO: [bubble] Artifact: 清明上河图, Type: 书画, include_detail: True
+INFO: [bubble] Selected topics: ['名人八卦', '值多少钱', '震惊冷知识']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:7373a7b387aed1bb8d6b4c2393b52cbd)
+DEBUG: High-level keywords: ['艺术价值', '历史画卷', '宋代社会生活']
+DEBUG: Low-level  keywords: ['清明上河图', '张择端', '北宋', '风俗画']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 清明上河图, 张择端, 北宋, 风俗画 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 14 relations
+INFO: Query edges: 艺术价值, 历史画卷, 宋代社会生活 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 26 entities, 24 relations, 20 vector chunks
+DEBUG: Before truncation: 26 entities, 24 relations
+INFO: After truncation: 26 entities, 24 relations
+DEBUG: Finding text chunks from 26 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=65, entity_info_count=26
+DEBUG: Vector similarity chunk selection: 26 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 26 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 26 chunks from 26 candidates
+INFO: Selecting 26 from 26 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 24 relations
+INFO: Find no additional relations-related chunks from 24 relations
+INFO: Round-robin merged chunks: 46 -> 41 (deduplicated 5)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 5, KG: 4135, Buffer: 200, Available for chunks: 24956
+DEBUG: Rerank request: 41 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 41 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 41)
+DEBUG: Token truncation: 19 chunks from 20 (chunk available tokens: 24956, source: mix)
+INFO: Final context: 26 entities, 24 relations, 19 chunks
+INFO: Final chunks S+F/O: E1/19 E1/3 C1/9 C1/3 C1/11 C1/20 C1/17 C1/14 E3/14 C1/15 C1/8 E3/2 C1/12 E2/16 E2/15 E2/17 C1/18 E2/13 E1/26
+DEBUG: [_build_context_str] Converting to user format: 26 entities, 24 relations, 19 chunks
+DEBUG: [convert_to_user_format] Formatted 19/19 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36953
+DEBUG: [_build_query_context] Raw data entities: 26, relationships: 24, chunks: 19
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 清明上河图
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 517
+DEBUG: Response: ChatCompletion(id='chatcmpl-c4931765-21b5-99a4-bae3-e2f5ab85f031', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:34494 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: test1, Type: default, include_detail: True
+INFO: [bubble] Selected topics: ['世界之最', '现代等价物', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Cache missed(mode:mix type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 673 tokens (Prompt: 673)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 59
+DEBUG: Response: ChatCompletion(id='chatcmpl-99813aed-f7d5-9aee-96ac-109963d69e98', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+DEBUG: High-level keywords: []
+DEBUG: Low-level  keywords: []
+WARNING: low_level_keywords is empty
+WARNING: high_level_keywords is empty
+WARNING: Forced low_level_keywords to origin query: test1
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: test1 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 9 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 10 entities, 9 relations, 20 vector chunks
+DEBUG: Before truncation: 10 entities, 9 relations
+INFO: After truncation: 10 entities, 9 relations
+DEBUG: Finding text chunks from 10 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=25, entity_info_count=10
+DEBUG: Vector similarity chunk selection: 10 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 10 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 10 chunks from 10 candidates
+INFO: Selecting 10 from 10 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 9 relations
+INFO: Find no additional relations-related chunks from 9 relations
+INFO: Round-robin merged chunks: 30 -> 29 (deduplicated 1)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 2, KG: 1205, Buffer: 200, Available for chunks: 27889
+DEBUG: Rerank request: 29 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 29 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 29)
+DEBUG: Token truncation: 20 chunks from 20 (chunk available tokens: 27889, source: mix)
+INFO: Final context: 10 entities, 9 relations, 20 chunks
+INFO: Final chunks S+F/O: E1/7 E1/6 C1/10 E1/1 C1/2 E1/2 E1/9 C1/12 C1/18 C1/3 E1/10 C1/14 C1/15 C1/16 C1/4 E1/5 C1/6 C1/7 E1/8 C1/11
+DEBUG: [_build_context_str] Converting to user format: 10 entities, 9 relations, 20 chunks
+DEBUG: [convert_to_user_format] Formatted 20/20 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 35801
+DEBUG: [_build_query_context] Raw data entities: 10, relationships: 9, chunks: 20
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: test1
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 490
+DEBUG: Response: ChatCompletion(id='chatcmpl-cde20b27-0f1d-9ff0-b0be-bf9772a86134', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:51924 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '审美吐槽', '数字震撼']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Cache missed(mode:mix type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 695 tokens (Prompt: 695)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 118
+DEBUG: Response: ChatCompletion(id='chatcmpl-3e0219b7-2fc0-90de-b62f-a699f916967a', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: mix:keywords:175df0819aa2fe59d34d5cbea022eff7
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: High-level keywords: ['掐丝珐琅', '缠枝莲纹', '多穆壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '嵌石多穆壶', '乾隆时期', '珐琅器']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 嵌石多穆壶, 乾隆时期, 珐琅器 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 108 relations
+INFO: Query edges: 掐丝珐琅, 缠枝莲纹, 多穆壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 24 entities, 116 relations, 20 vector chunks
+DEBUG: Before truncation: 24 entities, 116 relations
+INFO: After truncation: 24 entities, 116 relations
+DEBUG: Finding text chunks from 24 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=60, entity_info_count=24
+DEBUG: Vector similarity chunk selection: 91 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 91 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 60 chunks from 91 candidates
+INFO: Selecting 60 from 91 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 116 relations
+INFO: Find 7 additional chunks in 5 relations (deduplicated 20)
+DEBUG: Vector similarity chunk selection: num_of_chunks=12, entity_info_count=5
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 60 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 87 -> 69 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 23, KG: 10838, Buffer: 200, Available for chunks: 18235
+DEBUG: Rerank request: 69 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 69 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 69)
+DEBUG: Token truncation: 13 chunks from 20 (chunk available tokens: 18235, source: mix)
+INFO: Final context: 24 entities, 116 relations, 13 chunks
+INFO: Final chunks S+F/O: E4/11 E2/48 E3/4 E5/6 E2/9 E6/30 E2/8 E4/1 E4/3 R12/3 E3/49 E1/5 E5/21
+DEBUG: [_build_context_str] Converting to user format: 24 entities, 116 relations, 13 chunks
+DEBUG: [convert_to_user_format] Formatted 13/13 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36616
+DEBUG: [_build_query_context] Raw data entities: 24, relationships: 116, chunks: 13
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶
+DEBUG: ===== Sending Query to LLM =====
+INFO: [bubble] Artifact: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '现代等价物', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:175df0819aa2fe59d34d5cbea022eff7)
+DEBUG: High-level keywords: ['掐丝珐琅', '缠枝莲纹', '多穆壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '嵌石多穆壶', '乾隆时期', '珐琅器']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 嵌石多穆壶, 乾隆时期, 珐琅器 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 108 relations
+INFO: Query edges: 掐丝珐琅, 缠枝莲纹, 多穆壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 24 entities, 116 relations, 20 vector chunks
+DEBUG: Before truncation: 24 entities, 116 relations
+INFO: After truncation: 24 entities, 116 relations
+DEBUG: Finding text chunks from 24 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=60, entity_info_count=24
+DEBUG: Vector similarity chunk selection: 91 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 91 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 60 chunks from 91 candidates
+INFO: Selecting 60 from 91 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 116 relations
+INFO: Find 7 additional chunks in 5 relations (deduplicated 20)
+DEBUG: Vector similarity chunk selection: num_of_chunks=12, entity_info_count=5
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 60 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 87 -> 69 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 23, KG: 10838, Buffer: 200, Available for chunks: 18235
+DEBUG: Rerank request: 69 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 69 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 69)
+DEBUG: Token truncation: 13 chunks from 20 (chunk available tokens: 18235, source: mix)
+INFO: Final context: 24 entities, 116 relations, 13 chunks
+INFO: Final chunks S+F/O: E4/11 E2/48 E3/4 E5/6 E2/9 E6/30 E2/8 E4/1 E4/3 R12/3 E3/49 E1/5 E5/21
+DEBUG: [_build_context_str] Converting to user format: 24 entities, 116 relations, 13 chunks
+DEBUG: [convert_to_user_format] Formatted 13/13 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36616
+DEBUG: [_build_query_context] Raw data entities: 24, relationships: 116, chunks: 13
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 521
+DEBUG: Response: ChatCompletion(id='chatcmpl-96bc7757-4fdb-9e50-b8cc-9a7ebe337a23', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:51924 - "POST /bubble HTTP/1.1" 200
+DEBUG: Response content len: 480
+DEBUG: Response: ChatCompletion(id='chatcmpl-d4e56b1b-b9d7-9080-94d0-a5959769a4d1', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:49032 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款珐琅彩花卉纹蒜头瓶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '审美吐槽', '数字震撼']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Cache missed(mode:mix type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 688 tokens (Prompt: 688)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 123
+DEBUG: Response: ChatCompletion(id='chatcmpl-77f32045-bd5c-9182-9519-e588cf39d930', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: mix:keywords:d8fa7ca6c7919a11cab31d0b74af4e43
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: High-level keywords: ['珐琅彩瓷器', '清代瓷器', '文物鉴定', '陶瓷纹饰']
+DEBUG: Low-level  keywords: ['乾隆款', '珐琅彩花卉纹蒜头瓶', '蒜头瓶', '乾隆时期']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 珐琅彩花卉纹蒜头瓶, 蒜头瓶, 乾隆时期 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 85 relations
+INFO: Query edges: 珐琅彩瓷器, 清代瓷器, 文物鉴定, 陶瓷纹饰 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 22 entities, 93 relations, 20 vector chunks
+DEBUG: Before truncation: 22 entities, 93 relations
+INFO: After truncation: 22 entities, 93 relations
+DEBUG: Finding text chunks from 22 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=55, entity_info_count=22
+DEBUG: Vector similarity chunk selection: 63 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 63 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 55 chunks from 63 candidates
+INFO: Selecting 55 from 63 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 93 relations
+INFO: Find no additional relations-related chunks from 93 relations
+INFO: Round-robin merged chunks: 75 -> 57 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 16, KG: 9257, Buffer: 200, Available for chunks: 19823
+DEBUG: Rerank request: 57 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 57 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 57)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 19823, source: mix)
+INFO: Final context: 22 entities, 93 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/18 E7/29 E3/12 E3/3 E1/6 E2/13 E4/44 E1/4 E3/8 E1/23 E5/5 E3/11 E1/45 E2/1 E1/39
+DEBUG: [_build_context_str] Converting to user format: 22 entities, 93 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 38181
+DEBUG: [_build_query_context] Raw data entities: 22, relationships: 93, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款珐琅彩花卉纹蒜头瓶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 461
+DEBUG: Response: ChatCompletion(id='chatcmpl-9c4f57ca-2138-9ee5-9a72-ab99d77d435b', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:49032 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '数字震撼', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:175df0819aa2fe59d34d5cbea022eff7)
+DEBUG: High-level keywords: ['掐丝珐琅', '缠枝莲纹', '多穆壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '嵌石多穆壶', '乾隆时期', '珐琅器']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 嵌石多穆壶, 乾隆时期, 珐琅器 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 108 relations
+INFO: Query edges: 掐丝珐琅, 缠枝莲纹, 多穆壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 24 entities, 116 relations, 20 vector chunks
+DEBUG: Before truncation: 24 entities, 116 relations
+INFO: After truncation: 24 entities, 116 relations
+DEBUG: Finding text chunks from 24 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=60, entity_info_count=24
+DEBUG: Vector similarity chunk selection: 91 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 91 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 60 chunks from 91 candidates
+INFO: Selecting 60 from 91 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 116 relations
+INFO: Find 7 additional chunks in 5 relations (deduplicated 20)
+DEBUG: Vector similarity chunk selection: num_of_chunks=12, entity_info_count=5
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 60 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 87 -> 69 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 23, KG: 10838, Buffer: 200, Available for chunks: 18235
+DEBUG: Rerank request: 69 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 69 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 69)
+DEBUG: Token truncation: 13 chunks from 20 (chunk available tokens: 18235, source: mix)
+INFO: Final context: 24 entities, 116 relations, 13 chunks
+INFO: Final chunks S+F/O: E4/11 E2/48 E3/4 E5/6 E2/9 E6/30 E2/8 E4/1 E4/3 R12/3 E3/49 E1/5 E5/21
+DEBUG: [_build_context_str] Converting to user format: 24 entities, 116 relations, 13 chunks
+DEBUG: [convert_to_user_format] Formatted 13/13 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36616
+DEBUG: [_build_query_context] Raw data entities: 24, relationships: 116, chunks: 13
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 482
+DEBUG: Response: ChatCompletion(id='chatcmpl-e50379ad-2a78-9a16-8804-9adb61039144', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:35310 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款珐琅彩花卉纹蒜头瓶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '名人八卦', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:d8fa7ca6c7919a11cab31d0b74af4e43)
+DEBUG: High-level keywords: ['珐琅彩瓷器', '清代瓷器', '文物鉴定', '陶瓷纹饰']
+DEBUG: Low-level  keywords: ['乾隆款', '珐琅彩花卉纹蒜头瓶', '蒜头瓶', '乾隆时期']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 珐琅彩花卉纹蒜头瓶, 蒜头瓶, 乾隆时期 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 85 relations
+INFO: Query edges: 珐琅彩瓷器, 清代瓷器, 文物鉴定, 陶瓷纹饰 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 22 entities, 93 relations, 20 vector chunks
+DEBUG: Before truncation: 22 entities, 93 relations
+INFO: After truncation: 22 entities, 93 relations
+DEBUG: Finding text chunks from 22 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=55, entity_info_count=22
+DEBUG: Vector similarity chunk selection: 63 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 63 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 55 chunks from 63 candidates
+INFO: Selecting 55 from 63 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 93 relations
+INFO: Find no additional relations-related chunks from 93 relations
+INFO: Round-robin merged chunks: 75 -> 57 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 16, KG: 9257, Buffer: 200, Available for chunks: 19823
+DEBUG: Rerank request: 57 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 57 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 57)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 19823, source: mix)
+INFO: Final context: 22 entities, 93 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/18 E7/29 E3/12 E3/3 E1/6 E2/13 E4/44 E1/4 E3/8 E1/23 E5/5 E3/11 E1/45 E2/1 E1/39
+DEBUG: [_build_context_str] Converting to user format: 22 entities, 93 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 38181
+DEBUG: [_build_query_context] Raw data entities: 22, relationships: 93, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款珐琅彩花卉纹蒜头瓶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 582
+DEBUG: Response: ChatCompletion(id='chatcmpl-d03a4f30-db66-9062-b642-9bb69bf25807', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:35310 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款画珐琅缠枝莲纹卤壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '值多少钱', '名人八卦']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Cache missed(mode:mix type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 689 tokens (Prompt: 689)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 119
+DEBUG: Response: ChatCompletion(id='chatcmpl-132cebdf-d4c1-9ca2-8647-2fb2ca7f9ce7', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO:  == LLM cache == saving: mix:keywords:8f0bc3cc8811eacdfe8c7c81fc597040
+DEBUG: [default] Inserting 1 to llm_response_cache
+DEBUG: High-level keywords: ['画珐琅', '缠枝莲纹', '卤壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '乾隆时期', '画珐琅卤壶', '缠枝莲纹装饰']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 乾隆时期, 画珐琅卤壶, 缠枝莲纹装饰 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 72 relations
+INFO: Query edges: 画珐琅, 缠枝莲纹, 卤壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 20 entities, 77 relations, 20 vector chunks
+DEBUG: Before truncation: 20 entities, 77 relations
+INFO: After truncation: 20 entities, 77 relations
+DEBUG: Finding text chunks from 20 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=50, entity_info_count=20
+DEBUG: Vector similarity chunk selection: 90 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 90 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 50 chunks from 90 candidates
+INFO: Selecting 50 from 90 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 77 relations
+INFO: Find 7 additional chunks in 6 relations (deduplicated 24)
+DEBUG: Vector similarity chunk selection: num_of_chunks=15, entity_info_count=6
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 50 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 77 -> 60 (deduplicated 17)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 17, KG: 8287, Buffer: 200, Available for chunks: 20792
+DEBUG: Rerank request: 60 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 60 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 60)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 20792, source: mix)
+INFO: Final context: 20 entities, 77 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/12 E2/15 E3/1 E3/5 E3/28 E3/7 E5/47 E4/3 E6/24 E4/8 E3/25 E3/46 R1/7 E2/50 E7/10
+DEBUG: [_build_context_str] Converting to user format: 20 entities, 77 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36347
+DEBUG: [_build_query_context] Raw data entities: 20, relationships: 77, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款画珐琅缠枝莲纹卤壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 517
+DEBUG: Response: ChatCompletion(id='chatcmpl-8a1f04b5-bf65-9ad1-8dba-952005a83cab', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:35310 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: test1, Type: default, include_detail: True
+INFO: [bubble] Selected topics: ['值多少钱', '震惊冷知识', '现代等价物']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Cache missed(mode:mix type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 673 tokens (Prompt: 673)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 59
+DEBUG: Response: ChatCompletion(id='chatcmpl-a2a4b035-46ed-95f9-9e5a-f44e9ae40168', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+DEBUG: High-level keywords: []
+DEBUG: Low-level  keywords: []
+WARNING: low_level_keywords is empty
+WARNING: high_level_keywords is empty
+WARNING: Forced low_level_keywords to origin query: test1
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: test1 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 9 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 10 entities, 9 relations, 20 vector chunks
+DEBUG: Before truncation: 10 entities, 9 relations
+INFO: After truncation: 10 entities, 9 relations
+DEBUG: Finding text chunks from 10 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=25, entity_info_count=10
+DEBUG: Vector similarity chunk selection: 10 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 10 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 10 chunks from 10 candidates
+INFO: Selecting 10 from 10 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 9 relations
+INFO: Find no additional relations-related chunks from 9 relations
+INFO: Round-robin merged chunks: 30 -> 29 (deduplicated 1)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 2, KG: 1205, Buffer: 200, Available for chunks: 27889
+DEBUG: Rerank request: 29 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 29 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 29)
+DEBUG: Token truncation: 20 chunks from 20 (chunk available tokens: 27889, source: mix)
+INFO: Final context: 10 entities, 9 relations, 20 chunks
+INFO: Final chunks S+F/O: E1/7 E1/6 C1/10 E1/1 C1/2 E1/2 E1/9 C1/12 C1/18 C1/3 E1/10 C1/14 C1/15 C1/16 C1/4 E1/5 C1/6 C1/7 E1/8 C1/11
+DEBUG: [_build_context_str] Converting to user format: 10 entities, 9 relations, 20 chunks
+DEBUG: [convert_to_user_format] Formatted 20/20 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 35801
+DEBUG: [_build_query_context] Raw data entities: 10, relationships: 9, chunks: 20
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: test1
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 521
+DEBUG: Response: ChatCompletion(id='chatcmpl-8b55ddec-9816-98fb-ba1a-0e6b73d26682', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:41266 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '现代等价物', '名人八卦']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:175df0819aa2fe59d34d5cbea022eff7)
+DEBUG: High-level keywords: ['掐丝珐琅', '缠枝莲纹', '多穆壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '嵌石多穆壶', '乾隆时期', '珐琅器']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 嵌石多穆壶, 乾隆时期, 珐琅器 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 108 relations
+INFO: Query edges: 掐丝珐琅, 缠枝莲纹, 多穆壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 24 entities, 116 relations, 20 vector chunks
+DEBUG: Before truncation: 24 entities, 116 relations
+INFO: After truncation: 24 entities, 116 relations
+DEBUG: Finding text chunks from 24 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=60, entity_info_count=24
+DEBUG: Vector similarity chunk selection: 91 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 91 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 60 chunks from 91 candidates
+INFO: Selecting 60 from 91 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 116 relations
+INFO: Find 7 additional chunks in 5 relations (deduplicated 20)
+DEBUG: Vector similarity chunk selection: num_of_chunks=12, entity_info_count=5
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 60 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 87 -> 69 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 23, KG: 10838, Buffer: 200, Available for chunks: 18235
+DEBUG: Rerank request: 69 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 69 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 69)
+DEBUG: Token truncation: 13 chunks from 20 (chunk available tokens: 18235, source: mix)
+INFO: Final context: 24 entities, 116 relations, 13 chunks
+INFO: Final chunks S+F/O: E4/11 E2/48 E3/4 E5/6 E2/9 E6/30 E2/8 E4/1 E4/3 R12/3 E3/49 E1/5 E5/21
+DEBUG: [_build_context_str] Converting to user format: 24 entities, 116 relations, 13 chunks
+DEBUG: [convert_to_user_format] Formatted 13/13 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36616
+DEBUG: [_build_query_context] Raw data entities: 24, relationships: 116, chunks: 13
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 479
+DEBUG: Response: ChatCompletion(id='chatcmpl-aeddaec3-0d35-9d06-a34e-38e7755346b4', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:41266 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款珐琅彩花卉纹蒜头瓶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '现代等价物', '名人八卦']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:d8fa7ca6c7919a11cab31d0b74af4e43)
+DEBUG: High-level keywords: ['珐琅彩瓷器', '清代瓷器', '文物鉴定', '陶瓷纹饰']
+DEBUG: Low-level  keywords: ['乾隆款', '珐琅彩花卉纹蒜头瓶', '蒜头瓶', '乾隆时期']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 珐琅彩花卉纹蒜头瓶, 蒜头瓶, 乾隆时期 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 85 relations
+INFO: Query edges: 珐琅彩瓷器, 清代瓷器, 文物鉴定, 陶瓷纹饰 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 22 entities, 93 relations, 20 vector chunks
+DEBUG: Before truncation: 22 entities, 93 relations
+INFO: After truncation: 22 entities, 93 relations
+DEBUG: Finding text chunks from 22 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=55, entity_info_count=22
+DEBUG: Vector similarity chunk selection: 63 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 63 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 55 chunks from 63 candidates
+INFO: Selecting 55 from 63 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 93 relations
+INFO: Find no additional relations-related chunks from 93 relations
+INFO: Round-robin merged chunks: 75 -> 57 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 16, KG: 9257, Buffer: 200, Available for chunks: 19823
+DEBUG: Rerank request: 57 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 57 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 57)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 19823, source: mix)
+INFO: Final context: 22 entities, 93 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/18 E7/29 E3/12 E3/3 E1/6 E2/13 E4/44 E1/4 E3/8 E1/23 E5/5 E3/11 E1/45 E2/1 E1/39
+DEBUG: [_build_context_str] Converting to user format: 22 entities, 93 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 38181
+DEBUG: [_build_query_context] Raw data entities: 22, relationships: 93, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款珐琅彩花卉纹蒜头瓶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 439
+DEBUG: Response: ChatCompletion(id='chatcmpl-807bc073-88b5-96d1-bd4d-3574444582ff', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:41266 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款画珐琅缠枝莲纹卤壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '现代等价物', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:8f0bc3cc8811eacdfe8c7c81fc597040)
+DEBUG: High-level keywords: ['画珐琅', '缠枝莲纹', '卤壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '乾隆时期', '画珐琅卤壶', '缠枝莲纹装饰']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 乾隆时期, 画珐琅卤壶, 缠枝莲纹装饰 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 72 relations
+INFO: Query edges: 画珐琅, 缠枝莲纹, 卤壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 20 entities, 77 relations, 20 vector chunks
+DEBUG: Before truncation: 20 entities, 77 relations
+INFO: After truncation: 20 entities, 77 relations
+DEBUG: Finding text chunks from 20 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=50, entity_info_count=20
+DEBUG: Vector similarity chunk selection: 90 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 90 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 50 chunks from 90 candidates
+INFO: Selecting 50 from 90 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 77 relations
+INFO: Find 7 additional chunks in 6 relations (deduplicated 24)
+DEBUG: Vector similarity chunk selection: num_of_chunks=15, entity_info_count=6
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 50 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 77 -> 60 (deduplicated 17)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 17, KG: 8287, Buffer: 200, Available for chunks: 20792
+DEBUG: Rerank request: 60 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 60 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 60)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 20792, source: mix)
+INFO: Final context: 20 entities, 77 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/12 E2/15 E3/1 E3/5 E3/28 E3/7 E5/47 E4/3 E6/24 E4/8 E3/25 E3/46 R1/7 E2/50 E7/10
+DEBUG: [_build_context_str] Converting to user format: 20 entities, 77 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36347
+DEBUG: [_build_query_context] Raw data entities: 20, relationships: 77, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款画珐琅缠枝莲纹卤壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 495
+DEBUG: Response: ChatCompletion(id='chatcmpl-06162f19-d348-9124-a03f-daf46497ef05', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:41266 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: test1, Type: default, include_detail: True
+INFO: [bubble] Selected topics: ['震惊冷知识', '名人八卦', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Cache missed(mode:mix type:keywords)
+DEBUG: [extract_keywords] language=Chinese, addon_params={'language': 'Chinese', 'entity_types': ['文物', '朝代', '历史时期', '文化特征', '人物', '地点', '事件', '工艺技术', '材质', '纹饰图案', '馆藏机构', '文献典籍']}
+DEBUG: [extract_keywords] Sending to LLM: 673 tokens (Prompt: 673)
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: None
+DEBUG: Query: ---Role---
+You are an expert keyword extractor, specializing in analyzing user queries for a Retrieval-Augmented Generation (RAG) system. Your ...
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 59
+DEBUG: Response: ChatCompletion(id='chatcmpl-5e6dec9b-7c1e-9569-8aec-ddf07effdb5b', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+DEBUG: High-level keywords: []
+DEBUG: Low-level  keywords: []
+WARNING: low_level_keywords is empty
+WARNING: high_level_keywords is empty
+WARNING: Forced low_level_keywords to origin query: test1
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: test1 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 9 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 10 entities, 9 relations, 20 vector chunks
+DEBUG: Before truncation: 10 entities, 9 relations
+INFO: After truncation: 10 entities, 9 relations
+DEBUG: Finding text chunks from 10 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=25, entity_info_count=10
+DEBUG: Vector similarity chunk selection: 10 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 10 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 10 chunks from 10 candidates
+INFO: Selecting 10 from 10 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 9 relations
+INFO: Find no additional relations-related chunks from 9 relations
+INFO: Round-robin merged chunks: 30 -> 29 (deduplicated 1)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 2, KG: 1205, Buffer: 200, Available for chunks: 27889
+DEBUG: Rerank request: 29 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 29 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 29)
+DEBUG: Token truncation: 20 chunks from 20 (chunk available tokens: 27889, source: mix)
+INFO: Final context: 10 entities, 9 relations, 20 chunks
+INFO: Final chunks S+F/O: E1/7 E1/6 C1/10 E1/1 C1/2 E1/2 E1/9 C1/12 C1/18 C1/3 E1/10 C1/14 C1/15 C1/16 C1/4 E1/5 C1/6 C1/7 E1/8 C1/11
+DEBUG: [_build_context_str] Converting to user format: 10 entities, 9 relations, 20 chunks
+DEBUG: [convert_to_user_format] Formatted 20/20 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 35801
+DEBUG: [_build_query_context] Raw data entities: 10, relationships: 9, chunks: 20
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: test1
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 458
+DEBUG: Response: ChatCompletion(id='chatcmpl-647fc67a-a505-9ea4-a3c3-d0fbe2211462', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:40692 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '数字震撼', '审美吐槽']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:175df0819aa2fe59d34d5cbea022eff7)
+DEBUG: High-level keywords: ['掐丝珐琅', '缠枝莲纹', '多穆壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '嵌石多穆壶', '乾隆时期', '珐琅器']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 嵌石多穆壶, 乾隆时期, 珐琅器 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 108 relations
+INFO: Query edges: 掐丝珐琅, 缠枝莲纹, 多穆壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 24 entities, 116 relations, 20 vector chunks
+DEBUG: Before truncation: 24 entities, 116 relations
+INFO: After truncation: 24 entities, 116 relations
+DEBUG: Finding text chunks from 24 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=60, entity_info_count=24
+DEBUG: Vector similarity chunk selection: 91 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 91 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 60 chunks from 91 candidates
+INFO: Selecting 60 from 91 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 116 relations
+INFO: Find 7 additional chunks in 5 relations (deduplicated 20)
+DEBUG: Vector similarity chunk selection: num_of_chunks=12, entity_info_count=5
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 60 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 87 -> 69 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 23, KG: 10838, Buffer: 200, Available for chunks: 18235
+DEBUG: Rerank request: 69 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 69 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 69)
+DEBUG: Token truncation: 13 chunks from 20 (chunk available tokens: 18235, source: mix)
+INFO: Final context: 24 entities, 116 relations, 13 chunks
+INFO: Final chunks S+F/O: E4/11 E2/48 E3/4 E5/6 E2/9 E6/30 E2/8 E4/1 E4/3 R12/3 E3/49 E1/5 E5/21
+DEBUG: [_build_context_str] Converting to user format: 24 entities, 116 relations, 13 chunks
+DEBUG: [convert_to_user_format] Formatted 13/13 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36616
+DEBUG: [_build_query_context] Raw data entities: 24, relationships: 116, chunks: 13
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款掐丝珐琅缠枝莲纹嵌石多穆壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 470
+DEBUG: Response: ChatCompletion(id='chatcmpl-1354ef39-cd4f-998f-9e99-3136aa05d117', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:40692 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款珐琅彩花卉纹蒜头瓶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '名人八卦', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:d8fa7ca6c7919a11cab31d0b74af4e43)
+DEBUG: High-level keywords: ['珐琅彩瓷器', '清代瓷器', '文物鉴定', '陶瓷纹饰']
+DEBUG: Low-level  keywords: ['乾隆款', '珐琅彩花卉纹蒜头瓶', '蒜头瓶', '乾隆时期']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 珐琅彩花卉纹蒜头瓶, 蒜头瓶, 乾隆时期 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 85 relations
+INFO: Query edges: 珐琅彩瓷器, 清代瓷器, 文物鉴定, 陶瓷纹饰 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 22 entities, 93 relations, 20 vector chunks
+DEBUG: Before truncation: 22 entities, 93 relations
+INFO: After truncation: 22 entities, 93 relations
+DEBUG: Finding text chunks from 22 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=55, entity_info_count=22
+DEBUG: Vector similarity chunk selection: 63 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 63 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 55 chunks from 63 candidates
+INFO: Selecting 55 from 63 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 93 relations
+INFO: Find no additional relations-related chunks from 93 relations
+INFO: Round-robin merged chunks: 75 -> 57 (deduplicated 18)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 16, KG: 9257, Buffer: 200, Available for chunks: 19823
+DEBUG: Rerank request: 57 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 57 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 57)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 19823, source: mix)
+INFO: Final context: 22 entities, 93 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/18 E7/29 E3/12 E3/3 E1/6 E2/13 E4/44 E1/4 E3/8 E1/23 E5/5 E3/11 E1/45 E2/1 E1/39
+DEBUG: [_build_context_str] Converting to user format: 22 entities, 93 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 38181
+DEBUG: [_build_query_context] Raw data entities: 22, relationships: 93, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款珐琅彩花卉纹蒜头瓶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 593
+DEBUG: Response: ChatCompletion(id='chatcmpl-92da7a10-7316-9b9d-b868-98151902ecbf', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:40692 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 乾隆款画珐琅缠枝莲纹卤壶, Type: 瓷器, include_detail: True
+INFO: [bubble] Selected topics: ['鉴定秘籍', '审美吐槽', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:8f0bc3cc8811eacdfe8c7c81fc597040)
+DEBUG: High-level keywords: ['画珐琅', '缠枝莲纹', '卤壶', '清代工艺品']
+DEBUG: Low-level  keywords: ['乾隆款', '乾隆时期', '画珐琅卤壶', '缠枝莲纹装饰']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 乾隆款, 乾隆时期, 画珐琅卤壶, 缠枝莲纹装饰 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 72 relations
+INFO: Query edges: 画珐琅, 缠枝莲纹, 卤壶, 清代工艺品 (top_k:10, cosine:0.2)
+INFO: Global query: 14 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 20 entities, 77 relations, 20 vector chunks
+DEBUG: Before truncation: 20 entities, 77 relations
+INFO: After truncation: 20 entities, 77 relations
+DEBUG: Finding text chunks from 20 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=50, entity_info_count=20
+DEBUG: Vector similarity chunk selection: 90 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 90 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 50 chunks from 90 candidates
+INFO: Selecting 50 from 90 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 77 relations
+INFO: Find 7 additional chunks in 6 relations (deduplicated 24)
+DEBUG: Vector similarity chunk selection: num_of_chunks=15, entity_info_count=6
+DEBUG: Vector similarity chunk selection: 7 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 7 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 7 chunks from 7 candidates
+INFO: Selecting 7 from 7 relation-related chunks by vector similarity
+DEBUG: KG related chunks: 50 from entitys, 7 from relations
+INFO: Round-robin merged chunks: 77 -> 60 (deduplicated 17)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 17, KG: 8287, Buffer: 200, Available for chunks: 20792
+DEBUG: Rerank request: 60 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 60 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 60)
+DEBUG: Token truncation: 15 chunks from 20 (chunk available tokens: 20792, source: mix)
+INFO: Final context: 20 entities, 77 relations, 15 chunks
+INFO: Final chunks S+F/O: E5/12 E2/15 E3/1 E3/5 E3/28 E3/7 E5/47 E4/3 E6/24 E4/8 E3/25 E3/46 R1/7 E2/50 E7/10
+DEBUG: [_build_context_str] Converting to user format: 20 entities, 77 relations, 15 chunks
+DEBUG: [convert_to_user_format] Formatted 15/15 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36347
+DEBUG: [_build_query_context] Raw data entities: 20, relationships: 77, chunks: 15
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 乾隆款画珐琅缠枝莲纹卤壶
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 528
+DEBUG: Response: ChatCompletion(id='chatcmpl-d93b201d-5abd-9b0e-97e3-4178154c08ff', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:40692 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 清明上河图, Type: 书画, include_detail: True
+INFO: [bubble] Selected topics: ['名人八卦', '值多少钱', '震惊冷知识']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:7373a7b387aed1bb8d6b4c2393b52cbd)
+DEBUG: High-level keywords: ['艺术价值', '历史画卷', '宋代社会生活']
+DEBUG: Low-level  keywords: ['清明上河图', '张择端', '北宋', '风俗画']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 清明上河图, 张择端, 北宋, 风俗画 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 14 relations
+INFO: Query edges: 艺术价值, 历史画卷, 宋代社会生活 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 26 entities, 24 relations, 20 vector chunks
+DEBUG: Before truncation: 26 entities, 24 relations
+INFO: After truncation: 26 entities, 24 relations
+DEBUG: Finding text chunks from 26 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=65, entity_info_count=26
+DEBUG: Vector similarity chunk selection: 26 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 26 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 26 chunks from 26 candidates
+INFO: Selecting 26 from 26 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 24 relations
+INFO: Find no additional relations-related chunks from 24 relations
+INFO: Round-robin merged chunks: 46 -> 41 (deduplicated 5)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 5, KG: 4135, Buffer: 200, Available for chunks: 24956
+DEBUG: Rerank request: 41 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 41 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 41)
+DEBUG: Token truncation: 19 chunks from 20 (chunk available tokens: 24956, source: mix)
+INFO: Final context: 26 entities, 24 relations, 19 chunks
+INFO: Final chunks S+F/O: E1/19 E1/3 C1/9 C1/3 C1/11 C1/20 C1/17 C1/14 E3/14 C1/15 C1/8 E3/2 C1/12 E2/16 E2/15 E2/17 C1/18 E2/13 E1/26
+DEBUG: [_build_context_str] Converting to user format: 26 entities, 24 relations, 19 chunks
+DEBUG: [convert_to_user_format] Formatted 19/19 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36953
+DEBUG: [_build_query_context] Raw data entities: 26, relationships: 24, chunks: 19
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 清明上河图
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 506
+DEBUG: Response: ChatCompletion(id='chatcmpl-7489d054-f00a-9b1d-a8f8-49a1a8edb91d', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:37126 - "POST /bubble HTTP/1.1" 200
+INFO: [bubble] Artifact: 清明上河图, Type: 书画, include_detail: True
+INFO: [bubble] Selected topics: ['名人八卦', '震惊冷知识', '值多少钱']
+DEBUG: [aquery_llm] Query param: QueryParam(mode='mix', only_need_context=True, only_need_prompt=False, response_type='Multiple Paragraphs', stream=False, top_k=10, chunk_top_k=20, max_entity_tokens=6000, max_relation_tokens=8000, max_total_tokens=30000, hl_keywords=[], ll_keywords=[], conversation_history=[], history_turns=0, model_func=None, user_prompt=None, enable_rerank=True, include_references=False)
+DEBUG: Flattened cache hit(key:mix:keywords:7373a7b387aed1bb8d6b4c2393b52cbd)
+DEBUG: High-level keywords: ['艺术价值', '历史画卷', '宋代社会生活']
+DEBUG: Low-level  keywords: ['清明上河图', '张择端', '北宋', '风俗画']
+DEBUG: Pre-computed query embedding for all vector operations
+INFO: Query nodes: 清明上河图, 张择端, 北宋, 风俗画 (top_k:10, cosine:0.2)
+INFO: Local query: 10 entites, 14 relations
+INFO: Query edges: 艺术价值, 历史画卷, 宋代社会生活 (top_k:10, cosine:0.2)
+INFO: Global query: 16 entites, 10 relations
+INFO: Naive query: 20 chunks (chunk_top_k:20 cosine:0.2)
+INFO: Raw search results: 26 entities, 24 relations, 20 vector chunks
+DEBUG: Before truncation: 26 entities, 24 relations
+INFO: After truncation: 26 entities, 24 relations
+DEBUG: Finding text chunks from 26 entities
+DEBUG: Vector similarity chunk selection: num_of_chunks=65, entity_info_count=26
+DEBUG: Vector similarity chunk selection: 26 unique chunk IDs collected
+DEBUG: Using pre-computed query embedding for vector similarity chunk selection
+DEBUG: Vector similarity chunk selection: 26 chunk vectors Retrieved
+DEBUG: Vector similarity chunk selection: 26 chunks from 26 candidates
+INFO: Selecting 26 from 26 entity-related chunks by vector similarity
+DEBUG: Finding text chunks from 24 relations
+INFO: Find no additional relations-related chunks from 24 relations
+INFO: Round-robin merged chunks: 46 -> 41 (deduplicated 5)
+DEBUG: Token allocation - Total: 30000, SysPrompt: 704, Query: 5, KG: 4135, Buffer: 200, Available for chunks: 24956
+DEBUG: Rerank request: 41 documents, model: gte-rerank-v2, format: aliyun
+INFO: Successfully reranked: 20 chunks from 41 original chunks
+DEBUG: Kept chunk_top-k: 20 chunks (deduplicated original: 41)
+DEBUG: Token truncation: 19 chunks from 20 (chunk available tokens: 24956, source: mix)
+INFO: Final context: 26 entities, 24 relations, 19 chunks
+INFO: Final chunks S+F/O: E1/19 E1/3 C1/9 C1/3 C1/11 C1/20 C1/17 C1/14 E3/14 C1/15 C1/8 E3/2 C1/12 E2/16 E2/15 E2/17 C1/18 E2/13 E1/26
+DEBUG: [_build_context_str] Converting to user format: 26 entities, 24 relations, 19 chunks
+DEBUG: [convert_to_user_format] Formatted 19/19 chunks
+DEBUG: [_build_context_str] Final data after conversion: 0 entities, 0 relationships, 0 chunks
+DEBUG: [_build_query_context] Context length: 36953
+DEBUG: [_build_query_context] Raw data entities: 26, relationships: 24, chunks: 19
+INFO: [bubble] Using knowledge base context
+DEBUG: ===== Entering func of LLM =====
+DEBUG: Model: qwen3-max   Base URL: https://dashscope.aliyuncs.com/compatible-mode/v1
+DEBUG: Client Configs: {}
+DEBUG: Additional kwargs: {}
+DEBUG: Num of history messages: 0
+DEBUG: System prompt: ---角色---
+你是博物馆文物的"八卦翻译官"，把枯燥的文物知识变成让人忍不住想点的气泡。
+---任务---
+为识别出的文物生成3个"气泡"，每个气泡包含：
+- **title**: 10-15字的吸睛短句（像弹幕/朋友圈标题，要有悬念感）
+- **detail**...
+DEBUG: Query: 清明上河图
+DEBUG: ===== Sending Query to LLM =====
+DEBUG: Response content len: 484
+DEBUG: Response: ChatCompletion(id='chatcmpl-8fde9a2c-f006-9be2-ae28-f80a68327b55', choices=[Choice(finish_reason='stop', index=0, logprobs=None, message=Cha...
+INFO: 192.168.10.1:46278 - "POST /bubble HTTP/1.1" 200
