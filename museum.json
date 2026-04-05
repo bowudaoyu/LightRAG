@@ -1,0 +1,585 @@
+{
+  "museum": {
+    "museum_id": "CN_NMC",
+    "name": "中国国家博物馆",
+    "city": "北京",
+    "address": "东长安街16号"
+  },
+  "spatial_topology":[
+    {
+      "floor_id": "CN_NMC_FLOOR_B1",
+      "floor_name": "地下一层 (B1)",
+      "zones":[
+        {
+          "zone_id": "CN_NMC_ZONE_B1_NORTH",
+          "name": "古代中国基本陈列（北区）",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "古代中国（史前至南北朝）"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_B1_SOUTH",
+          "name": "古代中国基本陈列（南区）",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "古代中国（隋唐至明清）"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_CAFETERIA",
+          "name": "国博食堂",
+          "type": "Facility",
+          "facility_type": "Food_Drink"
+        }
+      ]
+    },
+    {
+      "floor_id": "CN_NMC_FLOOR_F1",
+      "floor_name": "一层 (F1)",
+      "zones":[
+        {
+          "zone_id": "CN_NMC_ZONE_F1_NORTH",
+          "name": "北1展厅",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "中国古代佛造像艺术"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F1_SOUTH",
+          "name": "南1展厅",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "中国古代瓷器艺术"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_VISITOR_CENTER",
+          "name": "游客接待台",
+          "type": "Facility",
+          "facility_type": "Service"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_LUGGAGE",
+          "name": "行李寄存处",
+          "type": "Facility",
+          "facility_type": "Service"
+        }
+      ]
+    },
+    {
+      "floor_id": "CN_NMC_FLOOR_F2",
+      "floor_name": "二层 (F2)",
+      "zones":[
+        {
+          "zone_id": "CN_NMC_ZONE_F2_NORTH",
+          "name": "北2展厅",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "中国古代书画"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F2_SOUTH",
+          "name": "南2展厅",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "中国古代玉器艺术"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_GIFT_SHOP",
+          "name": "国博文创旗舰店",
+          "type": "Facility",
+          "facility_type": "Merch"
+        }
+      ]
+    },
+    {
+      "floor_id": "CN_NMC_FLOOR_F3",
+      "floor_name": "三层 (F3)",
+      "zones":[
+        {
+          "zone_id": "CN_NMC_ZONE_F3_NORTH",
+          "name": "北3展厅",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "中国古代钱币"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F3_SOUTH",
+          "name": "南3展厅",
+          "type": "Exhibition_Hall",
+          "current_exhibition": "【特展】庞贝神话：意大利那不勒斯国家考古博物馆藏古希腊古罗马珍品展"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_CAFE",
+          "name": "国博咖啡厅",
+          "type": "Facility",
+          "facility_type": "Food_Drink"
+        }
+      ]
+    }
+  ],
+  "artifacts":[
+    {
+      "artifact_id": "ART_NMC_001",
+      "name": "后母戊鼎",
+      "category": "青铜器",
+      "image_url": "https://oss.yourdomain.com/mock/houmuwuding.jpg",
+      "description": "商代晚期青铜器，中国迄今出土最大、最重的青铜礼器，享有“镇国之宝”美誉。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_002",
+      "name": "四羊方尊",
+      "category": "青铜器",
+      "image_url": "https://oss.yourdomain.com/mock/siyangfangzun.jpg",
+      "description": "商代晚期青铜礼器，四周边缘铸有四只栩栩如生的卷角羊，代表了商代青铜铸造工艺的巅峰。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_003",
+      "name": "击鼓说唱俑",
+      "category": "陶塑",
+      "image_url": "https://oss.yourdomain.com/mock/jigushuochangyong.jpg",
+      "description": "东汉时期泥质灰陶，生动展现了汉代俳优（滑稽戏演员）眉飞色舞的表演瞬间，极具感染力。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_004",
+      "name": "人面鱼纹彩陶盆",
+      "category": "陶塑",
+      "image_url": "https://oss.yourdomain.com/mock/renmianyuwen.jpg",
+      "description": "新石器时代仰韶文化，内壁绘有神秘的人面与鱼纹交织图案，是史前原始信仰的珍贵物证。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_005",
+      "name": "红山文化玉龙",
+      "category": "玉器",
+      "image_url": "https://oss.yourdomain.com/mock/yulong.jpg",
+      "description": "新石器时代红山文化，整体呈“C”字形，被誉为“中华第一龙”，是早期龙图腾的雏形。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_006",
+      "name": "大盂鼎",
+      "category": "青铜器",
+      "image_url": "https://oss.yourdomain.com/mock/dayuding.jpg",
+      "description": "西周早期青铜重器，内壁铸有291字长篇铭文，记载了周康王向盂讲述文王、武王建国经验的历史。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_007",
+      "name": "错金银云纹青铜犀尊",
+      "category": "青铜器",
+      "image_url": "https://oss.yourdomain.com/mock/xizun.jpg",
+      "description": "西汉时期酒器，造型为一头健硕的犀牛，通体饰满错金银流云纹，华丽至极。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_008",
+      "name": "鹰形陶鼎",
+      "category": "陶塑",
+      "image_url": "https://oss.yourdomain.com/mock/yingxingtaoding.jpg",
+      "description": "新石器时代仰韶文化，将鼎的造型巧妙融入一只威武的雄鹰之中，兼具实用与雕塑美感。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_009",
+      "name": "长信宫灯",
+      "category": "青铜器",
+      "image_url": "https://oss.yourdomain.com/mock/changxingongdeng.jpg",
+      "description": "西汉鎏金铜灯，宫女提灯造型，设计有精妙的排烟导水环保装置，汉代审美的代表作。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_010",
+      "name": "九龙九凤冠",
+      "category": "金银首饰",
+      "image_url": "https://oss.yourdomain.com/mock/jiulongjiufengguan.jpg",
+      "description": "明代孝端皇后御用，采用点翠、花丝镶嵌工艺，镶嵌百余颗红蓝宝石及数千颗珍珠，极其奢华。",
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_011",
+      "name": "木雕观音菩萨坐像",
+      "category": "佛造像",
+      "image_url": "https://oss.yourdomain.com/mock/mudiaoguanyin.jpg",
+      "description": "宋代木雕彩绘，观音姿态闲适安详（水月观音），打破了早期佛教造像的僵硬感，极具世俗人情味。",
+      "located_in_zone_id": "CN_NMC_ZONE_F1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_012",
+      "name": "铜鎏金绿度母坐像",
+      "category": "佛造像",
+      "image_url": "https://oss.yourdomain.com/mock/lvdumu.jpg",
+      "description": "明代永乐年间宫廷造像，工艺精湛，度母身姿婀娜，面相慈悲，代表了明代藏传佛教金铜造像的最高水准。",
+      "located_in_zone_id": "CN_NMC_ZONE_F1_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_013",
+      "name": "青花海水云龙纹扁壶",
+      "category": "瓷器",
+      "image_url": "https://oss.yourdomain.com/mock/qinghuabianhu.jpg",
+      "description": "明代永乐时期，使用进口“苏麻离青”料烧制，发色浓艳，白龙穿梭于青花海水之中，气势磅礴。",
+      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_014",
+      "name": "粉彩镂空转心瓶",
+      "category": "瓷器",
+      "image_url": "https://oss.yourdomain.com/mock/zhuanxinping.jpg",
+      "description": "清代乾隆时期御窑炫技之作，内胆可转动，透过外瓶镂空处可见内瓶绘制的连环画，工艺巧夺天工。",
+      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_015",
+      "name": "钧窑玫瑰紫釉尊",
+      "category": "瓷器",
+      "image_url": "https://oss.yourdomain.com/mock/junyaozun.jpg",
+      "description": "宋代五大名窑之一钧窑代表作，“入窑一色，出窑万彩”，釉面呈现出如晚霞般绚丽的玫瑰紫色。",
+      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_016",
+      "name": "明代文徵明《真赏斋图》卷",
+      "category": "书画",
+      "image_url": "https://oss.yourdomain.com/mock/zhenshangzhaitu.jpg",
+      "description": "明代吴门画派领袖文徵明晚年杰作，描绘了文人雅士在庭院中鉴赏金石书画的清雅生活。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_017",
+      "name": "清代郑板桥《竹石图》",
+      "category": "书画",
+      "image_url": "https://oss.yourdomain.com/mock/zhushitu.jpg",
+      "description": "扬州八怪之一郑板桥代表作，以水墨撇写幽竹怪石，笔力挺拔，彰显文人傲骨气节。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_018",
+      "name": "宋人《辋川图》卷",
+      "category": "书画",
+      "image_url": "https://oss.yourdomain.com/mock/wangchuantu.jpg",
+      "description": "临摹唐代王维的名作，全景式展现了辋川别墅的二十景，是研究唐宋山水园林的重要图像史料。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_019",
+      "name": "清代《乾隆南巡图》第六卷",
+      "category": "书画",
+      "image_url": "https://oss.yourdomain.com/mock/qianlongnanxun.jpg",
+      "description": "宫廷画师徐扬等人绘制的宏篇巨制，写实地记录了乾隆皇帝下江南沿途的繁华市井与壮丽山河。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_020",
+      "name": "宋代王安石《楞严经旨要》卷",
+      "category": "书画",
+      "image_url": "https://oss.yourdomain.com/mock/wanganshi_shufa.jpg",
+      "description": "北宋政治家王安石存世罕见的书法真迹，笔势清劲，结体紧凑，反映了其峭拔的个性。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_021",
+      "name": "商代妇好墓玉凤",
+      "category": "玉器",
+      "image_url": "https://oss.yourdomain.com/mock/fuhaoyufeng.jpg",
+      "description": "商代晚期玉器，造型优美流畅，凤鸟回首长翎，是商代玉雕线条艺术的巅峰之作。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_022",
+      "name": "良渚文化神人兽面纹玉琮",
+      "category": "玉器",
+      "image_url": "https://oss.yourdomain.com/mock/yucong.jpg",
+      "description": "新石器时代良渚文化祭祀重器，外方内圆，表面精雕细琢了神秘的神人兽面徽记，象征神权。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_023",
+      "name": "汉代白玉龙形佩",
+      "category": "玉器",
+      "image_url": "https://oss.yourdomain.com/mock/yulongpei.jpg",
+      "description": "西汉玉器，采用游丝毛雕工艺，双龙蜿蜒交织，充满动感与张力，体现了大汉王朝的雄浑气魄。",
+      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_024",
+      "name": "战国齐刀币",
+      "category": "钱币",
+      "image_url": "https://oss.yourdomain.com/mock/qidaobi.jpg",
+      "description": "战国时期齐国铸造的青铜货币，形似环首刀，带有“齐大化”等铭文，是先秦货币史的重要实物。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_025",
+      "name": "王莽时期“一刀平五千”错金刀币",
+      "category": "钱币",
+      "image_url": "https://oss.yourdomain.com/mock/yidaopingwuqian.jpg",
+      "description": "新朝王莽时期铸造，造型独特，环首处用黄金错出“一刀”二字，极具艺术审美价值，存世稀少。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_026",
+      "name": "楚国“郢爰”金版",
+      "category": "钱币",
+      "image_url": "https://oss.yourdomain.com/mock/yingyuan.jpg",
+      "description": "战国时期楚国发行的黄金货币，呈印子金状，使用时需要切割称重，是中国最早的原始黄金铸币。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_027",
+      "name": "大清铜币（样币）",
+      "category": "钱币",
+      "image_url": "https://oss.yourdomain.com/mock/daqing_tongbi.jpg",
+      "description": "清末货币制度改革的产物，代表了当时中国近代机制币铸造工艺的引入与发展。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+    },
+    {
+      "artifact_id": "ART_NMC_028",
+      "name": "《花卉与水果》庞贝壁画碎片",
+      "category": "壁画",
+      "image_url": "https://oss.yourdomain.com/mock/pompeii_fresco.jpg",
+      "description": "古罗马时期庞贝城出土，色彩鲜艳，运用了高超的透视与光影画法，被维苏威火山灰封存近两千年。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_029",
+      "name": "持酒钵的农牧神青铜雕像",
+      "category": "青铜雕塑",
+      "image_url": "https://oss.yourdomain.com/mock/faun_bronze.jpg",
+      "description": "古罗马时期，出土于庞贝古城的“农牧神之家”，展现了古希腊罗马神话中神明醉酒狂欢的生动姿态。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
+    },
+    {
+      "artifact_id": "ART_NMC_030",
+      "name": "大理石维纳斯雕像",
+      "category": "石雕",
+      "image_url": "https://oss.yourdomain.com/mock/venus_marble.jpg",
+      "description": "古罗马时期大理石雕刻，展现了爱与美之神维纳斯沐浴时的优美体态，是古典写实主义雕塑的典范。",
+      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
+    }
+  ],
+
+  "exhibitions":[
+    {
+      "exhibition_id": "EXH_NMC_001",
+      "name": "古代中国（史前至南北朝）",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "description": "以考古发现和历史文献为依托，系统展示从远古时期到南北朝的中国古代文明发展历程。展品涵盖青铜重器、彩陶、玉器等，呈现华夏文明从萌芽到繁盛的宏大叙事。",
+      "artifact_ids": ["ART_NMC_001","ART_NMC_002","ART_NMC_004","ART_NMC_005","ART_NMC_006","ART_NMC_008"],
+      "tips": "建议参观时间40-60分钟。北区展厅面积较大，后母戊鼎和四羊方尊位于展厅中央，不要错过角落里的鹰形陶鼎。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_002",
+      "name": "古代中国（隋唐至明清）",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_B1_SOUTH",
+      "description": "延续北区的历史脉络，展现隋唐至明清时期中国古代文明的灿烂成就。展品涵盖汉代陶俑、西汉青铜酒器、鎏金铜灯及明代凤冠等，反映了大一统帝国的繁荣与工艺巅峰。",
+      "artifact_ids": ["ART_NMC_003","ART_NMC_007","ART_NMC_009","ART_NMC_010"],
+      "tips": "建议参观时间30-40分钟。击鼓说唱俑是国博最受欢迎的'表情包文物'之一，适合拍照打卡。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_003",
+      "name": "中国古代佛造像艺术",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_F1_NORTH",
+      "description": "汇集从北朝到明清的佛教造像精品，展现佛教艺术传入中国后逐步本土化的演变历程。展品以石雕、铜鎏金、木雕为主，体现不同时期的造像风格变迁。",
+      "artifact_ids": ["ART_NMC_011","ART_NMC_012"],
+      "tips": "建议参观时间20-30分钟。宋代木雕观音的闲适姿态与明代绿度母的端庄慈悲形成鲜明对比，值得细细品味。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_004",
+      "name": "中国古代瓷器艺术",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_F1_SOUTH",
+      "description": "系统展示从原始瓷器到清代御窑的中国瓷器发展史。展品涵盖宋代五大名窑、元青花、明永乐青花及清乾隆粉彩等代表作，呈现中国作为'瓷器之国'的辉煌成就。",
+      "artifact_ids": ["ART_NMC_013","ART_NMC_014","ART_NMC_015"],
+      "tips": "建议参观时间20-30分钟。粉彩镂空转心瓶的内胆可转动效果是全展最惊艳的设计，注意观察透过镂空看到的内瓶画面。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_005",
+      "name": "中国古代书画",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_F2_NORTH",
+      "description": "展出馆藏历代书画精品，从宋人山水到明清文人画，涵盖卷轴、册页、手卷等多种形制。展品体现了中国传统绘画'诗书画印'四位一体的独特审美体系。",
+      "artifact_ids": ["ART_NMC_016","ART_NMC_017","ART_NMC_018","ART_NMC_019","ART_NMC_020"],
+      "tips": "建议参观时间25-35分钟。书画展厅光线较暗以保护文物，需要适应一下再仔细观看。乾隆南巡图篇幅极长，可慢慢展读。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_006",
+      "name": "中国古代玉器艺术",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_F2_SOUTH",
+      "description": "系统展示从新石器时代到清代的中国玉器发展脉络。展品涵盖红山文化、良渚文化、商代及汉代的代表性玉器，揭示'君子比德于玉'的文化传统。",
+      "artifact_ids": ["ART_NMC_021","ART_NMC_022","ART_NMC_023"],
+      "tips": "建议参观时间20-25分钟。良渚玉琮表面的神人兽面纹极其精细，建议使用展柜旁的放大镜仔细观察。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_007",
+      "name": "中国古代钱币",
+      "type": "permanent",
+      "zone_id": "CN_NMC_ZONE_F3_NORTH",
+      "description": "以实物为线索，完整呈现从先秦贝币到近代机制币的中国货币发展史。展品涵盖刀币、布币、金版、五铢钱、交子等各时期代表性货币，揭示货币与经济制度的互动演变。",
+      "artifact_ids": ["ART_NMC_024","ART_NMC_025","ART_NMC_026","ART_NMC_027"],
+      "tips": "建议参观时间15-20分钟。王莽'一刀平五千'错金刀币的黄金错字工艺堪称一绝，存世极少，务必驻足细看。"
+    },
+    {
+      "exhibition_id": "EXH_NMC_008",
+      "name": "庞贝神话：意大利那不勒斯国家考古博物馆藏古希腊古罗马珍品展",
+      "type": "temporary",
+      "zone_id": "CN_NMC_ZONE_F3_SOUTH",
+      "valid_from": "2026-02-01",
+      "valid_to": "2026-08-31",
+      "description": "来自意大利那不勒斯国家考古博物馆的近百件珍品首次亮相中国，包括庞贝古城出土的壁画、青铜雕塑和大理石雕像。展览再现了公元79年维苏威火山喷发前古罗马城市的繁荣生活与艺术成就。",
+      "artifact_ids": ["ART_NMC_028","ART_NMC_029","ART_NMC_030"],
+      "tips": "建议参观时间25-40分钟。特展人气较高，建议工作日或下午3点后参观以避开人流高峰。壁画碎片的色彩保存极为完好，令人震撼。"
+    }
+  ],
+
+  "themes":[
+    {
+      "theme_id": "THEME_NMC_001",
+      "name": "商代青铜文明",
+      "description": "商代（约前1600-前1046年）是中国青铜时代的巅峰。从王室祭祀用的后母戊鼎、四羊方尊等青铜重器，到妇好墓出土的精美玉凤，商代工匠将金属铸造和玉石雕琢推向了极致。这些文物散布于地下一层北区和二层南区，串联起一条跨越3000年的对话之路。",
+      "artifact_ids": ["ART_NMC_001","ART_NMC_002","ART_NMC_021"],
+      "span_zones": ["CN_NMC_ZONE_B1_NORTH","CN_NMC_ZONE_F2_SOUTH"]
+    },
+    {
+      "theme_id": "THEME_NMC_002",
+      "name": "史前信仰密码",
+      "description": "在文字发明之前，先民用图腾和器物表达对天地的敬畏。仰韶文化的人面鱼纹盆暗藏神秘的原始巫术符号，红山文化的C形玉龙被视为中华龙图腾的雏形，良渚文化的玉琮以神人兽面纹象征沟通天地的神权。这些跨越数千年的信仰遗存，从地下一层北区一直延伸到二层南区。",
+      "artifact_ids": ["ART_NMC_004","ART_NMC_005","ART_NMC_008","ART_NMC_022"],
+      "span_zones": ["CN_NMC_ZONE_B1_NORTH","CN_NMC_ZONE_F2_SOUTH"]
+    },
+    {
+      "theme_id": "THEME_NMC_003",
+      "name": "皇权与礼制",
+      "description": "从西周大盂鼎铭文中记载的王朝治国之道，到明代九龙九凤冠的极致奢华，再到乾隆南巡图记录的盛世威仪——帝王权力通过器物、服饰和绘画得以彰显。这条主题线串联地下一层至二层，横跨3000年的皇权叙事。",
+      "artifact_ids": ["ART_NMC_006","ART_NMC_010","ART_NMC_019"],
+      "span_zones": ["CN_NMC_ZONE_B1_NORTH","CN_NMC_ZONE_B1_SOUTH","CN_NMC_ZONE_F2_NORTH"]
+    },
+    {
+      "theme_id": "THEME_NMC_004",
+      "name": "匠心独运：古代科技之美",
+      "description": "古代工匠将实用功能与艺术美感完美融合。西汉长信宫灯内置环保排烟系统，错金银犀尊以精湛的金银错丝工艺令人叹为观止，清乾隆粉彩转心瓶的可旋转内胆更是巧夺天工。这些'黑科技'文物分布在地下一层南区和一层南区。",
+      "artifact_ids": ["ART_NMC_009","ART_NMC_007","ART_NMC_014"],
+      "span_zones": ["CN_NMC_ZONE_B1_SOUTH","CN_NMC_ZONE_F1_SOUTH"]
+    },
+    {
+      "theme_id": "THEME_NMC_005",
+      "name": "佛光东渐",
+      "description": "佛教自汉代传入中国后，造像艺术经历了从模仿到创新的本土化进程。宋代木雕观音以闲适自在的世俗姿态打破了早期造像的僵硬，明永乐铜鎏金绿度母则代表了宫廷藏传佛教造像的最高水准。两尊造像同在一层北区，对比欣赏别有意趣。",
+      "artifact_ids": ["ART_NMC_011","ART_NMC_012"],
+      "span_zones": ["CN_NMC_ZONE_F1_NORTH"]
+    },
+    {
+      "theme_id": "THEME_NMC_006",
+      "name": "文人风骨",
+      "description": "中国文人以书画寄托志趣、彰显气节。文徵明晚年绘就的《真赏斋图》描绘了文人雅集的清逸生活，郑板桥以墨竹怪石表达傲骨不屈，王安石罕见的书法真迹则透露出政治家的峭拔个性。三件展品均在二层北区书画厅，构成一场跨越宋明清的文人精神对话。",
+      "artifact_ids": ["ART_NMC_016","ART_NMC_017","ART_NMC_020"],
+      "span_zones": ["CN_NMC_ZONE_F2_NORTH"]
+    },
+    {
+      "theme_id": "THEME_NMC_007",
+      "name": "地中海古典文明",
+      "description": "庞贝特展将古希腊罗马文明的辉煌呈现在中国观众面前。色彩鲜艳的壁画碎片展现了高超的透视画法，农牧神青铜雕像捕捉了神话中的狂欢瞬间，大理石维纳斯则是古典写实雕塑的典范。所有展品均在三层南区，与中国文物隔空呼应，开启一场东西方文明的跨时空对话。",
+      "artifact_ids": ["ART_NMC_028","ART_NMC_029","ART_NMC_030"],
+      "span_zones": ["CN_NMC_ZONE_F3_SOUTH"]
+    }
+  ],
+
+  "routes":[
+    {
+      "route_id": "ROUTE_NMC_001",
+      "name": "2小时国宝精华路线",
+      "duration_minutes": 120,
+      "target_audience": "首次来馆的普通观众",
+      "description": "一条覆盖全馆精华的经典路线，从地下一层出发，逐层向上，不走回头路。",
+      "stops":[
+        {"zone_id":"CN_NMC_ZONE_B1_NORTH","duration_min":35,"highlight_artifacts":["ART_NMC_001","ART_NMC_002","ART_NMC_005"],"note":"先看镇馆之宝后母戊鼎和四羊方尊，再找到角落里的红山玉龙"},
+        {"zone_id":"CN_NMC_ZONE_B1_SOUTH","duration_min":20,"highlight_artifacts":["ART_NMC_003","ART_NMC_009"],"note":"打卡击鼓说唱俑，欣赏长信宫灯的环保设计"},
+        {"zone_id":"CN_NMC_ZONE_F1_NORTH","duration_min":10,"highlight_artifacts":["ART_NMC_011"],"note":"乘电梯至一层，欣赏宋代木雕观音的闲适之美"},
+        {"zone_id":"CN_NMC_ZONE_F1_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_014","ART_NMC_015"],"note":"粉彩转心瓶是全馆最精巧的器物之一"},
+        {"zone_id":"CN_NMC_ZONE_F2_NORTH","duration_min":15,"highlight_artifacts":["ART_NMC_016","ART_NMC_019"],"note":"书画厅光线暗，需适应后再细看乾隆南巡图"},
+        {"zone_id":"CN_NMC_ZONE_F3_SOUTH","duration_min":25,"highlight_artifacts":["ART_NMC_028","ART_NMC_030"],"note":"以庞贝特展收尾，从中国文明穿越到地中海文明"}
+      ]
+    },
+    {
+      "route_id": "ROUTE_NMC_002",
+      "name": "亲子探索路线",
+      "duration_minutes": 90,
+      "target_audience": "带6-12岁儿童的家庭",
+      "description": "精选最具视觉冲击力和趣味性的文物，节奏轻快，穿插休息和互动环节。",
+      "stops":[
+        {"zone_id":"CN_NMC_FAC_LUGGAGE","duration_min":5,"highlight_artifacts":[],"note":"先在一层寄存大件行李，轻装上阵"},
+        {"zone_id":"CN_NMC_ZONE_B1_NORTH","duration_min":25,"highlight_artifacts":["ART_NMC_001","ART_NMC_008"],"note":"让孩子猜猜后母戊鼎有多重（832公斤！），找一找像老鹰的鼎"},
+        {"zone_id":"CN_NMC_ZONE_B1_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_003"],"note":"击鼓说唱俑是最受小朋友欢迎的'表情包文物'，模仿它的表情拍照"},
+        {"zone_id":"CN_NMC_FAC_CAFETERIA","duration_min":15,"highlight_artifacts":[],"note":"在国博食堂休息补充能量"},
+        {"zone_id":"CN_NMC_ZONE_F1_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_014"],"note":"粉彩转心瓶可以转动的内胆让孩子大开眼界"},
+        {"zone_id":"CN_NMC_ZONE_F3_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_029","ART_NMC_030"],"note":"庞贝的神话雕塑对孩子有天然吸引力"}
+      ]
+    },
+    {
+      "route_id": "ROUTE_NMC_003",
+      "name": "青铜器深度之旅",
+      "duration_minutes": 75,
+      "target_audience": "对青铜器和古代冶金感兴趣的观众",
+      "description": "聚焦馆藏青铜重器，从商代祭祀礼器到西汉生活用器，感受中国青铜文明从巅峰到余晖的完整弧线。",
+      "stops":[
+        {"zone_id":"CN_NMC_ZONE_B1_NORTH","duration_min":35,"highlight_artifacts":["ART_NMC_001","ART_NMC_002","ART_NMC_006"],"note":"三件青铜重器集中于此：后母戊鼎（最重）、四羊方尊（最精美）、大盂鼎（铭文最长）"},
+        {"zone_id":"CN_NMC_ZONE_B1_SOUTH","duration_min":25,"highlight_artifacts":["ART_NMC_007","ART_NMC_009"],"note":"错金银犀尊代表了青铜装饰工艺的极致，长信宫灯则是实用与美学的完美结合"},
+        {"zone_id":"CN_NMC_FAC_CAFE","duration_min":15,"highlight_artifacts":[],"note":"上到三层咖啡厅，边休息边回味刚才看到的青铜瑰宝"}
+      ]
+    }
+  ],
+
+  "artifact_relations":[
+    {
+      "source_artifact_id": "ART_NMC_001",
+      "target_artifact_id": "ART_NMC_002",
+      "relation_type": "RELATED_TO",
+      "description": "后母戊鼎与四羊方尊同为商代晚期青铜礼器的巅峰之作，前者以832公斤的重量称霸，后者以四羊造型的精美著称，共同代表了中国青铜铸造技术的最高成就。两件均陈列于地下一层北区。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_001",
+      "target_artifact_id": "ART_NMC_006",
+      "relation_type": "RELATED_TO",
+      "description": "后母戊鼎（商代）与大盂鼎（西周）是中国古代最重要的两件青铜重器。后母戊鼎以体量著称，大盂鼎以291字铭文记载了珍贵的历史。两者见证了从商到周的王朝更替，均在地下一层北区。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_001",
+      "target_artifact_id": "ART_NMC_021",
+      "relation_type": "RELATED_TO",
+      "description": "后母戊鼎与妇好墓玉凤均与商代王室密切相关。后母戊鼎是商王祭祀母亲的礼器，妇好墓玉凤出土于商王武丁王后妇好的墓葬。两件文物分别在地下一层北区和二层南区，串联起商代王室生活的青铜与玉器两面。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_004",
+      "target_artifact_id": "ART_NMC_008",
+      "relation_type": "RELATED_TO",
+      "description": "人面鱼纹彩陶盆与鹰形陶鼎同属仰韶文化（距今约5000-7000年），是黄河流域先民的杰出创造。前者以神秘的图案承载原始信仰，后者以鹰的造型展现雕塑美感，两件均在地下一层北区。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_005",
+      "target_artifact_id": "ART_NMC_022",
+      "relation_type": "RELATED_TO",
+      "description": "红山文化玉龙与良渚文化玉琮代表了中国新石器时代北方和南方两大玉文化体系。红山玉龙是龙图腾的雏形，良渚玉琮象征天地神权。两件分别在地下一层北区和二层南区，对比可见南北先民信仰的异同。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_011",
+      "target_artifact_id": "ART_NMC_012",
+      "relation_type": "RELATED_TO",
+      "description": "木雕观音菩萨坐像（宋代）与铜鎏金绿度母坐像（明代）同在一层北区佛造像展厅，分别代表了汉传佛教和藏传佛教的造像巅峰。宋代观音以世俗化的闲适姿态著称，明代绿度母则保持了端庄慈悲的宗教气质。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_007",
+      "target_artifact_id": "ART_NMC_009",
+      "relation_type": "RELATED_TO",
+      "description": "错金银云纹青铜犀尊与长信宫灯同为西汉金属工艺杰作。犀尊以错金银技法将青铜器推向装饰艺术巅峰，长信宫灯则以巧妙的环保排烟设计体现了实用与美学的统一。两件均在地下一层南区。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_016",
+      "target_artifact_id": "ART_NMC_017",
+      "relation_type": "RELATED_TO",
+      "description": "文徵明《真赏斋图》与郑板桥《竹石图》是明清文人画的代表之作。文徵明以工整雅致的笔法描绘文人生活理想，郑板桥以疏放恣意的墨竹彰显傲骨气节，两人风格迥异却同为文人精神的载体。两件均在二层北区。"
+    },
+    {
+      "source_artifact_id": "ART_NMC_028",
+      "target_artifact_id": "ART_NMC_030",
+      "relation_type": "RELATED_TO",
+      "description": "《花卉与水果》庞贝壁画与大理石维纳斯雕像同出自古罗马时期，分别代表了古典绘画和雕塑的最高成就。壁画展现了精湛的透视与光影技法，维纳斯则是古典写实主义人体雕塑的典范。两件均在三层南区庞贝特展中展出。"
+    }
+  ]
+}
