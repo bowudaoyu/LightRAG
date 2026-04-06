@@ -268,23 +268,29 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
         edge_weight = priority / 5.0
 
         # --- HAPPENS_AT / AFFECTS edges → Zone ---
+        # Edge descriptions use semantic context without entity names/times,
+        # since src_id/tgt_id already carry the entity identity.
+        category_cn = {"activity": "活动", "ticket": "票务", "operation": "运营",
+                        "exhibition_update": "展览动态"}.get(category, category)
         for zone_name in item_zone_names:
             if node_type == "Notice":
-                edge_desc = f"【通知】{title}影响{zone_name}"
+                edge_desc = f"{category_cn}通知影响所在展区"
                 edge_kw = "影响,通知,状态,公告"
-                edges.append((
-                    title, zone_name,
-                    _edge_data(edge_desc, edge_kw, weight=edge_weight,
-                               source_id=chunk_id, file_path=file_path_tag),
-                ))
+            elif node_type == "Event":
+                activity_type = item.get("payload", {}).get("activity_type", "")
+                type_cn = {"guided_tour": "讲解导览", "workshop": "工作坊",
+                           "lecture": "讲座", "performance": "演出",
+                           "stamp_rally": "集章活动"}.get(activity_type, "活动")
+                edge_desc = f"{type_cn}活动在展区举办"
+                edge_kw = "活动,位置,发生地"
             else:
-                edge_desc = f"【{'活动' if node_type == 'Event' else '资讯'}】{title}在{zone_name}"
-                edge_kw = "活动,位置,发生地" if node_type == "Event" else "资讯,位置,可获取"
-                edges.append((
-                    title, zone_name,
-                    _edge_data(edge_desc, edge_kw, weight=edge_weight,
-                               source_id=chunk_id, file_path=file_path_tag),
-                ))
+                edge_desc = f"{category_cn}资讯关联展区"
+                edge_kw = "资讯,位置,可获取"
+            edges.append((
+                title, zone_name,
+                _edge_data(edge_desc, edge_kw, weight=edge_weight,
+                           source_id=chunk_id, file_path=file_path_tag),
+            ))
 
         # --- ABOUT edges → Artifact ---
         for art_id in item.get("artifact_ids", []):
@@ -293,7 +299,7 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
                 edges.append((
                     title, art_name,
                     _edge_data(
-                        f"{title}涉及文物{art_name}",
+                        f"{category_cn}涉及相关文物",
                         "相关文物,涉及,关联",
                         weight=edge_weight,
                         source_id=chunk_id, file_path=file_path_tag,
@@ -307,7 +313,7 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
                 edges.append((
                     title, exh_name,
                     _edge_data(
-                        f"{title}关联展览{exh_name}",
+                        f"{category_cn}关联所属展览",
                         "相关展览,配套,关联",
                         weight=edge_weight,
                         source_id=chunk_id, file_path=file_path_tag,
@@ -321,7 +327,7 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
                 edges.append((
                     title, theme_name,
                     _edge_data(
-                        f"{title}与主题「{theme_name}」相关",
+                        f"{category_cn}与相关主题关联",
                         "相关主题,主题关联",
                         weight=edge_weight,
                         source_id=chunk_id, file_path=file_path_tag,
