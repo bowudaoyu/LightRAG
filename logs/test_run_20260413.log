@@ -1,0 +1,50 @@
+17:42:12 [museum_agent.run] INFO: ============================================================
+17:42:12 [museum_agent.run] INFO: Museum Agent
+17:42:12 [museum_agent.run] INFO:   Query: 我有3小时
+17:42:12 [museum_agent.run] INFO:   Date: 2026-04-13
+17:42:12 [museum_agent.run] INFO:   Override time: 09:10
+17:42:12 [museum_agent.run] INFO:   Mode: batch
+17:42:12 [museum_agent.run] INFO: ============================================================
+INFO: PostgreSQL table: LIGHTRAG_VDB_ENTITY_bge_m3_1024d
+INFO: PostgreSQL table: LIGHTRAG_VDB_RELATION_bge_m3_1024d
+INFO: PostgreSQL table: LIGHTRAG_VDB_CHUNKS_bge_m3_1024d
+INFO: PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+INFO: PostgreSQL, VECTOR extension enabled
+INFO: PostgreSQL, Connected to database at entry.we.mornai.cn:22131/rag without SSL
+INFO: chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+INFO: cache_type column already exists in LIGHTRAG_LLM_CACHE table
+INFO: queryparam column already exists in LIGHTRAG_LLM_CACHE table
+INFO: mode column does not exist in LIGHTRAG_LLM_CACHE table
+INFO: chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+INFO: llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+INFO: track_id column already exists in LIGHTRAG_DOC_STATUS table
+INFO: Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+INFO: metadata column already exists in LIGHTRAG_DOC_STATUS table
+INFO: error_msg column already exists in LIGHTRAG_DOC_STATUS table
+INFO: HNSW vector index idx_lightrag_vdb_entity_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_bge_m3_1024d
+INFO: HNSW vector index idx_lightrag_vdb_relation_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_bge_m3_1024d
+INFO: HNSW vector index idx_lightrag_vdb_chunks_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_bge_m3_1024d
+INFO: [default] PostgreSQL Graph initialized: graph_name='chunk_entity_relation'
+INFO: PostgreSQL, AGE extension enabled
+17:42:28 [museum_agent.agent] INFO: MuseumAgent initialized (LLM=qwen3.5-plus)
+17:42:28 [museum_agent.agent] WARNING: [Closure] 2026-04-13（周一）为国博每周例行闭馆日，不对外开放
+INFO: Closed PostgreSQL database connection pool
+INFO: Successfully finalized 12 storages
+
+============================================================
+TOUR PLAN
+============================================================
+**很抱歉，2026-04-13（周一）为国博每周例行闭馆日，不对外开放。**
+
+中国国家博物馆每周一闭馆（国家法定节假日期间的周一除外）。
+
+**建议：**
+- 改为其他日期参观（周二至周日均可）
+- 提前在国博官方微信小程序预约
+- 如果您今天在北京，可以考虑参观故宫博物院（注意：故宫周一也闭馆）、天坛公园、颐和园等其他景点
+
+
+------------------------------------------------------------
+TIMINGS
+------------------------------------------------------------
+  total: 0.00s

@@ -9,8 +9,10 @@
         "open_time": "09:00",
         "last_entry": "16:00",
         "close_time": "17:00",
-        "closed_days": ["周一"],
-        "closed_days_note": "周一闭馆（含国家法定节假日）。如遇重大活动或特殊情况，开放时间另行通知。"
+        "closed_days": [
+          "周一"
+        ],
+        "closed_days_note": "周一闭馆。国家法定节假日期间的周一照常开放（闭馆日顺延至节后首个工作日，具体以官方公告为准）。"
       },
       "night_session": {
         "enabled": true,
@@ -19,11 +21,22 @@
         "close_time": "21:00",
         "last_entry": "20:00",
         "note": "每周五夜场开放，需单独预约夜场票，限流2000人。仅开放部分展厅（B1古代中国、F3庞贝特展）。",
-        "available_zones": ["CN_NMC_ZONE_B1_NORTH", "CN_NMC_ZONE_B1_SOUTH", "CN_NMC_ZONE_F3_SOUTH", "CN_NMC_FAC_CAFE"]
+        "available_zones": [
+          "CN_NMC_ZONE_B1_NORTH",
+          "CN_NMC_ZONE_B1_SOUTH",
+          "CN_NMC_ZONE_F3_SOUTH",
+          "CN_NMC_FAC_CAFE"
+        ]
       },
       "special_closures": [
-        {"date": "除夕", "note": "春节除夕全天闭馆"},
-        {"date": "大年初一", "note": "春节初一全天闭馆"}
+        {
+          "date": "除夕",
+          "note": "春节除夕全天闭馆"
+        },
+        {
+          "date": "大年初一",
+          "note": "春节初一全天闭馆"
+        }
       ]
     },
     "reservation": {
@@ -32,19 +45,36 @@
       "advance_days": 7,
       "advance_days_note": "可提前7天预约，建议至少提前1-2天",
       "id_required": true,
-      "id_types": ["身份证", "护照", "港澳通行证", "台湾通行证"],
+      "id_types": [
+        "身份证",
+        "护照",
+        "港澳通行证",
+        "台湾通行证"
+      ],
       "daily_capacity": 30000,
       "time_slots": [
-        {"slot": "上午场", "time": "08:30-12:00"},
-        {"slot": "下午场", "time": "12:00-16:00"}
+        {
+          "slot": "上午场",
+          "time": "08:30-12:00"
+        },
+        {
+          "slot": "下午场",
+          "time": "12:00-16:00"
+        }
       ],
       "notes": "未成年人须由成人陪同预约。每个证件每天限约一次。"
     },
     "entrance": {
       "recommended": "东门（面向长安街）",
       "entrances": [
-        {"name": "东门", "note": "主入口，面向长安街，地铁1号线天安门东站C/D口步行约5分钟"},
-        {"name": "西门", "note": "团体入口，面向天安门广场"}
+        {
+          "name": "东门",
+          "note": "主入口，面向长安街，地铁1号线天安门东站C/D口步行约5分钟"
+        },
+        {
+          "name": "西门",
+          "note": "团体入口，面向天安门广场"
+        }
       ],
       "security_check": "入馆需经过安检，禁止携带打火机、液体饮料（未开封矿泉水除外）、自拍杆、三脚架等。大件行李需在一层行李寄存处寄存。",
       "queue_estimate": {
@@ -59,11 +89,11 @@
       "parking": "博物馆无停车场，建议乘坐公共交通"
     }
   },
-  "spatial_topology":[
+  "spatial_topology": [
     {
       "floor_id": "CN_NMC_FLOOR_B1",
       "floor_name": "地下一层 (B1)",
-      "zones":[
+      "zones": [
         {
           "zone_id": "CN_NMC_ZONE_B1_NORTH",
           "name": "古代中国基本陈列（北区）",
@@ -87,7 +117,7 @@
     {
       "floor_id": "CN_NMC_FLOOR_F1",
       "floor_name": "一层 (F1)",
-      "zones":[
+      "zones": [
         {
           "zone_id": "CN_NMC_ZONE_F1_NORTH",
           "name": "北1展厅",
@@ -117,7 +147,7 @@
     {
       "floor_id": "CN_NMC_FLOOR_F2",
       "floor_name": "二层 (F2)",
-      "zones":[
+      "zones": [
         {
           "zone_id": "CN_NMC_ZONE_F2_NORTH",
           "name": "北2展厅",
@@ -141,7 +171,7 @@
     {
       "floor_id": "CN_NMC_FLOOR_F3",
       "floor_name": "三层 (F3)",
-      "zones":[
+      "zones": [
         {
           "zone_id": "CN_NMC_ZONE_F3_NORTH",
           "name": "北3展厅",
@@ -163,7 +193,7 @@
       ]
     }
   ],
-  "artifacts":[
+  "artifacts": [
     {
       "artifact_id": "ART_NMC_001",
       "name": "后母戊鼎",
@@ -405,15 +435,21 @@
       "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
     }
   ],
-
-  "exhibitions":[
+  "exhibitions": [
     {
       "exhibition_id": "EXH_NMC_001",
       "name": "古代中国（史前至南北朝）",
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_B1_NORTH",
       "description": "以考古发现和历史文献为依托，系统展示从远古时期到南北朝的中国古代文明发展历程。展品涵盖青铜重器、彩陶、玉器等，呈现华夏文明从萌芽到繁盛的宏大叙事。",
-      "artifact_ids": ["ART_NMC_001","ART_NMC_002","ART_NMC_004","ART_NMC_005","ART_NMC_006","ART_NMC_008"],
+      "artifact_ids": [
+        "ART_NMC_001",
+        "ART_NMC_002",
+        "ART_NMC_004",
+        "ART_NMC_005",
+        "ART_NMC_006",
+        "ART_NMC_008"
+      ],
       "tips": "建议参观时间40-60分钟。北区展厅面积较大，后母戊鼎和四羊方尊位于展厅中央，不要错过角落里的鹰形陶鼎。"
     },
     {
@@ -422,7 +458,12 @@
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_B1_SOUTH",
       "description": "延续北区的历史脉络，展现隋唐至明清时期中国古代文明的灿烂成就。展品涵盖汉代陶俑、西汉青铜酒器、鎏金铜灯及明代凤冠等，反映了大一统帝国的繁荣与工艺巅峰。",
-      "artifact_ids": ["ART_NMC_003","ART_NMC_007","ART_NMC_009","ART_NMC_010"],
+      "artifact_ids": [
+        "ART_NMC_003",
+        "ART_NMC_007",
+        "ART_NMC_009",
+        "ART_NMC_010"
+      ],
       "tips": "建议参观时间30-40分钟。击鼓说唱俑是国博最受欢迎的'表情包文物'之一，适合拍照打卡。"
     },
     {
@@ -431,7 +472,10 @@
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_F1_NORTH",
       "description": "汇集从北朝到明清的佛教造像精品，展现佛教艺术传入中国后逐步本土化的演变历程。展品以石雕、铜鎏金、木雕为主，体现不同时期的造像风格变迁。",
-      "artifact_ids": ["ART_NMC_011","ART_NMC_012"],
+      "artifact_ids": [
+        "ART_NMC_011",
+        "ART_NMC_012"
+      ],
       "tips": "建议参观时间20-30分钟。宋代木雕观音的闲适姿态与明代绿度母的端庄慈悲形成鲜明对比，值得细细品味。"
     },
     {
@@ -440,7 +484,11 @@
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_F1_SOUTH",
       "description": "系统展示从原始瓷器到清代御窑的中国瓷器发展史。展品涵盖宋代五大名窑、元青花、明永乐青花及清乾隆粉彩等代表作，呈现中国作为'瓷器之国'的辉煌成就。",
-      "artifact_ids": ["ART_NMC_013","ART_NMC_014","ART_NMC_015"],
+      "artifact_ids": [
+        "ART_NMC_013",
+        "ART_NMC_014",
+        "ART_NMC_015"
+      ],
       "tips": "建议参观时间20-30分钟。粉彩镂空转心瓶的内胆可转动效果是全展最惊艳的设计，注意观察透过镂空看到的内瓶画面。"
     },
     {
@@ -449,7 +497,13 @@
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_F2_NORTH",
       "description": "展出馆藏历代书画精品，从宋人山水到明清文人画，涵盖卷轴、册页、手卷等多种形制。展品体现了中国传统绘画'诗书画印'四位一体的独特审美体系。",
-      "artifact_ids": ["ART_NMC_016","ART_NMC_017","ART_NMC_018","ART_NMC_019","ART_NMC_020"],
+      "artifact_ids": [
+        "ART_NMC_016",
+        "ART_NMC_017",
+        "ART_NMC_018",
+        "ART_NMC_019",
+        "ART_NMC_020"
+      ],
       "tips": "建议参观时间25-35分钟。书画展厅光线较暗以保护文物，需要适应一下再仔细观看。乾隆南巡图篇幅极长，可慢慢展读。"
     },
     {
@@ -458,7 +512,11 @@
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_F2_SOUTH",
       "description": "系统展示从新石器时代到清代的中国玉器发展脉络。展品涵盖红山文化、良渚文化、商代及汉代的代表性玉器，揭示'君子比德于玉'的文化传统。",
-      "artifact_ids": ["ART_NMC_021","ART_NMC_022","ART_NMC_023"],
+      "artifact_ids": [
+        "ART_NMC_021",
+        "ART_NMC_022",
+        "ART_NMC_023"
+      ],
       "tips": "建议参观时间20-25分钟。良渚玉琮表面的神人兽面纹极其精细，建议使用展柜旁的放大镜仔细观察。"
     },
     {
@@ -467,7 +525,12 @@
       "type": "permanent",
       "zone_id": "CN_NMC_ZONE_F3_NORTH",
       "description": "以实物为线索，完整呈现从先秦贝币到近代机制币的中国货币发展史。展品涵盖刀币、布币、金版、五铢钱、交子等各时期代表性货币，揭示货币与经济制度的互动演变。",
-      "artifact_ids": ["ART_NMC_024","ART_NMC_025","ART_NMC_026","ART_NMC_027"],
+      "artifact_ids": [
+        "ART_NMC_024",
+        "ART_NMC_025",
+        "ART_NMC_026",
+        "ART_NMC_027"
+      ],
       "tips": "建议参观时间15-20分钟。王莽'一刀平五千'错金刀币的黄金错字工艺堪称一绝，存世极少，务必驻足细看。"
     },
     {
@@ -478,77 +541,174 @@
       "valid_from": "2026-02-01",
       "valid_to": "2026-08-31",
       "description": "来自意大利那不勒斯国家考古博物馆的近百件珍品首次亮相中国，包括庞贝古城出土的壁画、青铜雕塑和大理石雕像。展览再现了公元79年维苏威火山喷发前古罗马城市的繁荣生活与艺术成就。",
-      "artifact_ids": ["ART_NMC_028","ART_NMC_029","ART_NMC_030"],
+      "artifact_ids": [
+        "ART_NMC_028",
+        "ART_NMC_029",
+        "ART_NMC_030"
+      ],
       "tips": "建议参观时间25-40分钟。特展人气较高，建议工作日或下午3点后参观以避开人流高峰。壁画碎片的色彩保存极为完好，令人震撼。"
     }
   ],
-
-  "themes":[
+  "themes": [
     {
       "theme_id": "THEME_NMC_001",
       "name": "商代青铜文明",
       "description": "商代（约前1600-前1046年）是中国青铜时代的巅峰。从王室祭祀用的后母戊鼎、四羊方尊等青铜重器，到妇好墓出土的精美玉凤，商代工匠将金属铸造和玉石雕琢推向了极致。这些文物散布于地下一层北区和二层南区，串联起一条跨越3000年的对话之路。",
-      "artifact_ids": ["ART_NMC_001","ART_NMC_002","ART_NMC_021"],
-      "span_zones": ["CN_NMC_ZONE_B1_NORTH","CN_NMC_ZONE_F2_SOUTH"]
+      "artifact_ids": [
+        "ART_NMC_001",
+        "ART_NMC_002",
+        "ART_NMC_021"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_B1_NORTH",
+        "CN_NMC_ZONE_F2_SOUTH"
+      ]
     },
     {
       "theme_id": "THEME_NMC_002",
       "name": "史前信仰密码",
       "description": "在文字发明之前，先民用图腾和器物表达对天地的敬畏。仰韶文化的人面鱼纹盆暗藏神秘的原始巫术符号，红山文化的C形玉龙被视为中华龙图腾的雏形，良渚文化的玉琮以神人兽面纹象征沟通天地的神权。这些跨越数千年的信仰遗存，从地下一层北区一直延伸到二层南区。",
-      "artifact_ids": ["ART_NMC_004","ART_NMC_005","ART_NMC_008","ART_NMC_022"],
-      "span_zones": ["CN_NMC_ZONE_B1_NORTH","CN_NMC_ZONE_F2_SOUTH"]
+      "artifact_ids": [
+        "ART_NMC_004",
+        "ART_NMC_005",
+        "ART_NMC_008",
+        "ART_NMC_022"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_B1_NORTH",
+        "CN_NMC_ZONE_F2_SOUTH"
+      ]
     },
     {
       "theme_id": "THEME_NMC_003",
       "name": "皇权与礼制",
       "description": "从西周大盂鼎铭文中记载的王朝治国之道，到明代九龙九凤冠的极致奢华，再到乾隆南巡图记录的盛世威仪——帝王权力通过器物、服饰和绘画得以彰显。这条主题线串联地下一层至二层，横跨3000年的皇权叙事。",
-      "artifact_ids": ["ART_NMC_006","ART_NMC_010","ART_NMC_019"],
-      "span_zones": ["CN_NMC_ZONE_B1_NORTH","CN_NMC_ZONE_B1_SOUTH","CN_NMC_ZONE_F2_NORTH"]
+      "artifact_ids": [
+        "ART_NMC_006",
+        "ART_NMC_010",
+        "ART_NMC_019"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_B1_NORTH",
+        "CN_NMC_ZONE_B1_SOUTH",
+        "CN_NMC_ZONE_F2_NORTH"
+      ]
     },
     {
       "theme_id": "THEME_NMC_004",
       "name": "匠心独运：古代科技之美",
       "description": "古代工匠将实用功能与艺术美感完美融合。西汉长信宫灯内置环保排烟系统，错金银犀尊以精湛的金银错丝工艺令人叹为观止，清乾隆粉彩转心瓶的可旋转内胆更是巧夺天工。这些'黑科技'文物分布在地下一层南区和一层南区。",
-      "artifact_ids": ["ART_NMC_009","ART_NMC_007","ART_NMC_014"],
-      "span_zones": ["CN_NMC_ZONE_B1_SOUTH","CN_NMC_ZONE_F1_SOUTH"]
+      "artifact_ids": [
+        "ART_NMC_009",
+        "ART_NMC_007",
+        "ART_NMC_014"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_B1_SOUTH",
+        "CN_NMC_ZONE_F1_SOUTH"
+      ]
     },
     {
       "theme_id": "THEME_NMC_005",
       "name": "佛光东渐",
       "description": "佛教自汉代传入中国后，造像艺术经历了从模仿到创新的本土化进程。宋代木雕观音以闲适自在的世俗姿态打破了早期造像的僵硬，明永乐铜鎏金绿度母则代表了宫廷藏传佛教造像的最高水准。两尊造像同在一层北区，对比欣赏别有意趣。",
-      "artifact_ids": ["ART_NMC_011","ART_NMC_012"],
-      "span_zones": ["CN_NMC_ZONE_F1_NORTH"]
+      "artifact_ids": [
+        "ART_NMC_011",
+        "ART_NMC_012"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_F1_NORTH"
+      ]
     },
     {
       "theme_id": "THEME_NMC_006",
       "name": "文人风骨",
       "description": "中国文人以书画寄托志趣、彰显气节。文徵明晚年绘就的《真赏斋图》描绘了文人雅集的清逸生活，郑板桥以墨竹怪石表达傲骨不屈，王安石罕见的书法真迹则透露出政治家的峭拔个性。三件展品均在二层北区书画厅，构成一场跨越宋明清的文人精神对话。",
-      "artifact_ids": ["ART_NMC_016","ART_NMC_017","ART_NMC_020"],
-      "span_zones": ["CN_NMC_ZONE_F2_NORTH"]
+      "artifact_ids": [
+        "ART_NMC_016",
+        "ART_NMC_017",
+        "ART_NMC_020"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_F2_NORTH"
+      ]
     },
     {
       "theme_id": "THEME_NMC_007",
       "name": "地中海古典文明",
       "description": "庞贝特展将古希腊罗马文明的辉煌呈现在中国观众面前。色彩鲜艳的壁画碎片展现了高超的透视画法，农牧神青铜雕像捕捉了神话中的狂欢瞬间，大理石维纳斯则是古典写实雕塑的典范。所有展品均在三层南区，与中国文物隔空呼应，开启一场东西方文明的跨时空对话。",
-      "artifact_ids": ["ART_NMC_028","ART_NMC_029","ART_NMC_030"],
-      "span_zones": ["CN_NMC_ZONE_F3_SOUTH"]
+      "artifact_ids": [
+        "ART_NMC_028",
+        "ART_NMC_029",
+        "ART_NMC_030"
+      ],
+      "span_zones": [
+        "CN_NMC_ZONE_F3_SOUTH"
+      ]
     }
   ],
-
-  "routes":[
+  "routes": [
     {
       "route_id": "ROUTE_NMC_001",
       "name": "2小时国宝精华路线",
       "duration_minutes": 120,
       "target_audience": "首次来馆的普通观众",
       "description": "一条覆盖全馆精华的经典路线，从地下一层出发，逐层向上，不走回头路。",
-      "stops":[
-        {"zone_id":"CN_NMC_ZONE_B1_NORTH","duration_min":35,"highlight_artifacts":["ART_NMC_001","ART_NMC_002","ART_NMC_005"],"note":"先看镇馆之宝后母戊鼎和四羊方尊，再找到角落里的红山玉龙"},
-        {"zone_id":"CN_NMC_ZONE_B1_SOUTH","duration_min":20,"highlight_artifacts":["ART_NMC_003","ART_NMC_009"],"note":"打卡击鼓说唱俑，欣赏长信宫灯的环保设计"},
-        {"zone_id":"CN_NMC_ZONE_F1_NORTH","duration_min":10,"highlight_artifacts":["ART_NMC_011"],"note":"乘电梯至一层，欣赏宋代木雕观音的闲适之美"},
-        {"zone_id":"CN_NMC_ZONE_F1_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_014","ART_NMC_015"],"note":"粉彩转心瓶是全馆最精巧的器物之一"},
-        {"zone_id":"CN_NMC_ZONE_F2_NORTH","duration_min":15,"highlight_artifacts":["ART_NMC_016","ART_NMC_019"],"note":"书画厅光线暗，需适应后再细看乾隆南巡图"},
-        {"zone_id":"CN_NMC_ZONE_F3_SOUTH","duration_min":25,"highlight_artifacts":["ART_NMC_028","ART_NMC_030"],"note":"以庞贝特展收尾，从中国文明穿越到地中海文明"}
+      "stops": [
+        {
+          "zone_id": "CN_NMC_ZONE_B1_NORTH",
+          "duration_min": 35,
+          "highlight_artifacts": [
+            "ART_NMC_001",
+            "ART_NMC_002",
+            "ART_NMC_005"
+          ],
+          "note": "先看镇馆之宝后母戊鼎和四羊方尊，再找到角落里的红山玉龙"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_B1_SOUTH",
+          "duration_min": 20,
+          "highlight_artifacts": [
+            "ART_NMC_003",
+            "ART_NMC_009"
+          ],
+          "note": "打卡击鼓说唱俑，欣赏长信宫灯的环保设计"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F1_NORTH",
+          "duration_min": 10,
+          "highlight_artifacts": [
+            "ART_NMC_011"
+          ],
+          "note": "乘电梯至一层，欣赏宋代木雕观音的闲适之美"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F1_SOUTH",
+          "duration_min": 15,
+          "highlight_artifacts": [
+            "ART_NMC_014",
+            "ART_NMC_015"
+          ],
+          "note": "粉彩转心瓶是全馆最精巧的器物之一"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F2_NORTH",
+          "duration_min": 15,
+          "highlight_artifacts": [
+            "ART_NMC_016",
+            "ART_NMC_019"
+          ],
+          "note": "书画厅光线暗，需适应后再细看乾隆南巡图"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F3_SOUTH",
+          "duration_min": 25,
+          "highlight_artifacts": [
+            "ART_NMC_028",
+            "ART_NMC_030"
+          ],
+          "note": "以庞贝特展收尾，从中国文明穿越到地中海文明"
+        }
       ]
     },
     {
@@ -557,13 +717,53 @@
       "duration_minutes": 90,
       "target_audience": "带6-12岁儿童的家庭",
       "description": "精选最具视觉冲击力和趣味性的文物，节奏轻快，穿插休息和互动环节。",
-      "stops":[
-        {"zone_id":"CN_NMC_FAC_LUGGAGE","duration_min":5,"highlight_artifacts":[],"note":"先在一层寄存大件行李，轻装上阵"},
-        {"zone_id":"CN_NMC_ZONE_B1_NORTH","duration_min":25,"highlight_artifacts":["ART_NMC_001","ART_NMC_008"],"note":"让孩子猜猜后母戊鼎有多重（832公斤！），找一找像老鹰的鼎"},
-        {"zone_id":"CN_NMC_ZONE_B1_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_003"],"note":"击鼓说唱俑是最受小朋友欢迎的'表情包文物'，模仿它的表情拍照"},
-        {"zone_id":"CN_NMC_FAC_CAFETERIA","duration_min":15,"highlight_artifacts":[],"note":"在国博食堂休息补充能量"},
-        {"zone_id":"CN_NMC_ZONE_F1_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_014"],"note":"粉彩转心瓶可以转动的内胆让孩子大开眼界"},
-        {"zone_id":"CN_NMC_ZONE_F3_SOUTH","duration_min":15,"highlight_artifacts":["ART_NMC_029","ART_NMC_030"],"note":"庞贝的神话雕塑对孩子有天然吸引力"}
+      "stops": [
+        {
+          "zone_id": "CN_NMC_FAC_LUGGAGE",
+          "duration_min": 5,
+          "highlight_artifacts": [],
+          "note": "先在一层寄存大件行李，轻装上阵"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_B1_NORTH",
+          "duration_min": 25,
+          "highlight_artifacts": [
+            "ART_NMC_001",
+            "ART_NMC_008"
+          ],
+          "note": "让孩子猜猜后母戊鼎有多重（832公斤！），找一找像老鹰的鼎"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_B1_SOUTH",
+          "duration_min": 15,
+          "highlight_artifacts": [
+            "ART_NMC_003"
+          ],
+          "note": "击鼓说唱俑是最受小朋友欢迎的'表情包文物'，模仿它的表情拍照"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_CAFETERIA",
+          "duration_min": 15,
+          "highlight_artifacts": [],
+          "note": "在国博食堂休息补充能量"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F1_SOUTH",
+          "duration_min": 15,
+          "highlight_artifacts": [
+            "ART_NMC_014"
+          ],
+          "note": "粉彩转心瓶可以转动的内胆让孩子大开眼界"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_F3_SOUTH",
+          "duration_min": 15,
+          "highlight_artifacts": [
+            "ART_NMC_029",
+            "ART_NMC_030"
+          ],
+          "note": "庞贝的神话雕塑对孩子有天然吸引力"
+        }
       ]
     },
     {
@@ -572,14 +772,35 @@
       "duration_minutes": 75,
       "target_audience": "对青铜器和古代冶金感兴趣的观众",
       "description": "聚焦馆藏青铜重器，从商代祭祀礼器到西汉生活用器，感受中国青铜文明从巅峰到余晖的完整弧线。",
-      "stops":[
-        {"zone_id":"CN_NMC_ZONE_B1_NORTH","duration_min":35,"highlight_artifacts":["ART_NMC_001","ART_NMC_002","ART_NMC_006"],"note":"三件青铜重器集中于此：后母戊鼎（最重）、四羊方尊（最精美）、大盂鼎（铭文最长）"},
-        {"zone_id":"CN_NMC_ZONE_B1_SOUTH","duration_min":25,"highlight_artifacts":["ART_NMC_007","ART_NMC_009"],"note":"错金银犀尊代表了青铜装饰工艺的极致，长信宫灯则是实用与美学的完美结合"},
-        {"zone_id":"CN_NMC_FAC_CAFE","duration_min":15,"highlight_artifacts":[],"note":"上到三层咖啡厅，边休息边回味刚才看到的青铜瑰宝"}
+      "stops": [
+        {
+          "zone_id": "CN_NMC_ZONE_B1_NORTH",
+          "duration_min": 35,
+          "highlight_artifacts": [
+            "ART_NMC_001",
+            "ART_NMC_002",
+            "ART_NMC_006"
+          ],
+          "note": "三件青铜重器集中于此：后母戊鼎（最重）、四羊方尊（最精美）、大盂鼎（铭文最长）"
+        },
+        {
+          "zone_id": "CN_NMC_ZONE_B1_SOUTH",
+          "duration_min": 25,
+          "highlight_artifacts": [
+            "ART_NMC_007",
+            "ART_NMC_009"
+          ],
+          "note": "错金银犀尊代表了青铜装饰工艺的极致，长信宫灯则是实用与美学的完美结合"
+        },
+        {
+          "zone_id": "CN_NMC_FAC_CAFE",
+          "duration_min": 15,
+          "highlight_artifacts": [],
+          "note": "上到三层咖啡厅，边休息边回味刚才看到的青铜瑰宝"
+        }
       ]
     }
   ],
-
   "crowd_patterns": {
     "description": "客流规律模型，基于国博历年数据统计。用于预估排队时间和展厅拥挤度，帮助规划最佳参观时段。",
     "daily_capacity": 30000,
@@ -610,26 +831,85 @@
       }
     },
     "hourly_distribution": [
-      {"time": "09:00-10:00", "pct": 15, "note": "开馆首批入场，安检排队较长但馆内人少"},
-      {"time": "10:00-11:00", "pct": 20, "note": "上午高峰开始，热门展品前聚集人流"},
-      {"time": "11:00-12:00", "pct": 18, "note": "上午高峰持续"},
-      {"time": "12:00-13:00", "pct": 12, "note": "午间低谷，很多人去用餐，展厅相对空旷"},
-      {"time": "13:00-14:00", "pct": 15, "note": "下午场观众入场，人流回升"},
-      {"time": "14:00-15:00", "pct": 12, "note": "下午平稳期"},
-      {"time": "15:00-16:00", "pct": 8, "note": "临近停止入馆，人流明显减少，参观体验最佳"}
+      {
+        "time": "09:00-10:00",
+        "pct": 15,
+        "note": "开馆首批入场，安检排队较长但馆内人少"
+      },
+      {
+        "time": "10:00-11:00",
+        "pct": 20,
+        "note": "上午高峰开始，热门展品前聚集人流"
+      },
+      {
+        "time": "11:00-12:00",
+        "pct": 18,
+        "note": "上午高峰持续"
+      },
+      {
+        "time": "12:00-13:00",
+        "pct": 12,
+        "note": "午间低谷，很多人去用餐，展厅相对空旷"
+      },
+      {
+        "time": "13:00-14:00",
+        "pct": 15,
+        "note": "下午场观众入场，人流回升"
+      },
+      {
+        "time": "14:00-15:00",
+        "pct": 12,
+        "note": "下午平稳期"
+      },
+      {
+        "time": "15:00-16:00",
+        "pct": 8,
+        "note": "临近停止入馆，人流明显减少，参观体验最佳"
+      }
     ],
     "zone_hotspots": [
-      {"zone_id": "CN_NMC_ZONE_B1_NORTH", "heat_level": "高", "note": "后母戊鼎和四羊方尊是全馆最热门打卡点，周末常需排队拍照"},
-      {"zone_id": "CN_NMC_ZONE_B1_SOUTH", "heat_level": "中", "note": "击鼓说唱俑人气高，但展厅面积大，不显拥挤"},
-      {"zone_id": "CN_NMC_ZONE_F1_NORTH", "heat_level": "低", "note": "佛造像展厅较为冷门，通常人很少，适合安静欣赏"},
-      {"zone_id": "CN_NMC_ZONE_F1_SOUTH", "heat_level": "中", "note": "瓷器展厅人流适中，粉彩转心瓶前常有驻足"},
-      {"zone_id": "CN_NMC_ZONE_F2_NORTH", "heat_level": "低", "note": "书画展厅光线暗、节奏慢，多数游客会快速通过"},
-      {"zone_id": "CN_NMC_ZONE_F2_SOUTH", "heat_level": "低", "note": "玉器展厅人流较少，可细细品味"},
-      {"zone_id": "CN_NMC_ZONE_F3_NORTH", "heat_level": "低", "note": "钱币展厅是全馆最冷门的区域之一"},
-      {"zone_id": "CN_NMC_ZONE_F3_SOUTH", "heat_level": "高", "note": "庞贝特展人气极高，周末高峰期可能需排队30分钟以上入场"}
+      {
+        "zone_id": "CN_NMC_ZONE_B1_NORTH",
+        "heat_level": "高",
+        "note": "后母戊鼎和四羊方尊是全馆最热门打卡点，周末常需排队拍照"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_B1_SOUTH",
+        "heat_level": "中",
+        "note": "击鼓说唱俑人气高，但展厅面积大，不显拥挤"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_F1_NORTH",
+        "heat_level": "低",
+        "note": "佛造像展厅较为冷门，通常人很少，适合安静欣赏"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_F1_SOUTH",
+        "heat_level": "中",
+        "note": "瓷器展厅人流适中，粉彩转心瓶前常有驻足"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_F2_NORTH",
+        "heat_level": "低",
+        "note": "书画展厅光线暗、节奏慢，多数游客会快速通过"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_F2_SOUTH",
+        "heat_level": "低",
+        "note": "玉器展厅人流较少，可细细品味"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_F3_NORTH",
+        "heat_level": "低",
+        "note": "钱币展厅是全馆最冷门的区域之一"
+      },
+      {
+        "zone_id": "CN_NMC_ZONE_F3_SOUTH",
+        "heat_level": "高",
+        "note": "庞贝特展人气极高，周末高峰期可能需排队30分钟以上入场"
+      }
     ]
   },
-
   "facilities": [
     {
       "facility_id": "CN_NMC_FAC_CAFETERIA",
@@ -640,10 +920,26 @@
       "hours": "10:30-14:00",
       "description": "位于地下一层南端，提供中式套餐和面食，价格实惠。",
       "menu_highlights": [
-        {"item": "红烧牛肉套餐", "price": 38, "note": "招牌菜，分量足"},
-        {"item": "番茄鸡蛋面", "price": 22, "note": "适合简单快餐"},
-        {"item": "宫保鸡丁套餐", "price": 35, "note": "配米饭和时蔬"},
-        {"item": "儿童套餐", "price": 28, "note": "含卡通造型饭团、小菜和酸奶"}
+        {
+          "item": "红烧牛肉套餐",
+          "price": 38,
+          "note": "招牌菜，分量足"
+        },
+        {
+          "item": "番茄鸡蛋面",
+          "price": 22,
+          "note": "适合简单快餐"
+        },
+        {
+          "item": "宫保鸡丁套餐",
+          "price": 35,
+          "note": "配米饭和时蔬"
+        },
+        {
+          "item": "儿童套餐",
+          "price": 28,
+          "note": "含卡通造型饭团、小菜和酸奶"
+        }
       ],
       "avg_price_range": "22-45元/人",
       "seating_capacity": 200,
@@ -659,11 +955,31 @@
       "hours": "09:00-16:30",
       "description": "位于三层东侧，落地窗可远眺长安街。环境雅致，适合参观间歇休息。",
       "menu_highlights": [
-        {"item": "国博特调拿铁", "price": 38, "note": "拉花为后母戊鼎纹样，社交媒体爆款"},
-        {"item": "抹茶蛋糕", "price": 32, "note": "自制甜品，搭配咖啡"},
-        {"item": "美式咖啡", "price": 28, "note": ""},
-        {"item": "鲜榨橙汁", "price": 25, "note": "适合儿童"},
-        {"item": "「星空特调」系列", "price": 42, "note": "周五夜场限定，灵感来自庞贝壁画星空图"}
+        {
+          "item": "国博特调拿铁",
+          "price": 38,
+          "note": "拉花为后母戊鼎纹样，社交媒体爆款"
+        },
+        {
+          "item": "抹茶蛋糕",
+          "price": 32,
+          "note": "自制甜品，搭配咖啡"
+        },
+        {
+          "item": "美式咖啡",
+          "price": 28,
+          "note": ""
+        },
+        {
+          "item": "鲜榨橙汁",
+          "price": 25,
+          "note": "适合儿童"
+        },
+        {
+          "item": "「星空特调」系列",
+          "price": 42,
+          "note": "周五夜场限定，灵感来自庞贝壁画星空图"
+        }
       ],
       "avg_price_range": "25-45元/人",
       "seating_capacity": 60,
@@ -710,12 +1026,36 @@
       "hours": "09:00-16:45",
       "description": "位于二层中部连廊，是全馆最大的文创商品销售区。",
       "product_categories": [
-        {"category": "冰箱贴/书签", "price_range": "15-35元", "note": "最受欢迎的伴手礼，后母戊鼎、击鼓说唱俑系列常断货"},
-        {"category": "丝巾/围巾", "price_range": "128-368元", "note": "以馆藏书画纹样为设计元素"},
-        {"category": "文具套装", "price_range": "39-89元", "note": "适合学生，含国博定制笔记本和书签"},
-        {"category": "考古盲盒", "price_range": "59元/个", "note": "亲子热门，模拟考古挖掘体验，随机开出微缩文物"},
-        {"category": "纪念徽章", "price_range": "25-128元", "note": "收藏爱好者首选，部分限量编号"},
-        {"category": "茶具/瓷器", "price_range": "168-688元", "note": "以馆藏瓷器为灵感的实用器皿"}
+        {
+          "category": "冰箱贴/书签",
+          "price_range": "15-35元",
+          "note": "最受欢迎的伴手礼，后母戊鼎、击鼓说唱俑系列常断货"
+        },
+        {
+          "category": "丝巾/围巾",
+          "price_range": "128-368元",
+          "note": "以馆藏书画纹样为设计元素"
+        },
+        {
+          "category": "文具套装",
+          "price_range": "39-89元",
+          "note": "适合学生，含国博定制笔记本和书签"
+        },
+        {
+          "category": "考古盲盒",
+          "price_range": "59元/个",
+          "note": "亲子热门，模拟考古挖掘体验，随机开出微缩文物"
+        },
+        {
+          "category": "纪念徽章",
+          "price_range": "25-128元",
+          "note": "收藏爱好者首选，部分限量编号"
+        },
+        {
+          "category": "茶具/瓷器",
+          "price_range": "168-688元",
+          "note": "以馆藏瓷器为灵感的实用器皿"
+        }
       ],
       "tips": "16:00后部分热门商品可能已售罄。击鼓说唱俑表情包系列冰箱贴是社交媒体出镜率最高的伴手礼。"
     },
@@ -724,10 +1064,26 @@
       "name": "洗手间",
       "type": "服务",
       "locations": [
-        {"floor": "B1", "position": "南北区连廊", "note": "含无障碍卫生间和母婴室"},
-        {"floor": "F1", "position": "东侧大厅、西侧大厅各一处", "note": "东侧有母婴室"},
-        {"floor": "F2", "position": "中部连廊（文创店旁）", "note": ""},
-        {"floor": "F3", "position": "咖啡厅旁", "note": ""}
+        {
+          "floor": "B1",
+          "position": "南北区连廊",
+          "note": "含无障碍卫生间和母婴室"
+        },
+        {
+          "floor": "F1",
+          "position": "东侧大厅、西侧大厅各一处",
+          "note": "东侧有母婴室"
+        },
+        {
+          "floor": "F2",
+          "position": "中部连廊（文创店旁）",
+          "note": ""
+        },
+        {
+          "floor": "F3",
+          "position": "咖啡厅旁",
+          "note": ""
+        }
       ]
     },
     {
@@ -735,8 +1091,16 @@
       "name": "手机充电站",
       "type": "服务",
       "locations": [
-        {"floor": "F1", "position": "游客接待台旁", "note": "免费共享充电宝，扫码借用"},
-        {"floor": "F3", "position": "咖啡厅内", "note": "座位旁有USB充电口"}
+        {
+          "floor": "F1",
+          "position": "游客接待台旁",
+          "note": "免费共享充电宝，扫码借用"
+        },
+        {
+          "floor": "F3",
+          "position": "咖啡厅内",
+          "note": "座位旁有USB充电口"
+        }
       ]
     },
     {
@@ -744,15 +1108,26 @@
       "name": "直饮水点",
       "type": "服务",
       "locations": [
-        {"floor": "B1", "position": "食堂入口处"},
-        {"floor": "F1", "position": "东侧洗手间旁"},
-        {"floor": "F2", "position": "文创店对面休息区"},
-        {"floor": "F3", "position": "咖啡厅门口"}
+        {
+          "floor": "B1",
+          "position": "食堂入口处"
+        },
+        {
+          "floor": "F1",
+          "position": "东侧洗手间旁"
+        },
+        {
+          "floor": "F2",
+          "position": "文创店对面休息区"
+        },
+        {
+          "floor": "F3",
+          "position": "咖啡厅门口"
+        }
       ],
       "note": "每层均设有直饮水点，可自带水杯接水。馆内禁止携带未密封饮料入展厅。"
     }
   ],
-
   "visitor_rules": {
     "prohibited_items": [
       "打火机、火柴等易燃物品",
@@ -780,20 +1155,47 @@
       "wheelchair_rental": "一层游客接待台免费借用轮椅，押身份证",
       "stroller": "一层游客接待台免费借用婴儿车，押身份证",
       "elevator_locations": [
-        {"floor_range": "B1-F3", "position": "东侧", "type": "无障碍直梯"},
-        {"floor_range": "B1-F3", "position": "西侧", "type": "无障碍直梯"},
-        {"floor_range": "F1-F3", "position": "中部", "type": "扶梯（非无障碍）"}
+        {
+          "floor_range": "B1-F3",
+          "position": "东侧",
+          "type": "无障碍直梯"
+        },
+        {
+          "floor_range": "B1-F3",
+          "position": "西侧",
+          "type": "无障碍直梯"
+        },
+        {
+          "floor_range": "F1-F3",
+          "position": "中部",
+          "type": "扶梯（非无障碍）"
+        }
       ],
       "rest_areas": [
-        {"floor": "B1", "position": "南北区连廊", "seating": 20},
-        {"floor": "F1", "position": "大厅两侧", "seating": 40},
-        {"floor": "F2", "position": "文创店对面", "seating": 15},
-        {"floor": "F3", "position": "咖啡厅", "seating": 60}
+        {
+          "floor": "B1",
+          "position": "南北区连廊",
+          "seating": 20
+        },
+        {
+          "floor": "F1",
+          "position": "大厅两侧",
+          "seating": 40
+        },
+        {
+          "floor": "F2",
+          "position": "文创店对面",
+          "seating": 15
+        },
+        {
+          "floor": "F3",
+          "position": "咖啡厅",
+          "seating": 60
+        }
       ],
       "tips": "建议行动不便的老人或轮椅使用者从东门进入（有坡道），避开高峰时段。每层休息区均有座椅，B1和F3有餐饮设施可补充体力。"
     }
   },
-
   "surroundings": [
     {
       "name": "天安门广场",
@@ -818,9 +1220,24 @@
       "description": "北京著名的历史商业街，汇集老字号餐馆和特色店铺。",
       "tips": "推荐：全聚德烤鸭（前门店）、都一处烧麦、便宜坊烤鸭。午餐高峰需排队30-60分钟，建议11:00前或13:30后前往。",
       "recommended_restaurants": [
-        {"name": "全聚德（前门店）", "cuisine": "北京烤鸭", "avg_price": "150-200元/人", "note": "北京最著名的烤鸭品牌，前门店是总店"},
-        {"name": "都一处烧麦馆", "cuisine": "烧麦/京菜", "avg_price": "60-90元/人", "note": "乾隆皇帝赐名的老字号，招牌三鲜烧麦"},
-        {"name": "便宜坊（前门店）", "cuisine": "焖炉烤鸭", "avg_price": "120-160元/人", "note": "600年历史，焖炉烤鸭与全聚德挂炉烤鸭风格不同"}
+        {
+          "name": "全聚德（前门店）",
+          "cuisine": "北京烤鸭",
+          "avg_price": "150-200元/人",
+          "note": "北京最著名的烤鸭品牌，前门店是总店"
+        },
+        {
+          "name": "都一处烧麦馆",
+          "cuisine": "烧麦/京菜",
+          "avg_price": "60-90元/人",
+          "note": "乾隆皇帝赐名的老字号，招牌三鲜烧麦"
+        },
+        {
+          "name": "便宜坊（前门店）",
+          "cuisine": "焖炉烤鸭",
+          "avg_price": "120-160元/人",
+          "note": "600年历史，焖炉烤鸭与全聚德挂炉烤鸭风格不同"
+        }
       ],
       "time_needed": "1-2小时"
     },
@@ -841,19 +1258,49 @@
       "time_needed": "30-60分钟"
     }
   ],
-
   "holidays_2026": [
-    {"name": "元旦", "dates": "2026-01-01至2026-01-03", "museum_status": "1月1日-3日正常开放（周四至周六），1月5日周一正常闭馆"},
-    {"name": "春节", "dates": "2026-02-14至2026-02-20", "museum_status": "除夕（2月16日）和初一（2月17日）闭馆，初二至初六（2月18日-22日）正常开放，2月23日周一正常闭馆"},
-    {"name": "清明节", "dates": "2026-04-04至2026-04-06", "museum_status": "4月4日（周六）、4月5日（周日）正常开放，4月6日（周一）正常闭馆"},
-    {"name": "劳动节", "dates": "2026-05-01至2026-05-05", "museum_status": "5月1日-3日正常开放，5月4日（周一）正常闭馆，5月5日正常开放"},
-    {"name": "端午节", "dates": "2026-06-19至2026-06-21", "museum_status": "6月19日-21日（周五至周日）正常开放，6月22日周一正常闭馆"},
-    {"name": "中秋节", "dates": "2026-09-25至2026-09-27", "museum_status": "9月25日-27日（周五至周日）正常开放，9月28日周一正常闭馆"},
-    {"name": "国庆节", "dates": "2026-10-01至2026-10-07", "museum_status": "10月1日-7日全部开放（含10月5日周一），10月12日周一正常闭馆（补休）"},
-    {"name": "暑假", "dates": "2026-07-01至2026-08-31", "museum_status": "暑期参观高峰，每日限流可能上调。周一仍然闭馆。建议工作日上午参观以避开人流。"}
+    {
+      "name": "元旦",
+      "dates": "2026-01-01至2026-01-03",
+      "museum_status": "1月1日-3日正常开放（周四至周六），1月5日周一正常闭馆"
+    },
+    {
+      "name": "春节",
+      "dates": "2026-02-14至2026-02-20",
+      "museum_status": "除夕（2月16日）和初一（2月17日）闭馆，初二至初六（2月18日-22日）正常开放，2月23日周一正常闭馆"
+    },
+    {
+      "name": "清明节",
+      "dates": "2026-04-04至2026-04-06",
+      "museum_status": "4月4日（周六）、4月5日（周日）、4月6日（周一）均正常开放（清明假期周一不闭馆），4月7日（周二）补休闭馆一天"
+    },
+    {
+      "name": "劳动节",
+      "dates": "2026-05-01至2026-05-05",
+      "museum_status": "5月1日-5日全部正常开放（含5月4日周一，劳动节假期周一不闭馆），5月6日（周三）起恢复正常，5月11日（周一）正常闭馆"
+    },
+    {
+      "name": "端午节",
+      "dates": "2026-06-19至2026-06-21",
+      "museum_status": "6月19日-21日（周五至周日）正常开放，6月22日周一正常闭馆"
+    },
+    {
+      "name": "中秋节",
+      "dates": "2026-09-25至2026-09-27",
+      "museum_status": "9月25日-27日（周五至周日）正常开放，9月28日周一正常闭馆"
+    },
+    {
+      "name": "国庆节",
+      "dates": "2026-10-01至2026-10-07",
+      "museum_status": "10月1日-7日全部正常开放（含10月5日周一，国庆假期周一不闭馆），10月8日（周四）起恢复正常，10月12日（周一）正常闭馆"
+    },
+    {
+      "name": "暑假",
+      "dates": "2026-07-01至2026-08-31",
+      "museum_status": "暑期参观高峰，每日限流可能上调。周一仍然闭馆。建议工作日上午参观以避开人流。"
+    }
   ],
-
-  "artifact_relations":[
+  "artifact_relations": [
     {
       "source_artifact_id": "ART_NMC_001",
       "target_artifact_id": "ART_NMC_002",

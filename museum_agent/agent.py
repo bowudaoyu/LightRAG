@@ -26,7 +26,7 @@ from museum_agent.planner import (
 )
 from museum_agent.prompts import INTENT_PARSE_PROMPT
 from museum_agent.retrieval import parallel_retrieve
-from museum_agent.utils import compute_weekday, compute_current_time, compute_end_time
+from museum_agent.utils import compute_weekday, compute_current_time, compute_end_time, is_museum_closed
 from museum_agent.validator import validate_plan
 
 logger = logging.getLogger(__name__)
@@ -180,6 +180,30 @@ class MuseumAgent:
         """
         timings: dict[str, float] = {}
 
+        # Pre-check: museum closure
+        closed, reason = is_museum_closed(date)
+        if closed:
+            weekday = compute_weekday(date)
+            logger.warning("[Closure] %s", reason)
+            closure_text = (
+                f"**很抱歉，{reason}。**\n\n"
+                f"中国国家博物馆每周一闭馆（国家法定节假日期间的周一除外）。\n\n"
+                f"**建议：**\n"
+                f"- 改为其他日期参观（周二至周日均可）\n"
+                f"- 提前在国博官方微信小程序预约\n"
+                f"- 如果您今天在北京，可以考虑参观故宫博物院（注意：故宫周一也闭馆）、"
+                f"天坛公园、颐和园等其他景点\n"
+            )
+            return {
+                "plan_text": closure_text,
+                "plan": None,
+                "validation_errors": [],
+                "timings": {"total": 0.0},
+                "intent": UserIntent(date=date, raw_query=user_message),
+                "closed": True,
+                "closed_reason": reason,
+            }
+
         # Step 1 + Step 2: Run intent parsing and retrieval in parallel
         logger.info("=" * 60)
         logger.info("[Step 1+2] Starting intent parsing + parallel retrieval")
@@ -294,6 +318,23 @@ class MuseumAgent:
         """
         import asyncio
         timings: dict[str, float] = {}
+
+        # Pre-check: museum closure
+        closed, reason = is_museum_closed(date)
+        if closed:
+            logger.warning("[Closure] %s", reason)
+            closure_text = (
+                f"**很抱歉，{reason}。**\n\n"
+                f"中国国家博物馆每周一闭馆（国家法定节假日期间的周一除外）。\n\n"
+                f"**建议：**\n"
+                f"- 改为其他日期参观（周二至周日均可）\n"
+                f"- 提前在国博官方微信小程序预约\n"
+                f"- 如果您今天在北京，可以考虑参观天坛公园、颐和园等其他景点\n"
+            )
+            yield ("chunk", closure_text)
+            yield ("validation", [])
+            yield ("timings", {"total": 0.0})
+            return
 
         # Step 1 + Step 2: parallel
         yield ("status", "Parsing intent and retrieving data...")
