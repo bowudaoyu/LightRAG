@@ -136,10 +136,10 @@ class MuseumAgent:
     # ------------------------------------------------------------------
     # Step 2: Parallel retrieval
     # ------------------------------------------------------------------
-    async def retrieve(self, date: str) -> dict[str, str]:
+    async def retrieve(self, date: str, user_message: str = "") -> dict[str, str]:
         """Run parallel retrieval queries against LightRAG."""
         assert self.rag is not None, "Call setup() first"
-        return await parallel_retrieve(self.rag, date=date)
+        return await parallel_retrieve(self.rag, date=date, user_message=user_message)
 
     # ------------------------------------------------------------------
     # Step 3: LLM planning + generation
@@ -182,7 +182,7 @@ class MuseumAgent:
         t0 = time.monotonic()
         import asyncio
         intent_task = asyncio.create_task(self.parse_intent(user_message, date))
-        retrieval_task = asyncio.create_task(self.retrieve(date))
+        retrieval_task = asyncio.create_task(self.retrieve(date, user_message))
         intent, retrieval = await asyncio.gather(intent_task, retrieval_task)
         timings["step1_2_intent_and_retrieval"] = time.monotonic() - t0
         logger.info("[Step 1+2] Done in %.2fs", timings["step1_2_intent_and_retrieval"])
@@ -294,7 +294,7 @@ class MuseumAgent:
         yield ("status", "Parsing intent and retrieving data...")
         t0 = time.monotonic()
         intent_task = asyncio.create_task(self.parse_intent(user_message, date))
-        retrieval_task = asyncio.create_task(self.retrieve(date))
+        retrieval_task = asyncio.create_task(self.retrieve(date, user_message))
         intent, retrieval = await asyncio.gather(intent_task, retrieval_task)
         timings["step1_2_intent_and_retrieval"] = time.monotonic() - t0
 
