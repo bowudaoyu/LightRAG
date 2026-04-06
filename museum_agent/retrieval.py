@@ -197,13 +197,22 @@ def _format_retrieval_block(result: dict[str, Any], today: str = "") -> str:
     if expired_count:
         logger.info("  Filtered out %d expired chunks (today=%s)", expired_count, today)
 
-    # Entities provide structured info
+    # Entities provide structured info — also filter expired ones
+    expired_entity_count = 0
     for entity in data.get("entities", []):
         desc = entity.get("description", "").strip()
-        if desc:
-            name = entity.get("entity_name", "")
-            etype = entity.get("entity_type", "")
-            parts.append(f"[{etype}] {name}: {desc}")
+        if not desc:
+            continue
+        if today:
+            desc, is_valid = _check_chunk_temporal(desc, today)
+            if not is_valid:
+                expired_entity_count += 1
+                continue
+        name = entity.get("entity_name", "")
+        etype = entity.get("entity_type", "")
+        parts.append(f"[{etype}] {name}: {desc}")
+    if expired_entity_count:
+        logger.info("  Filtered out %d expired entities (today=%s)", expired_entity_count, today)
 
     # Relationships provide connections
     for rel in data.get("relationships", []):
