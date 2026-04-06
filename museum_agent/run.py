@@ -60,6 +60,13 @@ examples:
         help="Visit date in YYYY-MM-DD format (default: today). Ignored if --datetime is set.",
     )
     parser.add_argument(
+        "--mode",
+        type=str,
+        default="auto",
+        choices=["auto", "qa", "tour"],
+        help="Agent mode: 'qa' for question answering (default), 'tour' for tour planning, 'auto' for auto-detection (default: auto)",
+    )
+    parser.add_argument(
         "--stream",
         action="store_true",
         help="Enable streaming output (plan text prints in real-time)",
@@ -132,13 +139,16 @@ async def main():
     else:
         visit_date = args.date or date.today().isoformat()
 
+    agent_mode = args.mode
+
     logger.info("=" * 60)
     logger.info("Museum Agent")
     logger.info("  Query: %s", user_message)
     logger.info("  Date: %s", visit_date)
     if override_time:
         logger.info("  Override time: %s", override_time)
-    logger.info("  Mode: %s", "streaming" if args.stream else "batch")
+    logger.info("  Agent mode: %s", agent_mode)
+    logger.info("  Output: %s", "streaming" if args.stream else "batch")
     logger.info("=" * 60)
 
     agent = MuseumAgent(env_path=env_path)
@@ -147,26 +157,27 @@ async def main():
         await agent.setup()
 
         if args.stream:
-            await run_streaming(agent, user_message, visit_date, override_time)
+            await run_streaming(agent, user_message, visit_date, override_time, mode=agent_mode)
         else:
-            await run_batch(agent, user_message, visit_date, override_time)
+            await run_batch(agent, user_message, visit_date, override_time, mode=agent_mode)
     finally:
         await agent.teardown()
 
 
-async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str, override_time: str | None = None):
-    """Run with streaming output — plan text prints in real-time."""
+async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str, override_time: str | None = None, mode: str = "auto"):
+    """Run with streaming output — text prints in real-time."""
     print("\n" + "=" * 60, flush=True)
     plan_started = False
 
-    async for event_type, data in agent.run_stream(user_message, visit_date, override_time=override_time):
+    async for event_type, data in agent.run_stream(user_message, visit_date, override_time=override_time, mode=mode):
         if event_type == "status":
             print(f"\r[status] {data}", flush=True)
 
         elif event_type == "chunk":
             if not plan_started:
                 print("\n" + "=" * 60)
-                print("TOUR PLAN (streaming)")
+                title = "TOUR PLAN (streaming)" if mode == "tour" else "ANSWER (streaming)"
+                print(title)
                 print("=" * 60, flush=True)
                 plan_started = True
             print(data, end="", flush=True)
@@ -205,10 +216,24 @@ async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str, 
     print(flush=True)
 
 
-async def run_batch(agent: MuseumAgent, user_message: str, visit_date: str, override_time: str | None = None):
+async def run_batch(agent: MuseumAgent, user_message: str, visit_date: str, override_time: str | None = None, mode: str = "auto"):
     """Run in batch mode — wait for full result then print."""
-    result = await agent.run(user_message, date=visit_date, override_time=override_time)
+    result = await agent.run(user_message, date=visit_date, override_time=override_time, mode=mode)
 
+    # QA mode output
+    if result.get("mode") == "qa":
+        print("\n" + "=" * 60)
+        print("ANSWER")
+        print("=" * 60)
+        print(result["answer"])
+        print("\n" + "-" * 60)
+        print("TIMINGS")
+        print("-" * 60)
+        for k, v in result["timings"].items():
+            print(f"  {k}: {v:.2f}s")
+        return
+
+    # Tour planning mode output
     print("\n" + "=" * 60)
     print("TOUR PLAN")
     print("=" * 60)

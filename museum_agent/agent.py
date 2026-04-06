@@ -1,10 +1,11 @@
-"""Main MuseumAgent class orchestrating the 4-step flow."""
+"""Main MuseumAgent class supporting QA and tour-planning modes."""
 
 from __future__ import annotations
 
 import json
 import logging
 import os
+import re
 import time
 from typing import Any
 
@@ -15,7 +16,7 @@ from lightrag.base import QueryParam
 from lightrag.llm.openai import openai_complete, openai_embed
 from lightrag.utils import EmbeddingFunc
 
-from museum_agent.llm import llm_complete
+from museum_agent.llm import llm_complete, llm_complete_stream
 from museum_agent.models import Plan, UserIntent
 from museum_agent.planner import (
     dict_to_plan,
@@ -24,10 +25,17 @@ from museum_agent.planner import (
     run_planner_fix,
     run_planner_stream,
 )
-from museum_agent.prompts import INTENT_PARSE_PROMPT
-from museum_agent.retrieval import parallel_retrieve
+from museum_agent.prompts import INTENT_PARSE_PROMPT, QA_SYSTEM_PROMPT, QA_USER_PROMPT
+from museum_agent.retrieval import parallel_retrieve, qa_retrieve
 from museum_agent.utils import compute_weekday, compute_current_time, compute_end_time, is_museum_closed
 from museum_agent.validator import validate_plan
+
+# Keywords that suggest the user wants a tour plan rather than a simple QA
+_TOUR_KEYWORDS = re.compile(
+    r"攻略|路线|规划|怎么逛|逛一圈|游览|参观计划|安排|行程|"
+    r"小时.*逛|逛.*小时|半天.*逛|逛.*半天|全天|"
+    r"第一次来|首次|带.*逛|先.*后.*再"
+)
 
 logger = logging.getLogger(__name__)
 
@@ -35,11 +43,11 @@ logger = logging.getLogger(__name__)
 class MuseumAgent:
     """Museum AI Tour Guide Agent.
 
-    Implements the 4-step flow:
-      Step 1: Intent parsing
-      Step 2: Parallel retrieval via LightRAG
-      Step 3: LLM planning + generation
-      Step 4: Code validation (with optional LLM retry)
+    Supports two modes:
+      - QA mode (default): retrieve + generate answer (2-step)
+      - Tour mode: intent parsing → retrieval → planning → validation (4-step)
+
+    Mode is auto-detected from user input, or can be set explicitly.
     """
 
     def __init__(self, env_path: str | None = None):
@@ -97,6 +105,17 @@ class MuseumAgent:
         """Close storage connections."""
         if self.rag:
             await self.rag.finalize_storages()
+
+    @staticmethod
+    def detect_mode(user_message: str) -> str:
+        """Detect whether the user wants tour planning or QA.
+
+        Returns "tour" if the message looks like a tour planning request,
+        "qa" otherwise.
+        """
+        if _TOUR_KEYWORDS.search(user_message):
+            return "tour"
+        return "qa"
 
     # ------------------------------------------------------------------
     # Step 1: Intent parsing
@@ -170,14 +189,130 @@ class MuseumAgent:
         return validate_plan(plan, intent.time_budget_min, intent.start_time)
 
     # ------------------------------------------------------------------
-    # Full pipeline
+    # QA pipeline
     # ------------------------------------------------------------------
-    async def run(self, user_message: str, date: str, override_time: str | None = None) -> dict[str, Any]:
-        """Execute the full 4-step pipeline.
+    async def run_qa(self, user_message: str, date: str) -> dict[str, Any]:
+        """Execute QA mode: retrieve + generate answer.
+
+        Returns dict with keys: answer, timings.
+        """
+        timings: dict[str, float] = {}
+
+        # Pre-check: museum closure (still inform user)
+        closed, reason = is_museum_closed(date)
+
+        # Step 1: Retrieve
+        logger.info("=" * 60)
+        logger.info("[QA Step 1] Retrieving relevant data")
+        logger.info("=" * 60)
+        t0 = time.monotonic()
+        assert self.rag is not None, "Call setup() first"
+        retrieved_data = await qa_retrieve(self.rag, query=user_message, date=date)
+        timings["retrieval"] = time.monotonic() - t0
+        logger.info("[QA Step 1] Done in %.2fs, %d chars", timings["retrieval"], len(retrieved_data))
+
+        # Step 2: Generate answer
+        logger.info("=" * 60)
+        logger.info("[QA Step 2] Generating answer")
+        logger.info("=" * 60)
+        t0 = time.monotonic()
+        weekday = compute_weekday(date)
+
+        system_prompt = QA_SYSTEM_PROMPT.format(date=date, weekday=weekday)
+        user_prompt = QA_USER_PROMPT.format(
+            user_query=user_message,
+            date=date,
+            weekday=weekday,
+            retrieved_data=retrieved_data,
+        )
+
+        # If museum is closed, prepend closure info to context
+        if closed:
+            user_prompt = f"**重要提醒：{reason}。**\n\n" + user_prompt
+
+        answer = await llm_complete(
+            prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=self.llm_model,
+        )
+        timings["generation"] = time.monotonic() - t0
+        timings["total"] = sum(timings.values())
+        logger.info("[QA Step 2] Done in %.2fs, %d chars", timings["generation"], len(answer))
+
+        return {
+            "answer": answer,
+            "timings": timings,
+            "mode": "qa",
+        }
+
+    async def run_qa_stream(self, user_message: str, date: str):
+        """Execute QA mode with streaming output.
+
+        Yields tuples of (event_type, data):
+          ("status", "message")     - progress updates
+          ("chunk", "text")         - streaming answer text
+          ("timings", timings_dict) - timing info
+        """
+        timings: dict[str, float] = {}
+
+        closed, reason = is_museum_closed(date)
+
+        # Step 1: Retrieve
+        yield ("status", "Retrieving relevant data...")
+        t0 = time.monotonic()
+        assert self.rag is not None, "Call setup() first"
+        retrieved_data = await qa_retrieve(self.rag, query=user_message, date=date)
+        timings["retrieval"] = time.monotonic() - t0
+        yield ("status", f"Retrieved {len(retrieved_data)} chars in {timings['retrieval']:.1f}s")
+
+        # Step 2: Generate answer (streaming)
+        yield ("status", "Generating answer...")
+        t0 = time.monotonic()
+        weekday = compute_weekday(date)
+
+        system_prompt = QA_SYSTEM_PROMPT.format(date=date, weekday=weekday)
+        user_prompt = QA_USER_PROMPT.format(
+            user_query=user_message,
+            date=date,
+            weekday=weekday,
+            retrieved_data=retrieved_data,
+        )
+
+        if closed:
+            user_prompt = f"**重要提醒：{reason}。**\n\n" + user_prompt
+
+        async for chunk in llm_complete_stream(
+            prompt=user_prompt,
+            system_prompt=system_prompt,
+            model=self.llm_model,
+        ):
+            yield ("chunk", chunk)
+
+        timings["generation"] = time.monotonic() - t0
+        timings["total"] = sum(timings.values())
+        yield ("timings", timings)
+
+    # ------------------------------------------------------------------
+    # Full tour planning pipeline
+    # ------------------------------------------------------------------
+    async def run(self, user_message: str, date: str, override_time: str | None = None, mode: str = "auto") -> dict[str, Any]:
+        """Execute the agent pipeline.
 
         Args:
+            user_message: User's natural language input.
+            date: Visit date in YYYY-MM-DD format.
             override_time: If set (e.g. "09:10"), use this as start_time instead of current time.
+            mode: "qa" for question answering, "tour" for tour planning, "auto" for auto-detection.
         """
+        # Resolve mode
+        if mode == "auto":
+            mode = self.detect_mode(user_message)
+            logger.info("Auto-detected mode: %s", mode)
+
+        if mode == "qa":
+            return await self.run_qa(user_message, date)
+
+        # --- Tour planning mode below ---
         timings: dict[str, float] = {}
 
         # Pre-check: museum closure
@@ -202,6 +337,7 @@ class MuseumAgent:
                 "intent": UserIntent(date=date, raw_query=user_message),
                 "closed": True,
                 "closed_reason": reason,
+                "mode": "tour",
             }
 
         # Step 1 + Step 2: Run intent parsing and retrieval in parallel
@@ -301,21 +437,33 @@ class MuseumAgent:
             "validation_errors": errors,
             "timings": timings,
             "intent": intent,
+            "mode": "tour",
         }
 
     # ------------------------------------------------------------------
     # Streaming pipeline
     # ------------------------------------------------------------------
-    async def run_stream(self, user_message: str, date: str, override_time: str | None = None):
+    async def run_stream(self, user_message: str, date: str, override_time: str | None = None, mode: str = "auto"):
         """Execute the pipeline with streaming output.
 
         Yields tuples of (event_type, data):
           ("status", "message")     - progress updates
-          ("chunk", "text")         - streaming plan text
-          ("plan_json", plan_dict)  - parsed plan JSON (after stream ends)
-          ("validation", errors)    - validation results
+          ("chunk", "text")         - streaming text
+          ("plan_json", plan_dict)  - parsed plan JSON (tour mode only)
+          ("validation", errors)    - validation results (tour mode only)
           ("timings", timings_dict) - timing info
         """
+        # Resolve mode
+        if mode == "auto":
+            mode = self.detect_mode(user_message)
+            logger.info("Auto-detected mode: %s (stream)", mode)
+
+        if mode == "qa":
+            async for event in self.run_qa_stream(user_message, date):
+                yield event
+            return
+
+        # --- Tour planning mode below ---
         import asyncio
         timings: dict[str, float] = {}
 

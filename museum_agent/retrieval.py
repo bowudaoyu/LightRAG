@@ -244,6 +244,50 @@ def _format_retrieval_block(result: dict[str, Any], today: str = "") -> str:
 # Main retrieval function
 # ---------------------------------------------------------------------------
 
+async def qa_retrieve(
+    rag,
+    query: str,
+    date: str,
+    top_k: int = 40,
+    chunk_top_k: int = 15,
+) -> str:
+    """Retrieve relevant data for QA mode using the user's query directly.
+
+    Returns a single formatted text block ready for the QA prompt.
+    """
+    # Extract keywords from user query for better retrieval
+    user_kw = extract_user_keywords(query)
+
+    # Build keyword lists from user interests
+    ll_keywords = list(set(
+        user_kw.get("interest_ll_keywords", [])
+        + user_kw.get("audience_ll_keywords", [])
+    ))
+
+    # Add date to keywords for temporal relevance
+    if date:
+        ll_keywords.append(date)
+
+    param = QueryParam(
+        mode="mix",
+        top_k=top_k,
+        chunk_top_k=chunk_top_k,
+        ll_keywords=ll_keywords if ll_keywords else None,
+    )
+
+    logger.info("QA retrieval: query=%s, ll_keywords=%s", query[:80], ll_keywords)
+
+    try:
+        result = await rag.aquery_data(query, param=param)
+        _summarize_retrieval("qa", result)
+        formatted = _format_retrieval_block(result, today=date)
+        logger.info("QA retrieval: %d chars formatted", len(formatted))
+        return formatted
+    except Exception:
+        logger.exception("QA retrieval failed")
+        return "(检索失败，无法获取数据)"
+
+
 async def parallel_retrieve(
     rag,
     date: str,
