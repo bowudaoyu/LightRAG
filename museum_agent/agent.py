@@ -22,6 +22,7 @@ from museum_agent.planner import (
     parse_llm_response,
     run_planner,
     run_planner_fix,
+    run_planner_stream,
 )
 from museum_agent.prompts import INTENT_PARSE_PROMPT
 from museum_agent.retrieval import parallel_retrieve
@@ -272,3 +273,77 @@ class MuseumAgent:
             "timings": timings,
             "intent": intent,
         }
+
+    # ------------------------------------------------------------------
+    # Streaming pipeline
+    # ------------------------------------------------------------------
+    async def run_stream(self, user_message: str, date: str):
+        """Execute the pipeline with streaming output.
+
+        Yields tuples of (event_type, data):
+          ("status", "message")     - progress updates
+          ("chunk", "text")         - streaming plan text
+          ("plan_json", plan_dict)  - parsed plan JSON (after stream ends)
+          ("validation", errors)    - validation results
+          ("timings", timings_dict) - timing info
+        """
+        import asyncio
+        timings: dict[str, float] = {}
+
+        # Step 1 + Step 2: parallel
+        yield ("status", "Parsing intent and retrieving data...")
+        t0 = time.monotonic()
+        intent_task = asyncio.create_task(self.parse_intent(user_message, date))
+        retrieval_task = asyncio.create_task(self.retrieve(date))
+        intent, retrieval = await asyncio.gather(intent_task, retrieval_task)
+        timings["step1_2_intent_and_retrieval"] = time.monotonic() - t0
+
+        yield ("status", f"Intent: {intent.audience}, {intent.time_budget_min}min from {intent.start_time}")
+        for key in ["route_data", "event_data", "notice_data", "story_data"]:
+            chars = len(retrieval.get(key, ""))
+            yield ("status", f"  Retrieved [{key}]: {chars} chars")
+
+        # Step 3: Streaming LLM generation
+        yield ("status", "Generating tour plan...")
+        t0 = time.monotonic()
+        raw_chunks: list[str] = []
+        in_plan_text = False
+
+        async for chunk in run_planner_stream(
+            llm_model=self.llm_model,
+            intent=intent,
+            retrieval=retrieval,
+        ):
+            raw_chunks.append(chunk)
+            accumulated = "".join(raw_chunks)
+
+            # Start streaming to user once we hit ---PLAN_TEXT---
+            if not in_plan_text and "---PLAN_TEXT---" in accumulated:
+                in_plan_text = True
+                # Emit everything after the marker
+                after_marker = accumulated.split("---PLAN_TEXT---", 1)[1]
+                if after_marker:
+                    yield ("chunk", after_marker)
+            elif in_plan_text:
+                yield ("chunk", chunk)
+
+        timings["step3_planning"] = time.monotonic() - t0
+
+        # Parse the full response
+        raw_response = "".join(raw_chunks)
+        plan_dict, plan_text = parse_llm_response(raw_response)
+        plan = dict_to_plan(plan_dict) if plan_dict else None
+
+        if plan_dict:
+            yield ("plan_json", plan_dict)
+
+        # Step 4: Validation
+        t0 = time.monotonic()
+        errors: list[str] = []
+        if plan:
+            errors = self.validate(plan, intent)
+        timings["step4_validation"] = time.monotonic() - t0
+        timings["total"] = sum(timings.values())
+
+        yield ("validation", errors)
+        yield ("timings", timings)

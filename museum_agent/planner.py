@@ -7,7 +7,9 @@ import logging
 import re
 from typing import Any
 
-from museum_agent.llm import llm_complete
+from collections.abc import AsyncIterator
+
+from museum_agent.llm import llm_complete, llm_complete_stream
 from museum_agent.models import Plan, PlanStop, UserIntent
 from museum_agent.prompts import PLANNER_SYSTEM_PROMPT, PLANNER_USER_PROMPT, VALIDATION_FIX_PROMPT
 
@@ -158,6 +160,33 @@ async def run_planner(
 
     plan = dict_to_plan(plan_dict) if plan_dict else None
     return plan, plan_text, raw
+
+
+async def run_planner_stream(
+    llm_model: str,
+    intent: UserIntent,
+    retrieval: dict[str, str],
+) -> AsyncIterator[str]:
+    """Stream the planner output. Yields raw text chunks as they arrive.
+
+    The caller should collect all chunks to form the full response,
+    then call parse_llm_response() on the accumulated text.
+    """
+    messages = _build_planner_messages(intent, retrieval)
+    user_content = messages[1]["content"]
+
+    logger.info("Planner input summary (stream mode):")
+    logger.info("  System prompt: %d chars", len(PLANNER_SYSTEM_PROMPT))
+    logger.info("  User prompt: %d chars", len(user_content))
+    logger.info("  User info: budget=%dmin, start=%s, audience=%s",
+                intent.time_budget_min, intent.start_time, intent.audience)
+
+    async for chunk in llm_complete_stream(
+        prompt=user_content,
+        system_prompt=PLANNER_SYSTEM_PROMPT,
+        model=llm_model,
+    ):
+        yield chunk
 
 
 async def run_planner_fix(
