@@ -3,7 +3,61 @@
     "museum_id": "CN_NMC",
     "name": "中国国家博物馆",
     "city": "北京",
-    "address": "东长安街16号"
+    "address": "东长安街16号",
+    "operating_hours": {
+      "regular": {
+        "open_time": "09:00",
+        "last_entry": "16:00",
+        "close_time": "17:00",
+        "closed_days": ["周一"],
+        "closed_days_note": "周一闭馆（含国家法定节假日）。如遇重大活动或特殊情况，开放时间另行通知。"
+      },
+      "night_session": {
+        "enabled": true,
+        "day_of_week": "周五",
+        "open_time": "18:00",
+        "close_time": "21:00",
+        "last_entry": "20:00",
+        "note": "每周五夜场开放，需单独预约夜场票，限流2000人。仅开放部分展厅（B1古代中国、F3庞贝特展）。",
+        "available_zones": ["CN_NMC_ZONE_B1_NORTH", "CN_NMC_ZONE_B1_SOUTH", "CN_NMC_ZONE_F3_SOUTH", "CN_NMC_FAC_CAFE"]
+      },
+      "special_closures": [
+        {"date": "除夕", "note": "春节除夕全天闭馆"},
+        {"date": "大年初一", "note": "春节初一全天闭馆"}
+      ]
+    },
+    "reservation": {
+      "required": true,
+      "platform": "国博官方微信小程序或官网 (www.chnmuseum.cn)",
+      "advance_days": 7,
+      "advance_days_note": "可提前7天预约，建议至少提前1-2天",
+      "id_required": true,
+      "id_types": ["身份证", "护照", "港澳通行证", "台湾通行证"],
+      "daily_capacity": 30000,
+      "time_slots": [
+        {"slot": "上午场", "time": "08:30-12:00"},
+        {"slot": "下午场", "time": "12:00-16:00"}
+      ],
+      "notes": "未成年人须由成人陪同预约。每个证件每天限约一次。"
+    },
+    "entrance": {
+      "recommended": "东门（面向长安街）",
+      "entrances": [
+        {"name": "东门", "note": "主入口，面向长安街，地铁1号线天安门东站C/D口步行约5分钟"},
+        {"name": "西门", "note": "团体入口，面向天安门广场"}
+      ],
+      "security_check": "入馆需经过安检，禁止携带打火机、液体饮料（未开封矿泉水除外）、自拍杆、三脚架等。大件行李需在一层行李寄存处寄存。",
+      "queue_estimate": {
+        "weekday": "约5-10分钟",
+        "weekend": "约15-30分钟",
+        "holiday": "约30-60分钟"
+      }
+    },
+    "transportation": {
+      "subway": "地铁1号线天安门东站C口或D口出站，步行约5分钟",
+      "bus": "多路公交可达「天安门东」站",
+      "parking": "博物馆无停车场，建议乘坐公共交通"
+    }
   },
   "spatial_topology":[
     {
