@@ -35,7 +35,7 @@ from lightrag.llm.openai import openai_embed, openai_complete
 # Config
 # ---------------------------------------------------------------------------
 MUSEUM_JSON = os.path.join(PROJECT_ROOT, "museum.json")
-DYNAMIC_JSON = os.path.join(PROJECT_ROOT, "museum_dynamic.json")
+DYNAMIC_JSON = os.path.join(PROJECT_ROOT, "museum_dynamic_0406.json")
 WORKING_DIR = os.path.join(PROJECT_ROOT, "rag_storage")
 
 DOC_ID_PREFIX = "museum_dynamic"

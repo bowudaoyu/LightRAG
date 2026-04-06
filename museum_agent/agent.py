@@ -101,9 +101,9 @@ class MuseumAgent:
     # ------------------------------------------------------------------
     # Step 1: Intent parsing
     # ------------------------------------------------------------------
-    async def parse_intent(self, user_message: str, date: str) -> UserIntent:
+    async def parse_intent(self, user_message: str, date: str, override_time: str | None = None) -> UserIntent:
         """Parse user's natural language input into structured intent."""
-        current_time = compute_current_time()
+        current_time = override_time or compute_current_time()
         weekday = compute_weekday(date)
         prompt = INTENT_PARSE_PROMPT.format(
             date=date,
@@ -172,14 +172,11 @@ class MuseumAgent:
     # ------------------------------------------------------------------
     # Full pipeline
     # ------------------------------------------------------------------
-    async def run(self, user_message: str, date: str) -> dict[str, Any]:
+    async def run(self, user_message: str, date: str, override_time: str | None = None) -> dict[str, Any]:
         """Execute the full 4-step pipeline.
 
-        Returns a dict with:
-          - plan_text: natural language itinerary for the user
-          - plan: Plan object (or None)
-          - validation_errors: list of errors (empty if valid)
-          - timings: dict of step durations in seconds
+        Args:
+            override_time: If set (e.g. "09:10"), use this as start_time instead of current time.
         """
         timings: dict[str, float] = {}
 
@@ -189,7 +186,7 @@ class MuseumAgent:
         logger.info("=" * 60)
         t0 = time.monotonic()
         import asyncio
-        intent_task = asyncio.create_task(self.parse_intent(user_message, date))
+        intent_task = asyncio.create_task(self.parse_intent(user_message, date, override_time))
         retrieval_task = asyncio.create_task(self.retrieve(date, user_message))
         intent, retrieval = await asyncio.gather(intent_task, retrieval_task)
         timings["step1_2_intent_and_retrieval"] = time.monotonic() - t0
@@ -285,7 +282,7 @@ class MuseumAgent:
     # ------------------------------------------------------------------
     # Streaming pipeline
     # ------------------------------------------------------------------
-    async def run_stream(self, user_message: str, date: str):
+    async def run_stream(self, user_message: str, date: str, override_time: str | None = None):
         """Execute the pipeline with streaming output.
 
         Yields tuples of (event_type, data):
@@ -301,7 +298,7 @@ class MuseumAgent:
         # Step 1 + Step 2: parallel
         yield ("status", "Parsing intent and retrieving data...")
         t0 = time.monotonic()
-        intent_task = asyncio.create_task(self.parse_intent(user_message, date))
+        intent_task = asyncio.create_task(self.parse_intent(user_message, date, override_time))
         retrieval_task = asyncio.create_task(self.retrieve(date, user_message))
         intent, retrieval = await asyncio.gather(intent_task, retrieval_task)
         timings["step1_2_intent_and_retrieval"] = time.monotonic() - t0

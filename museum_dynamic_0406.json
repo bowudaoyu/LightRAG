@@ -13,11 +13,26 @@
       "valid_from": "2026-04-06T10:00:00+08:00",
       "valid_to": "2026-04-06T15:00:00+08:00",
       "publish_time": "2026-04-06T08:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_B1_NORTH"],
-      "artifact_ids": ["ART_NMC_001", "ART_NMC_002", "ART_NMC_006"],
-      "exhibition_ids": ["EXH_NMC_001"],
-      "theme_ids": ["THEME_NMC_001"],
-      "tags": ["志愿者讲解", "青铜器", "免费", "周一"],
+      "zone_ids": [
+        "CN_NMC_ZONE_B1_NORTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_001",
+        "ART_NMC_002",
+        "ART_NMC_006"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_001"
+      ],
+      "theme_ids": [
+        "THEME_NMC_001"
+      ],
+      "tags": [
+        "志愿者讲解",
+        "青铜器",
+        "免费",
+        "周一"
+      ],
       "target_audience": [],
       "payload": {
         "activity_type": "guided_tour",
@@ -33,8 +48,17 @@
       },
       "recurrence": {
         "pattern": "daily",
-        "days_of_week": [1, 2, 3, 4, 5],
-        "times": ["10:00", "14:00"],
+        "days_of_week": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "times": [
+          "10:00",
+          "14:00"
+        ],
         "duration_minutes": 40,
         "exceptions": []
       }
@@ -50,11 +74,27 @@
       "valid_to": "2026-04-06T16:00:00+08:00",
       "publish_time": "2026-03-30T09:00:00+08:00",
       "zone_ids": [],
-      "artifact_ids": ["ART_NMC_001", "ART_NMC_002"],
-      "exhibition_ids": ["EXH_NMC_001"],
-      "theme_ids": ["THEME_NMC_001"],
-      "tags": ["讲座", "学术", "青铜器", "考古", "商代"],
-      "target_audience": ["culture_enthusiast", "student"],
+      "artifact_ids": [
+        "ART_NMC_001",
+        "ART_NMC_002"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_001"
+      ],
+      "theme_ids": [
+        "THEME_NMC_001"
+      ],
+      "tags": [
+        "讲座",
+        "学术",
+        "青铜器",
+        "考古",
+        "商代"
+      ],
+      "target_audience": [
+        "culture_enthusiast",
+        "student"
+      ],
       "payload": {
         "activity_type": "lecture",
         "host": "王研究员（中国社会科学院考古研究所）",
@@ -78,12 +118,29 @@
       "valid_from": "2026-04-06T09:30:00+08:00",
       "valid_to": "2026-04-12T17:00:00+08:00",
       "publish_time": "2026-04-03T09:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F2_NORTH"],
-      "artifact_ids": ["ART_NMC_020"],
-      "exhibition_ids": ["EXH_NMC_005"],
-      "theme_ids": ["THEME_NMC_006"],
-      "tags": ["工作坊", "书法", "体验", "王安石", "互动"],
-      "target_audience": ["culture_enthusiast", "student"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F2_NORTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_020"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_005"
+      ],
+      "theme_ids": [
+        "THEME_NMC_006"
+      ],
+      "tags": [
+        "工作坊",
+        "书法",
+        "体验",
+        "王安石",
+        "互动"
+      ],
+      "target_audience": [
+        "culture_enthusiast",
+        "student"
+      ],
       "payload": {
         "activity_type": "workshop",
         "host": "国博书画修复室",
@@ -98,8 +155,19 @@
       },
       "recurrence": {
         "pattern": "daily",
-        "days_of_week": [1, 2, 3, 4, 5, 6, 7],
-        "times": ["09:30", "14:00"],
+        "days_of_week": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "times": [
+          "09:30",
+          "14:00"
+        ],
         "duration_minutes": 90,
         "exceptions": []
       }
@@ -114,12 +182,31 @@
       "valid_from": "2026-04-06T09:00:00+08:00",
       "valid_to": "2026-05-06T17:00:00+08:00",
       "publish_time": "2026-04-05T09:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F3_SOUTH"],
-      "artifact_ids": ["ART_NMC_028", "ART_NMC_029", "ART_NMC_030"],
-      "exhibition_ids": ["EXH_NMC_008"],
-      "theme_ids": ["THEME_NMC_007"],
-      "tags": ["VR", "沉浸体验", "庞贝", "科技互动", "限时"],
-      "target_audience": ["culture_enthusiast", "social_media"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F3_SOUTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_028",
+        "ART_NMC_029",
+        "ART_NMC_030"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_008"
+      ],
+      "theme_ids": [
+        "THEME_NMC_007"
+      ],
+      "tags": [
+        "VR",
+        "沉浸体验",
+        "庞贝",
+        "科技互动",
+        "限时"
+      ],
+      "target_audience": [
+        "culture_enthusiast",
+        "social_media"
+      ],
       "payload": {
         "activity_type": "performance",
         "host": "国博数字展示中心",
@@ -143,12 +230,31 @@
       "valid_from": "2026-04-10T18:00:00+08:00",
       "valid_to": "2026-04-10T21:00:00+08:00",
       "publish_time": "2026-04-06T09:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_B1_NORTH", "CN_NMC_ZONE_B1_SOUTH", "CN_NMC_ZONE_F3_SOUTH", "CN_NMC_FAC_CAFE"],
+      "zone_ids": [
+        "CN_NMC_ZONE_B1_NORTH",
+        "CN_NMC_ZONE_B1_SOUTH",
+        "CN_NMC_ZONE_F3_SOUTH",
+        "CN_NMC_FAC_CAFE"
+      ],
       "artifact_ids": [],
-      "exhibition_ids": ["EXH_NMC_001", "EXH_NMC_002", "EXH_NMC_008"],
+      "exhibition_ids": [
+        "EXH_NMC_001",
+        "EXH_NMC_002",
+        "EXH_NMC_008"
+      ],
       "theme_ids": [],
-      "tags": ["夜场", "夜间开放", "打卡", "拍照", "氛围", "周五"],
-      "target_audience": ["culture_enthusiast", "social_media"],
+      "tags": [
+        "夜场",
+        "夜间开放",
+        "打卡",
+        "拍照",
+        "氛围",
+        "周五"
+      ],
+      "target_audience": [
+        "culture_enthusiast",
+        "social_media"
+      ],
       "payload": {
         "activity_type": "performance",
         "host": "国博运营部",
@@ -172,12 +278,22 @@
       "valid_from": "2026-04-15T09:00:00+08:00",
       "valid_to": "2026-08-15T17:00:00+08:00",
       "publish_time": "2026-04-06T09:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F2_SOUTH"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F2_SOUTH"
+      ],
       "artifact_ids": [],
       "exhibition_ids": [],
       "theme_ids": [],
-      "tags": ["新展", "敦煌", "丝绸之路", "服饰", "特展预告"],
-      "target_audience": ["culture_enthusiast"],
+      "tags": [
+        "新展",
+        "敦煌",
+        "丝绸之路",
+        "服饰",
+        "特展预告"
+      ],
+      "target_audience": [
+        "culture_enthusiast"
+      ],
       "payload": {
         "update_type": "opening",
         "original_end_date": null,
@@ -195,11 +311,26 @@
       "status": "active",
       "valid_from": "2026-04-06T00:00:00+08:00",
       "valid_to": "2026-08-31T17:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F3_SOUTH"],
-      "artifact_ids": ["ART_NMC_028", "ART_NMC_029", "ART_NMC_030"],
-      "exhibition_ids": ["EXH_NMC_008"],
-      "theme_ids": ["THEME_NMC_007"],
-      "tags": ["庞贝", "特展", "闭展倒计时", "限时"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F3_SOUTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_028",
+        "ART_NMC_029",
+        "ART_NMC_030"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_008"
+      ],
+      "theme_ids": [
+        "THEME_NMC_007"
+      ],
+      "tags": [
+        "庞贝",
+        "特展",
+        "闭展倒计时",
+        "限时"
+      ],
       "target_audience": [],
       "payload": {
         "update_type": "closing_soon",
@@ -222,8 +353,15 @@
       "artifact_ids": [],
       "exhibition_ids": [],
       "theme_ids": [],
-      "tags": ["门票", "预约", "余量", "工作日"],
-      "target_audience": ["tourist"],
+      "tags": [
+        "门票",
+        "预约",
+        "余量",
+        "工作日"
+      ],
+      "target_audience": [
+        "tourist"
+      ],
       "payload": {
         "ticket_type": "availability",
         "date": "2026-04-06",
@@ -235,30 +373,6 @@
       }
     },
     {
-      "id": "DYN_NMC_20260406_009",
-      "category": "operation",
-      "title": "当前东门排队约5分钟",
-      "description": "当前东门（东长安街侧）安检排队约5分钟，西门（天安门广场侧）约10分钟。今日为周一工作日，全馆客流较低，截至10:00已入馆800人（容量20%），参观体验非常舒适。",
-      "priority": 3,
-      "status": "active",
-      "valid_from": "2026-04-06T10:00:00+08:00",
-      "valid_to": "2026-04-06T12:00:00+08:00",
-      "zone_ids": [],
-      "artifact_ids": [],
-      "exhibition_ids": [],
-      "theme_ids": [],
-      "tags": ["排队", "客流", "入馆", "安检", "工作日"],
-      "target_audience": ["tourist"],
-      "payload": {
-        "operation_type": "queue_status",
-        "severity": "info",
-        "affected_entrance": null,
-        "queue_minutes": 5,
-        "new_hours": null,
-        "reason": "工作日客流低"
-      }
-    },
-    {
       "id": "DYN_NMC_20260406_010",
       "category": "operation",
       "title": "F3北区（钱币展）今日10:00-11:30临时闭厅",
@@ -267,17 +381,36 @@
       "status": "active",
       "valid_from": "2026-04-06T10:00:00+08:00",
       "valid_to": "2026-04-06T11:30:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F3_NORTH"],
-      "artifact_ids": ["ART_NMC_024", "ART_NMC_025", "ART_NMC_026", "ART_NMC_027"],
-      "exhibition_ids": ["EXH_NMC_007"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F3_NORTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_024",
+        "ART_NMC_025",
+        "ART_NMC_026",
+        "ART_NMC_027"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_007"
+      ],
       "theme_ids": [],
-      "tags": ["临时关闭", "展厅维护", "F3北区", "钱币"],
+      "tags": [
+        "临时关闭",
+        "展厅维护",
+        "F3北区",
+        "钱币"
+      ],
       "target_audience": [],
       "payload": {
         "update_type": "hall_closure",
         "original_end_date": null,
         "new_end_date": null,
-        "affected_artifacts": ["ART_NMC_024", "ART_NMC_025", "ART_NMC_026", "ART_NMC_027"],
+        "affected_artifacts": [
+          "ART_NMC_024",
+          "ART_NMC_025",
+          "ART_NMC_026",
+          "ART_NMC_027"
+        ],
         "reason": "展柜玻璃更换"
       }
     },
@@ -290,11 +423,20 @@
       "status": "active",
       "valid_from": "2026-04-06T09:00:00+08:00",
       "valid_to": "2026-04-06T17:00:00+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F2_SOUTH"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F2_SOUTH"
+      ],
       "artifact_ids": [],
-      "exhibition_ids": ["EXH_NMC_006"],
+      "exhibition_ids": [
+        "EXH_NMC_006"
+      ],
       "theme_ids": [],
-      "tags": ["电梯", "修复", "设施", "恢复"],
+      "tags": [
+        "电梯",
+        "修复",
+        "设施",
+        "恢复"
+      ],
       "target_audience": [],
       "payload": {
         "operation_type": "facility_status",
@@ -314,12 +456,28 @@
       "status": "active",
       "valid_from": "2026-04-05T00:00:00+08:00",
       "valid_to": "2026-12-31T23:59:59+08:00",
-      "zone_ids": ["CN_NMC_ZONE_B1_NORTH"],
-      "artifact_ids": ["ART_NMC_002"],
-      "exhibition_ids": ["EXH_NMC_001"],
-      "theme_ids": ["THEME_NMC_001"],
-      "tags": ["抖音", "四羊方尊", "铸造工��", "3D动画", "冷知识"],
-      "target_audience": ["social_media"],
+      "zone_ids": [
+        "CN_NMC_ZONE_B1_NORTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_002"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_001"
+      ],
+      "theme_ids": [
+        "THEME_NMC_001"
+      ],
+      "tags": [
+        "抖音",
+        "四羊方尊",
+        "铸造工��",
+        "3D动画",
+        "冷知识"
+      ],
+      "target_audience": [
+        "social_media"
+      ],
       "payload": {
         "content_type": "ugc",
         "author": "国博官方抖音",
@@ -338,12 +496,29 @@
       "status": "active",
       "valid_from": "2026-04-04T00:00:00+08:00",
       "valid_to": "2026-12-31T23:59:59+08:00",
-      "zone_ids": ["CN_NMC_ZONE_F2_SOUTH"],
-      "artifact_ids": ["ART_NMC_022"],
-      "exhibition_ids": ["EXH_NMC_006"],
-      "theme_ids": ["THEME_NMC_002"],
-      "tags": ["良渚", "玉琮", "神人兽面纹", "考古之谜", "冷知识"],
-      "target_audience": ["culture_enthusiast", "student"],
+      "zone_ids": [
+        "CN_NMC_ZONE_F2_SOUTH"
+      ],
+      "artifact_ids": [
+        "ART_NMC_022"
+      ],
+      "exhibition_ids": [
+        "EXH_NMC_006"
+      ],
+      "theme_ids": [
+        "THEME_NMC_002"
+      ],
+      "tags": [
+        "良渚",
+        "玉琮",
+        "神人兽面纹",
+        "考古之谜",
+        "冷知识"
+      ],
+      "target_audience": [
+        "culture_enthusiast",
+        "student"
+      ],
       "payload": {
         "content_type": "curator_insight",
         "author": "国博玉器研究室",
@@ -362,12 +537,30 @@
       "status": "active",
       "valid_from": "2026-04-06T09:00:00+08:00",
       "valid_to": "2026-05-31T17:00:00+08:00",
-      "zone_ids": ["CN_NMC_FAC_GIFT_SHOP"],
-      "artifact_ids": ["ART_NMC_001", "ART_NMC_002", "ART_NMC_003", "ART_NMC_005", "ART_NMC_009", "ART_NMC_011"],
+      "zone_ids": [
+        "CN_NMC_FAC_GIFT_SHOP"
+      ],
+      "artifact_ids": [
+        "ART_NMC_001",
+        "ART_NMC_002",
+        "ART_NMC_003",
+        "ART_NMC_005",
+        "ART_NMC_009",
+        "ART_NMC_011"
+      ],
       "exhibition_ids": [],
       "theme_ids": [],
-      "tags": ["文创", "纪念徽章", "66周年", "限量", "收藏"],
-      "target_audience": ["culture_enthusiast", "social_media"],
+      "tags": [
+        "文创",
+        "纪念徽章",
+        "66周年",
+        "限量",
+        "收藏"
+      ],
+      "target_audience": [
+        "culture_enthusiast",
+        "social_media"
+      ],
       "payload": {
         "merch_type": "new_release",
         "product_name": "国博66周年纪念徽章套装",
@@ -387,12 +580,21 @@
       "status": "active",
       "valid_from": "2026-04-06T09:00:00+08:00",
       "valid_to": "2026-12-31T17:00:00+08:00",
-      "zone_ids": ["CN_NMC_FAC_LUGGAGE"],
+      "zone_ids": [
+        "CN_NMC_FAC_LUGGAGE"
+      ],
       "artifact_ids": [],
       "exhibition_ids": [],
       "theme_ids": [],
-      "tags": ["寄存", "储物柜", "免费", "服务升级"],
-      "target_audience": ["tourist"],
+      "tags": [
+        "寄存",
+        "储物柜",
+        "免费",
+        "服务升级"
+      ],
+      "target_audience": [
+        "tourist"
+      ],
       "payload": {
         "service_type": "luggage",
         "details": "新增20个电子储物柜，扫码使用，4小时内免费",

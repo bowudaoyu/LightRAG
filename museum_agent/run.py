@@ -22,7 +22,7 @@ import asyncio
 import logging
 import os
 import sys
-from datetime import date
+from datetime import date, datetime
 
 # Add project root to path so we can import lightrag
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -48,10 +48,16 @@ examples:
         help="User query (if omitted, enters interactive mode)",
     )
     parser.add_argument(
+        "--datetime",
+        type=str,
+        default=None,
+        help="Visit date+time, e.g. '2026-04-06 09:10' or '2026.4.6 9:10' (default: now)",
+    )
+    parser.add_argument(
         "--date",
         type=str,
-        default=date.today().isoformat(),
-        help="Visit date in YYYY-MM-DD format (default: today)",
+        default=None,
+        help="Visit date in YYYY-MM-DD format (default: today). Ignored if --datetime is set.",
     )
     parser.add_argument(
         "--stream",
@@ -105,10 +111,33 @@ async def main():
             user_message = "我第一次来国博，有3小时，帮我规划一下怎么逛最值？"
             print(f"(using default: {user_message})")
 
+    # Resolve date and time
+    visit_date = None
+    override_time = None
+
+    if args.datetime:
+        # Parse flexible datetime formats: "2026-04-06 09:10", "2026.4.6 9:10", etc.
+        dt_str = args.datetime.replace(".", "-").replace("/", "-")
+        for fmt in ["%Y-%m-%d %H:%M", "%Y-%m-%d %H:%M:%S"]:
+            try:
+                dt = datetime.strptime(dt_str, fmt)
+                visit_date = dt.strftime("%Y-%m-%d")
+                override_time = dt.strftime("%H:%M")
+                break
+            except ValueError:
+                continue
+        if visit_date is None:
+            print(f"Error: cannot parse --datetime '{args.datetime}', expected format: '2026-04-06 09:10'")
+            return
+    else:
+        visit_date = args.date or date.today().isoformat()
+
     logger.info("=" * 60)
     logger.info("Museum Agent")
     logger.info("  Query: %s", user_message)
-    logger.info("  Date: %s", args.date)
+    logger.info("  Date: %s", visit_date)
+    if override_time:
+        logger.info("  Override time: %s", override_time)
     logger.info("  Mode: %s", "streaming" if args.stream else "batch")
     logger.info("=" * 60)
 
@@ -118,19 +147,19 @@ async def main():
         await agent.setup()
 
         if args.stream:
-            await run_streaming(agent, user_message, args.date)
+            await run_streaming(agent, user_message, visit_date, override_time)
         else:
-            await run_batch(agent, user_message, args.date)
+            await run_batch(agent, user_message, visit_date, override_time)
     finally:
         await agent.teardown()
 
 
-async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str):
+async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str, override_time: str | None = None):
     """Run with streaming output — plan text prints in real-time."""
     print("\n" + "=" * 60, flush=True)
     plan_started = False
 
-    async for event_type, data in agent.run_stream(user_message, visit_date):
+    async for event_type, data in agent.run_stream(user_message, visit_date, override_time=override_time):
         if event_type == "status":
             print(f"\r[status] {data}", flush=True)
 
@@ -176,9 +205,9 @@ async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str):
     print(flush=True)
 
 
-async def run_batch(agent: MuseumAgent, user_message: str, visit_date: str):
+async def run_batch(agent: MuseumAgent, user_message: str, visit_date: str, override_time: str | None = None):
     """Run in batch mode — wait for full result then print."""
-    result = await agent.run(user_message, date=visit_date)
+    result = await agent.run(user_message, date=visit_date, override_time=override_time)
 
     print("\n" + "=" * 60)
     print("TOUR PLAN")
