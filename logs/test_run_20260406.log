@@ -1,0 +1,294 @@
+17:26:09 [museum_agent.run] INFO: ============================================================
+17:26:09 [museum_agent.run] INFO: Museum Agent
+17:26:09 [museum_agent.run] INFO:   Query: 我有3小时
+17:26:09 [museum_agent.run] INFO:   Date: 2026-04-06
+17:26:09 [museum_agent.run] INFO:   Override time: 09:10
+17:26:09 [museum_agent.run] INFO:   Mode: batch
+17:26:09 [museum_agent.run] INFO: ============================================================
+INFO: PostgreSQL table: LIGHTRAG_VDB_ENTITY_bge_m3_1024d
+INFO: PostgreSQL table: LIGHTRAG_VDB_RELATION_bge_m3_1024d
+INFO: PostgreSQL table: LIGHTRAG_VDB_CHUNKS_bge_m3_1024d
+INFO: PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+INFO: PostgreSQL, VECTOR extension enabled
+INFO: PostgreSQL, Connected to database at entry.we.mornai.cn:22131/rag without SSL
+INFO: chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+INFO: cache_type column already exists in LIGHTRAG_LLM_CACHE table
+INFO: queryparam column already exists in LIGHTRAG_LLM_CACHE table
+INFO: mode column does not exist in LIGHTRAG_LLM_CACHE table
+INFO: chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+INFO: llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+INFO: track_id column already exists in LIGHTRAG_DOC_STATUS table
+INFO: Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+INFO: metadata column already exists in LIGHTRAG_DOC_STATUS table
+INFO: error_msg column already exists in LIGHTRAG_DOC_STATUS table
+INFO: HNSW vector index idx_lightrag_vdb_entity_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_bge_m3_1024d
+INFO: HNSW vector index idx_lightrag_vdb_relation_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_bge_m3_1024d
+INFO: HNSW vector index idx_lightrag_vdb_chunks_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_bge_m3_1024d
+INFO: [default] PostgreSQL Graph initialized: graph_name='chunk_entity_relation'
+INFO: PostgreSQL, AGE extension enabled
+17:26:29 [museum_agent.agent] INFO: MuseumAgent initialized (LLM=qwen3.5-plus)
+17:26:29 [museum_agent.agent] INFO: ============================================================
+17:26:29 [museum_agent.agent] INFO: [Step 1+2] Starting intent parsing + parallel retrieval
+17:26:29 [museum_agent.agent] INFO: ============================================================
+17:26:29 [museum_agent.retrieval] INFO: User keyword extraction: no specific interests detected, using defaults
+17:26:29 [museum_agent.retrieval] INFO: Final retrieval queries:
+17:26:29 [museum_agent.retrieval] INFO:   [route_data] query: 3小时 首次来馆 国宝 精华路线 推荐路线 必看文物 展览
+17:26:29 [museum_agent.retrieval] INFO:   [route_data] hl_keywords: ['博物馆路线', '参观规划', '国宝精华']
+17:26:29 [museum_agent.retrieval] INFO:   [route_data] ll_keywords: ['3小时', '路线', '国宝', '精华', '首次', '必看', '文物', '展览', '推荐']
+17:26:29 [museum_agent.retrieval] INFO:   [event_data] query: 2026-04-06 今天 活动 讲解 导览 工作坊 体验 集章
+17:26:29 [museum_agent.retrieval] INFO:   [event_data] hl_keywords: ['博物馆活动', '今日讲解导览']
+17:26:29 [museum_agent.retrieval] INFO:   [event_data] ll_keywords: ['活动', '讲解', '导览', '工作坊', '体验', '集章', '志愿者', '2026-04-06']
+17:26:29 [museum_agent.retrieval] INFO:   [notice_data] query: 2026-04-06 今天 关闭 维修 限流 排队 闭馆 注意事项
+17:26:29 [museum_agent.retrieval] INFO:   [notice_data] hl_keywords: ['运营公告', '注意事项']
+17:26:29 [museum_agent.retrieval] INFO:   [notice_data] ll_keywords: ['关闭', '维修', '限流', '排队', '闭馆', '注意', '电梯', '门票', '2026-04-06']
+17:26:29 [museum_agent.retrieval] INFO:   [story_data] query: 咖啡 文创 冷知识 打卡 拍照 纪念品 趣味 小红书
+17:26:29 [museum_agent.retrieval] INFO:   [story_data] hl_keywords: ['趣味内容', '文创购物', '冷知识']
+17:26:29 [museum_agent.retrieval] INFO:   [story_data] ll_keywords: ['咖啡', '文创', '冷知识', '打卡', '拍照', '纪念品', '小红书', '盲盒']
+INFO: Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+INFO: Query nodes: 咖啡, 文创, 冷知识, 打卡, 拍照, 纪念品, 小红书, 盲盒 (top_k:30, cosine:0.2)
+INFO: Query nodes: 活动, 讲解, 导览, 工作坊, 体验, 集章, 志愿者, 2026-04-06 (top_k:30, cosine:0.2)
+INFO: Query nodes: 3小时, 路线, 国宝, 精华, 首次, 必看, 文物, 展览, 推荐 (top_k:30, cosine:0.2)
+INFO: Query nodes: 关闭, 维修, 限流, 排队, 闭馆, 注意, 电梯, 门票, 2026-04-06 (top_k:30, cosine:0.2)
+17:26:30 [museum_agent.agent] INFO: Parsed intent: UserIntent(time_budget_min=180, start_time='09:10', date='2026-04-06', audience='adult_solo', has_child=False, has_elderly=False, interests=[], raw_query='我有3小时')
+INFO: Local query: 30 entites, 183 relations
+INFO: Query edges: 博物馆路线, 参观规划, 国宝精华 (top_k:30, cosine:0.2)
+INFO: Local query: 30 entites, 166 relations
+INFO: Query edges: 趣味内容, 文创购物, 冷知识 (top_k:30, cosine:0.2)
+INFO: Global query: 27 entites, 30 relations
+INFO: Naive query: 10 chunks (chunk_top_k:10 cosine:0.2)
+INFO: Raw search results: 48 entities, 183 relations, 10 vector chunks
+INFO: After truncation: 48 entities, 159 relations
+INFO: Selecting 44 from 44 entity-related chunks by vector similarity
+INFO: Global query: 28 entites, 30 relations
+INFO: Local query: 30 entites, 178 relations
+INFO: Query edges: 博物馆活动, 今日讲解导览 (top_k:30, cosine:0.2)
+INFO: Find 14 additional chunks in 14 relations (deduplicated 39)
+INFO: Local query: 30 entites, 170 relations
+INFO: Query edges: 运营公告, 注意事项 (top_k:30, cosine:0.2)
+INFO: Naive query: 10 chunks (chunk_top_k:10 cosine:0.2)
+INFO: Raw search results: 47 entities, 172 relations, 10 vector chunks
+INFO: After truncation: 47 entities, 166 relations
+INFO: Selecting 14 from 14 relation-related chunks by vector similarity
+INFO: Round-robin merged chunks: 68 -> 61 (deduplicated 7)
+WARNING: Rerank is enabled but no rerank model is configured. Please set up a rerank model or set enable_rerank=False in query parameters.
+INFO: Final context: 48 entities, 159 relations, 10 chunks
+INFO: Final chunks S+F/O: E1/1 R1/1 E1/2 R2/2 E1/3 R1/3 C1/4 E1/4 R1/4 E1/5
+17:26:36 [museum_agent.retrieval] INFO: Query [route_data] returned 48 entities, 159 relations, 10 chunks
+INFO: Selecting 46 from 46 entity-related chunks by vector similarity
+INFO: Find 20 additional chunks in 20 relations (deduplicated 42)
+INFO: Global query: 27 entites, 30 relations
+INFO: Global query: 30 entites, 30 relations
+INFO: Selecting 20 from 20 relation-related chunks by vector similarity
+INFO: Naive query: 10 chunks (chunk_top_k:10 cosine:0.2)
+INFO: Raw search results: 44 entities, 178 relations, 10 vector chunks
+INFO: After truncation: 44 entities, 165 relations
+INFO: Round-robin merged chunks: 76 -> 70 (deduplicated 6)
+WARNING: Rerank is enabled but no rerank model is configured. Please set up a rerank model or set enable_rerank=False in query parameters.
+INFO: Final context: 47 entities, 166 relations, 10 chunks
+INFO: Final chunks S+F/O: C1/1 E1/1 R1/1 C1/2 E1/2 R1/2 E1/3 R1/3 E1/4 R1/4
+17:26:38 [museum_agent.retrieval] INFO: Query [story_data] returned 47 entities, 166 relations, 10 chunks
+INFO: Naive query: 10 chunks (chunk_top_k:10 cosine:0.2)
+INFO: Raw search results: 38 entities, 170 relations, 10 vector chunks
+INFO: After truncation: 38 entities, 165 relations
+INFO: Selecting 38 from 38 entity-related chunks by vector similarity
+INFO: Selecting 30 from 30 entity-related chunks by vector similarity
+INFO: Find 28 additional chunks in 28 relations (deduplicated 34)
+INFO: Find 38 additional chunks in 38 relations (deduplicated 26)
+INFO: Selecting 28 from 28 relation-related chunks by vector similarity
+INFO: Round-robin merged chunks: 76 -> 67 (deduplicated 9)
+WARNING: Rerank is enabled but no rerank model is configured. Please set up a rerank model or set enable_rerank=False in query parameters.
+INFO: Final context: 44 entities, 165 relations, 10 chunks
+INFO: Final chunks S+F/O: E1/1 R1/1 E1/2 R1/2 E1/3 R1/3 E1/4 R1/4 E1/5 R1/5
+17:26:40 [museum_agent.retrieval] INFO: Query [event_data] returned 44 entities, 165 relations, 10 chunks
+INFO: Selecting 38 from 38 relation-related chunks by vector similarity
+INFO: Round-robin merged chunks: 78 -> 72 (deduplicated 6)
+WARNING: Rerank is enabled but no rerank model is configured. Please set up a rerank model or set enable_rerank=False in query parameters.
+INFO: Final context: 38 entities, 165 relations, 10 chunks
+INFO: Final chunks S+F/O: E1/1 R3/1 E1/2 R1/2 C1/3 E1/3 R1/3 C1/4 E1/4 R1/4
+17:26:40 [museum_agent.retrieval] INFO: Query [notice_data] returned 38 entities, 165 relations, 10 chunks
+17:26:40 [museum_agent.retrieval] INFO: ==================================================
+17:26:40 [museum_agent.retrieval] INFO: Retrieval Results Summary
+17:26:40 [museum_agent.retrieval] INFO: ==================================================
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] 48 entities {Artifact:13, Concept:7, Event:2, Exhibition:6, Exhibition_Hall:8, Facility:1, Floor:1, Museum:1, Notice:1, Route:3, Story:2, Surrounding:3}, 159 relations, 10 chunks
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] top entities: 2小时国宝精华路线, 亲子探索路线, 红山文化玉龙, 北3展厅, 四羊方尊, 青铜器深度之旅, 清代《乾隆南巡图》第六卷, 南3展厅, 北1展厅, 中国古代钱币
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] chunk[0]: 推荐路线「2小时国宝精华路线」：一条覆盖全馆精华的经典路线，从地下一层出发，逐层向上，不走回头路。
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] chunk[1]: 【2026-04-15至2026-08-15｜南2展厅｜活动·】
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] chunk[2]: 推荐路线「亲子探索路线」：精选最具视觉冲击力和趣味性的文物，节奏轻快，穿插休息和互动环节。
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] chunk[3]: 【2026-04-06至2026-05-06｜南3展厅｜活动·performance】
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] chunk[4]: 推荐路线「青铜器深度之旅」：聚焦馆藏青铜重器，从商代祭祀礼器到西汉生活用器，感受中国青铜文明从巅峰到余晖的完整弧线。
+17:26:40 [museum_agent.retrieval] INFO:   [route_data] formatted text: 8017 chars
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] 44 entities {Artifact:10, Concept:2, Event:6, Exhibition:2, Exhibition_Hall:8, Facility:3, Notice:4, Route:3, Story:3, Surrounding:1, Theme:2}, 165 relations, 10 chunks
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] top entities: B1北区青铜器志愿者讲解（周一场）, 亲子探索路线, 古代中国基本陈列（北区）, 免费寄存升级：新增电子储物柜, 青铜器深度之旅, 游客接待台, 古代中国基本陈列（南区）, 书法体验工作坊：临摹王安石真迹, 击鼓说唱俑, 4月7日-4月12日本周参观预约情况
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] chunk[0]: 【2026-04-06 09:30/14:00｜北2展厅｜活动·workshop】
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] chunk[1]: 展览「中国古代书画」：展出馆藏历代书画精品，从宋人山水到明清文人画，涵盖卷轴、册页、手卷等多种形制。展品体现了中国传统绘画'诗书画印'四位一体的独特审美体系。
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] chunk[2]: 【2026-04-06至2026-05-06｜南3展厅｜活动·performance】
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] chunk[3]: 展览「中国古代佛造像艺术」：汇集从北朝到明清的佛教造像精品，展现佛教艺术传入中国后逐步本土化的演变历程。展品以石雕、铜鎏金、木雕为主，体现不同时期的造像风格变迁
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] chunk[4]: 【2026-04-06至2026-04-12｜｜提示】
+17:26:40 [museum_agent.retrieval] INFO:   [event_data] formatted text: 8017 chars
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] 38 entities {Artifact:5, Event:5, Exhibition:2, Exhibition_Hall:8, Facility:5, Floor:3, Notice:4, Route:2, Story:2, Surrounding:1, Theme:1}, 165 relations, 10 chunks
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] top entities: F3北区（钱币展）4月6日10:00-11:30临时闭厅, F2南侧电梯已修复, 南2展厅, 4月7日-4月12日本周参观预约情况, 国博之夜：周五夜场开放, 北3展厅, 免费寄存升级：新增电子储物柜, 庞贝特展倒计时：还剩147天, 行李寄存处, 2小时国宝精华路线
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] chunk[0]: 【2026-04-06至2026-04-12｜｜提示】
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] chunk[1]: 推荐路线「青铜器深度之旅」：聚焦馆藏青铜重器，从商代祭祀礼器到西汉生活用器，感受中国青铜文明从巅峰到余晖的完整弧线。
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] chunk[2]: 【2026-04-06 10:00-11:30｜北3展厅｜提示】
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] chunk[3]: 展览「中国古代书画」：展出馆藏历代书画精品，从宋人山水到明清文人画，涵盖卷轴、册页、手卷等多种形制。展品体现了中国传统绘画'诗书画印'四位一体的独特审美体系。
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] chunk[4]: 中国国家博物馆参观实用信息
+17:26:40 [museum_agent.retrieval] INFO:   [notice_data] formatted text: 8017 chars
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] 47 entities {Artifact:9, Concept:3, Event:5, Exhibition:1, Exhibition_Hall:8, Facility:5, Floor:2, Notice:1, Route:3, Story:4, Surrounding:1, Theme:5}, 166 relations, 10 chunks
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] top entities: 亲子探索路线, 国博66周年纪念徽章限量发售, 国博咖啡厅, 国博文创旗舰店, 免费寄存升级：新增电子储物柜, 抖音爆款：用一分钟看懂四羊方尊的铸造工艺, 游客接待台, 古代中国基本陈列（北区）, 2小时国宝精华路线, 行李寄存处
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] chunk[0]: 手机充电站（馆内）
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] chunk[1]: 国博文创旗舰店（F2）
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] chunk[2]: 展览「中国古代书画」：展出馆藏历代书画精品，从宋人山水到明清文人画，涵盖卷轴、册页、手卷等多种形制。展品体现了中国传统绘画'诗书画印'四位一体的独特审美体系。
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] chunk[3]: 直饮水点（馆内）
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] chunk[4]: 国博咖啡厅（F3）
+17:26:40 [museum_agent.retrieval] INFO:   [story_data] formatted text: 8017 chars
+17:26:40 [museum_agent.retrieval] INFO: ==================================================
+17:26:40 [museum_agent.agent] INFO: [Step 1+2] Done in 11.91s
+17:26:40 [museum_agent.agent] INFO:   Intent: budget=180min, start=09:10, audience=adult_solo, child=False, elderly=False, interests=[]
+17:26:40 [museum_agent.agent] INFO:   Retrieval [route_data]: 8017 chars
+17:26:40 [museum_agent.agent] INFO:   Retrieval [event_data]: 8017 chars
+17:26:40 [museum_agent.agent] INFO:   Retrieval [notice_data]: 8017 chars
+17:26:40 [museum_agent.agent] INFO:   Retrieval [story_data]: 8017 chars
+17:26:40 [museum_agent.agent] INFO: ============================================================
+17:26:40 [museum_agent.agent] INFO: [Step 3] Starting LLM planning + generation
+17:26:40 [museum_agent.agent] INFO: ============================================================
+17:26:40 [museum_agent.planner] INFO: Planner input summary:
+17:26:40 [museum_agent.planner] INFO:   System prompt: 1597 chars
+17:26:40 [museum_agent.planner] INFO:   User prompt: 32381 chars
+17:26:40 [museum_agent.planner] INFO:   User info: budget=180min, start=09:10, audience=adult_solo
+17:26:40 [museum_agent.planner] INFO:   [route_data] 8017 chars: 推荐路线「2小时国宝精华路线」：一条覆盖全馆精华的经典路线，从地下一层出发，逐层向上，不走回头路。 预计时长：120分钟，适合：首次来馆的普通观众 路线步骤：   第1站：古代中国基本陈列（北区）（约...
+17:26:40 [museum_agent.planner] INFO:   [event_data] 8017 chars: [今日2026-04-06] 【2026-04-06 09:30/14:00｜北2展厅｜活动·workshop】 书法体验工作坊：临摹王安石真迹：在国博书画修复师指导下，使用专业文房四宝临摹馆藏王安石...
+17:26:40 [museum_agent.planner] INFO:   [notice_data] 8017 chars: [有效期至2026-04-12] 【2026-04-06至2026-04-12｜｜提示】 4月7日-4月12日本周参观预约情况：4月6日（周一）闭馆。4月7日（周二）至4月11日（周五）为工作日，客流...
+17:26:40 [museum_agent.planner] INFO:   [story_data] 8017 chars: 手机充电站（馆内）   F1 游客接待台旁（免费共享充电宝，扫码借用）   F3 咖啡厅内（座位旁有USB充电口）  国博文创旗舰店（F2） 营业时间：09:00-16:45 位于二层中部连廊，是全馆...
+17:27:10 [museum_agent.planner] INFO: Planner LLM response: 4761 chars
+17:27:10 [museum_agent.planner] INFO:   Parsed Plan JSON: 6 stops, total 170 min
+17:27:10 [museum_agent.agent] INFO: [Step 3] Done in 30.00s
+17:27:10 [museum_agent.agent] INFO:   Plan JSON parsed: yes
+17:27:10 [museum_agent.agent] INFO:   Plan text length: 2302 chars
+17:27:10 [museum_agent.agent] INFO:   Raw LLM response: 4761 chars
+17:27:10 [museum_agent.agent] INFO: ============================================================
+17:27:10 [museum_agent.agent] INFO: [Step 4] Starting code validation
+17:27:10 [museum_agent.agent] INFO: ============================================================
+17:27:10 [museum_agent.validator] INFO: ==================================================
+17:27:10 [museum_agent.validator] INFO: Plan Validation
+17:27:10 [museum_agent.validator] INFO: ==================================================
+17:27:10 [museum_agent.validator] INFO:   Time budget: 180 min, start: 09:10
+17:27:10 [museum_agent.validator] INFO:   Total stops: 6, planned duration: 170 min
+17:27:10 [museum_agent.validator] INFO:   Entrance hint: 建议走东门（面向长安街），排队约 5-10 分钟。入馆后先在一层行李寄存处寄存大件行李。
+17:27:10 [museum_agent.validator] INFO:   Plan stops:
+17:27:10 [museum_agent.validator] INFO:     1. 09:20-10:40 古代中国基本陈列（北区） (B1, 80min) [EVENT: B1 北区青铜器志愿者讲解（周一场）]
+17:27:10 [museum_agent.validator] INFO:        artifacts: 后母戊鼎, 四羊方尊, 红山文化玉龙
+17:27:10 [museum_agent.validator] INFO:        stories: 冷知识：四羊方尊的四只羊头与器身接合线几乎看不出痕迹，这是 3000 年前的'无缝焊接'。
+17:27:10 [museum_agent.validator] INFO:     2. 10:45-11:05 古代中国基本陈列（南区） (B1, 20min)
+17:27:10 [museum_agent.validator] INFO:        artifacts: 击鼓说唱俑, 长信宫灯
+17:27:10 [museum_agent.validator] INFO:        stories: 冷知识：击鼓说唱俑是汉代最受欢迎的'表情包文物'，其眉飞色舞的表情极具感染力。
+17:27:10 [museum_agent.validator] INFO:     3. 11:08-11:18 北 1 展厅 (?, 10min)
+17:27:10 [museum_agent.validator] INFO:        artifacts: 木雕观音菩萨坐像
+17:27:10 [museum_agent.validator] INFO:        stories: 冷知识：宋代木雕观音打破了早期佛教造像的僵硬感，姿态闲适安详，极具世俗人情味。
+17:27:10 [museum_agent.validator] INFO:     4. 11:22-11:37 南 1 展厅 (?, 15min)
+17:27:10 [museum_agent.validator] INFO:        artifacts: 粉彩镂空转心瓶, 钧窑玫瑰紫釉尊
+17:27:10 [museum_agent.validator] INFO:        stories: 冷知识：粉彩镂空转心瓶的内胆可以转动，透过外瓶镂空处可见内瓶绘制的连环画，工艺巧夺天工。
+17:27:10 [museum_agent.validator] INFO:     5. 11:40-11:55 北 2 展厅 (?, 15min)
+17:27:10 [museum_agent.validator] INFO:        artifacts: 明代文徵明《真赏斋图》卷, 清代《乾隆南巡图》第六卷
+17:27:10 [museum_agent.validator] INFO:        notices: 书画厅光线较暗，需适应后再细看。
+17:27:10 [museum_agent.validator] INFO:        stories: 冷知识：乾隆南巡图篇幅极长，写实地记录了乾隆皇帝下江南沿途的繁华市井与壮丽山河。
+17:27:10 [museum_agent.validator] INFO:     6. 11:58-12:10 南 3 展厅 (?, 12min) [EVENT: 庞贝特展 VR 沉浸体验]
+17:27:10 [museum_agent.validator] INFO:        artifacts: 《花卉与水果》庞贝壁画碎片, 大理石维纳斯雕像
+17:27:10 [museum_agent.validator] INFO:        notices: 特展人气较高，建议尽快体验 VR。
+17:27:10 [museum_agent.validator] INFO:        stories: 冷知识：庞贝壁画色彩鲜艳，被维苏威火山灰封存近两千年，运用了高超的透视与光影画法。
+17:27:10 [museum_agent.validator] INFO:   check [Stop 2 (古代中国基本陈列（南区）)]: 3min gap between stops (travel=2min)
+17:27:10 [museum_agent.validator] INFO:   check [Stop 3 (北 1 展厅)]: 1min gap between stops (travel=2min)
+17:27:10 [museum_agent.validator] INFO:   check [Stop 4 (南 1 展厅)]: 2min gap between stops (travel=2min)
+17:27:10 [museum_agent.validator] INFO:   check [Stop 5 (北 2 展厅)]: 1min gap between stops (travel=2min)
+17:27:10 [museum_agent.validator] INFO:   check [Stop 6 (南 3 展厅)]: 1min gap between stops (travel=2min)
+17:27:10 [museum_agent.validator] INFO:   Floor path: B1
+17:27:10 [museum_agent.validator] INFO:   Validation PASSED (0 errors)
+17:27:10 [museum_agent.validator] INFO:   Skipped events: 书法体验工作坊：临摹王安石真迹 (09:30/14:00，需提前预约且时间冲突), 学术讲座：商代青铜铸造技术新发现 (14:00-16:00，超出时间窗口)
+17:27:10 [museum_agent.validator] INFO:   Post-visit tips: 二层文创旗舰店有售'国博 66 周年纪念徽章'限量套装（128 元/套），含六大镇馆之宝对应徽章。, 三层国博咖啡厅提供'国博特调拿铁'，拉花为后母戊鼎纹样，适合休息打卡。, 离馆后可步行 3 分钟至天安门广场，或步行 15 分钟经天安门城楼前往故宫博物院（需提前预约）。
+17:27:10 [museum_agent.validator] INFO: ==================================================
+17:27:10 [museum_agent.agent] INFO: [Done] Total 41.91s (step1+2=11.91, planning=30.00, validation=0.00)
+INFO: Closed PostgreSQL database connection pool
+INFO: Successfully finalized 12 storages
+
+============================================================
+TOUR PLAN
+============================================================
+**推荐理由**：这条路线专为单人成年游客设计，紧扣“国宝精华”主题，利用周一上午的**志愿者讲解**作为核心锚点，深度解读商周青铜文明；随后沿楼层向上，从汉代陶俑到清代瓷器，最后以**庞贝特展的 VR 体验**收尾，在 180 分钟内实现从中国史前文明到古罗马文明的跨时空穿越，节奏紧凑且不走回头路。
+
+### 🕒 参观行程单
+
+**第一站：地下一层北区 · 青铜文明的巅峰**
+*   **时间**：09:20 - 10:40（停留 80 分钟）
+*   **必看内容**：**后母戊鼎**（中国最大最重的青铜礼器）、**四羊方尊**（商代铸造工艺巅峰）、**红山文化玉龙**（中华第一龙）。
+*   **活动提醒**：**10:00 准时参加「B1 北区青铜器志愿者讲解」**。无需预约，直接在展厅入口集合，资深志愿者将为您详解后母戊鼎、四羊方尊及大盂鼎的历史背景与分铸法工艺（约 40 分钟）。
+*   **趣味推荐**：
+    *   📸 **拍照 Tips**：观看四羊方尊时，试着寻找羊头与器身的接合线——你会发现几乎看不出痕迹，这就是 3000 年前的“无缝焊接”。
+    *   ❄️ **冷知识**：后母戊鼎重达 832 公斤，是名副其实的“镇国之宝”。
+
+**第二站：地下一层南区 · 汉唐风韵**
+*   **时间**：10:45 - 11:05（停留 20 分钟）
+*   **必看内容**：**击鼓说唱俑**（汉代“表情包”）、**长信宫灯**（环保黑科技）。
+*   **动线**：从北区步行约 5 分钟即可到达南区。
+*   **趣味推荐**：
+    *   😄 **互动**：模仿击鼓说唱俑眉飞色舞的表情拍张照，它是全馆最受观众喜爱的文物之一。
+    *   💡 **冷知识**：长信宫灯内置精妙的排烟导水装置，体现了汉代工匠的环保智慧。
+
+**第三站：一层北 1 展厅 · 佛造像艺术**
+*   **时间**：11:08 - 11:18（停留 10 分钟）
+*   **必看内容**：**木雕观音菩萨坐像**。
+*   **动线**：乘电梯上行至一层，步行约 3 分钟。
+*   **趣味推荐**：
+    *   🧘 **欣赏**：注意观察宋代观音闲适安详的“水月”姿态，感受其打破宗教距离感的世俗人情味。
+
+**第四站：一层南 1 展厅 · 瓷器之美**
+*   **时间**：11:22 - 11:37（停留 15 分钟）
+*   **必看内容**：**粉彩镂空转心瓶**、**钧窑玫瑰紫釉尊**。
+*   **动线**：穿过大厅至南侧，步行约 4 分钟。
+*   **趣味推荐**：
+    *   🔍 **细节**：一定要盯着粉彩镂空转心瓶看，透过外瓶的镂空处，可以看到内胆上绘制的连环画，且内胆是可以转动的！
+    *   🎨 **冷知识**：钧窑玫瑰紫釉尊展现了“入窑一色，出窑万彩”的窑变奇迹。
+
+**第五站：二层北 2 展厅 · 书画长廊**
+*   **时间**：11:40 - 11:55（停留 15 分钟）
+*   **必看内容**：**明代文徵明《真赏斋图》卷**、**清代《乾隆南巡图》第六卷**。
+*   **动线**：乘电梯至二层，北侧展厅，步行约 3 分钟。
+*   **注意事项**：展厅光线较暗以保护文物，请给眼睛一点适应时间再细细展读长卷。
+*   **趣味推荐**：
+    *   📜 **冷知识**：乾隆南巡图是一幅宏篇巨制，真实记录了乾隆下江南时的繁华市井，仿佛古代的“清明上河图”。
+
+**第六站：三层南 3 展厅 · 庞贝神话（压轴）**
+*   **时间**：11:58 - 12:10（停留 12 分钟）
+*   **必看内容**：**《花卉与水果》庞贝壁画碎片**、**大理石维纳斯雕像**。
+*   **活动提醒**：体验**「庞贝特展 VR 沉浸体验」**（每场 15 分钟，位于展厅出口处）。戴上 VR 头盔穿越回公元 79 年的庞贝古城，近距离观看被火山灰封存前的原作样貌。
+*   **趣味推荐**：
+    *   🌋 **冷知识**：这些色彩鲜艳的壁画被维苏威火山灰封存了近两千年，运用了极高超的透视画法。
+    *   ⏳ **提示**：特展将于 2026 年 8 月 31 日闭展，展品随后将返回意大利，此次可能是国内最后的学习机会。
+
+### 🎒 实用提示
+
+*   **入口建议**：推荐从**东门**（面向长安街）进入，地铁 1 号线天安门东站 C/D 口出站步行约 5 分钟。工作日排队约 5-10 分钟。
+*   **行李寄存**：入馆后请立即在一层东门入口右侧的**行李寄存处**存放大件行李。新增的电子储物柜扫码即可免费使用 4 小时。
+*   **设施状况**：二层南侧扶梯已修复，可正常使用前往南区展厅；三层北区（钱币展）今日 10:00-11:30 临时闭厅维护，但本路线未安排该时段前往，不受影响。
+*   **文创购物**：若时间充裕或下次来访，可前往二层中部的**国博文创旗舰店**，目前有售限量的“国博 66 周年纪念徽章”套装（含六大镇馆之宝，带唯一编号）。
+*   **餐饮休息**：三层东侧设有**国博咖啡厅**，推荐尝试“国博特调拿铁”（拉花为后母戊鼎纹样），窗边座位可远眺长安街。
+*   **周边游览**：离馆后，可向西步行 3 分钟游览**天安门广场**，或向南步行 10 分钟至**前门大街**品尝老字号美食（如全聚德、都一处烧麦）。
+
+------------------------------------------------------------
+TIMINGS
+------------------------------------------------------------
+  step1_2_intent_and_retrieval: 11.91s
+  step3_planning: 30.00s
+  step4_validation: 0.00s
+  total: 41.91s
+
+------------------------------------------------------------
+PLAN STRUCTURE
+------------------------------------------------------------
+  Entrance: 建议走东门（面向长安街），排队约 5-10 分钟。入馆后先在一层行李寄存处寄存大件行李。
+  Total duration: 170 min
+  Stops: 6
+    1. 09:20-10:40 古代中国基本陈列（北区） (80min) [EVENT: B1 北区青铜器志愿者讲解（周一场）]
+    2. 10:45-11:05 古代中国基本陈列（南区） (20min)
+    3. 11:08-11:18 北 1 展厅 (10min)
+    4. 11:22-11:37 南 1 展厅 (15min)
+    5. 11:40-11:55 北 2 展厅 (15min)
+    6. 11:58-12:10 南 3 展厅 (12min) [EVENT: 庞贝特展 VR 沉浸体验]

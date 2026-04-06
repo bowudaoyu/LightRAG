@@ -381,7 +381,212 @@ def build_graph_data(museum: dict):
                     ))
 
     # ===================================================================
-    # 7. Artifact relations (artifact <-> artifact)
+    # 7. Operating hours + reservation + entrance + transportation
+    #    (from museum info — build a rich "实用信息" chunk)
+    # ===================================================================
+    info_parts = []
+    ops = info.get("operating_hours", {})
+    reg = ops.get("regular", {})
+    if reg:
+        info_parts.append(
+            f"{museum_name}开放时间：{reg.get('open_time','')}-{reg.get('close_time','')}，"
+            f"{reg.get('last_entry','')}停止入馆。"
+            f"{reg.get('closed_days_note','')}"
+        )
+    night = ops.get("night_session", {})
+    if night and night.get("enabled"):
+        info_parts.append(
+            f"夜场：{night.get('day_of_week','')} {night.get('open_time','')}-{night.get('close_time','')}，"
+            f"{night.get('note','')}"
+        )
+    special = ops.get("special_closures", [])
+    if special:
+        info_parts.append("特殊闭馆日：" + "；".join(
+            f"{s['date']}（{s['note']}）" for s in special
+        ))
+    resv = info.get("reservation", {})
+    if resv:
+        slots_str = "、".join(f"{s['slot']}（{s['time']}）" for s in resv.get("time_slots", []))
+        info_parts.append(
+            f"预约规则：必须提前预约，平台：{resv.get('platform','')}，"
+            f"可提前{resv.get('advance_days',7)}天预约，需实名验证（{'/'.join(resv.get('id_types',[]))}），"
+            f"每日限流{resv.get('daily_capacity',30000)}人，分{slots_str}。"
+            f"{resv.get('notes','')}"
+        )
+    ent = info.get("entrance", {})
+    if ent:
+        ent_strs = [f"{e['name']}：{e['note']}" for e in ent.get("entrances", [])]
+        queue = ent.get("queue_estimate", {})
+        queue_str = "、".join(f"{k}：{v}" for k, v in queue.items()) if queue else ""
+        info_parts.append(
+            f"入口：推荐{ent.get('recommended','')}。{'；'.join(ent_strs)}。"
+            f"安检须知：{ent.get('security_check','')}。"
+            f"排队预估：{queue_str}。"
+        )
+    trans = info.get("transportation", {})
+    if trans:
+        info_parts.append(
+            f"交通：{trans.get('subway','')}。{trans.get('bus','')}。{trans.get('parking','')}"
+        )
+
+    if info_parts:
+        chunk_content = f"{museum_name}参观实用信息\n" + "\n".join(info_parts)
+        chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
+        chunks.append({"content": chunk_content, "chunk_id": chunk_id, "source_tag": "museum_info"})
+
+    # ===================================================================
+    # 8. Crowd patterns
+    # ===================================================================
+    crowd = museum.get("crowd_patterns", {})
+    if crowd:
+        parts = [f"{museum_name}客流规律"]
+        for dtype, info_d in crowd.get("by_day_type", {}).items():
+            parts.append(
+                f"{info_d['label']}：日均{info_d['avg_visitors']}人（{info_d['capacity_pct']}%容量），"
+                f"{info_d['experience']}。高峰时段{info_d['peak_hours']}，最佳时段{info_d['best_hours']}。"
+            )
+        parts.append("各时段客流占比：")
+        for slot in crowd.get("hourly_distribution", []):
+            parts.append(f"  {slot['time']}：{slot['pct']}%，{slot['note']}")
+        parts.append("各展厅拥挤度：")
+        for zh in crowd.get("zone_hotspots", []):
+            z_name = zone_id_to_name.get(zh["zone_id"], zh["zone_id"])
+            parts.append(f"  {z_name}：{zh['heat_level']}，{zh['note']}")
+
+        chunk_content = "\n".join(parts)
+        chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
+        chunks.append({"content": chunk_content, "chunk_id": chunk_id, "source_tag": "crowd_patterns"})
+
+    # ===================================================================
+    # 9. Facilities (detailed)
+    # ===================================================================
+    for fac in museum.get("facilities", []):
+        parts = [f"{fac['name']}（{fac.get('floor','馆内')}）"]
+        if fac.get("hours"):
+            parts.append(f"营业时间：{fac['hours']}")
+        if fac.get("description"):
+            parts.append(fac["description"])
+        for item_m in fac.get("menu_highlights", []):
+            note = f"（{item_m['note']}）" if item_m.get("note") else ""
+            parts.append(f"  {item_m['item']}：{item_m['price']}元{note}")
+        if fac.get("avg_price_range"):
+            parts.append(f"人均：{fac['avg_price_range']}")
+        if fac.get("peak_hours"):
+            parts.append(f"高峰时段：{fac['peak_hours']}")
+        for svc in fac.get("services", []):
+            parts.append(f"  · {svc}")
+        for cat in fac.get("product_categories", []):
+            note = f"（{cat['note']}）" if cat.get("note") else ""
+            parts.append(f"  {cat['category']}：{cat['price_range']}{note}")
+        for loc in fac.get("locations", []):
+            note = f"（{loc['note']}）" if loc.get("note") else ""
+            parts.append(f"  {loc['floor']} {loc['position']}{note}")
+        if fac.get("tips"):
+            parts.append(f"Tips：{fac['tips']}")
+        if fac.get("note"):
+            parts.append(fac["note"])
+
+        chunk_content = "\n".join(parts)
+        chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
+        chunks.append({"content": chunk_content, "chunk_id": chunk_id, "source_tag": "facility"})
+
+        # If the facility has a zone_id that maps to an existing zone, create an edge
+        fac_zone = fac.get("zone_id", "")
+        fac_zone_name = zone_id_to_name.get(fac_zone)
+        if fac_zone_name and fac.get("facility_id"):
+            fac_node_name = fac["name"]
+            nodes.append((
+                fac_node_name,
+                _node_data(fac_node_name, "Facility", fac.get("description", ""),
+                           source_id=chunk_id, code=fac["facility_id"]),
+            ))
+            edges.append((
+                fac_node_name, fac_zone_name,
+                _edge_data(f"{fac_node_name}位于{fac_zone_name}", "服务,设施,位置",
+                           source_id=chunk_id),
+            ))
+
+    # ===================================================================
+    # 10. Visitor rules
+    # ===================================================================
+    rules = museum.get("visitor_rules", {})
+    if rules:
+        parts = [f"{museum_name}参观须知"]
+        prohibited = rules.get("prohibited_items", [])
+        if prohibited:
+            parts.append("禁止携带物品：" + "；".join(prohibited))
+        photo = rules.get("photography_rules", {})
+        if photo:
+            parts.append(f"拍照规则：{photo.get('general','')}。{photo.get('special_exhibitions','')}")
+            if photo.get("commercial"):
+                parts.append(f"商业拍摄：{photo['commercial']}")
+            for tip in photo.get("tips", []):
+                parts.append(f"  · {tip}")
+        acc = rules.get("accessibility", {})
+        if acc:
+            parts.append(f"无障碍：{acc.get('wheelchair','')}")
+            parts.append(f"轮椅借用：{acc.get('wheelchair_rental','')}")
+            parts.append(f"婴儿车借用：{acc.get('stroller','')}")
+            for elev in acc.get("elevator_locations", []):
+                parts.append(f"  电梯：{elev['position']}（{elev['type']}，{elev['floor_range']}）")
+            parts.append("休息区：")
+            for rest in acc.get("rest_areas", []):
+                parts.append(f"  {rest['floor']} {rest['position']}（{rest['seating']}座）")
+            if acc.get("tips"):
+                parts.append(f"无障碍Tips：{acc['tips']}")
+
+        chunk_content = "\n".join(parts)
+        chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
+        chunks.append({"content": chunk_content, "chunk_id": chunk_id, "source_tag": "visitor_rules"})
+
+    # ===================================================================
+    # 11. Surroundings
+    # ===================================================================
+    for surr in museum.get("surroundings", []):
+        parts = [
+            f"周边推荐：{surr['name']}（{surr['category']}）",
+            f"距离：{surr['distance']}，预计游览时间：{surr['time_needed']}",
+            surr["description"],
+        ]
+        if surr.get("tips"):
+            parts.append(f"Tips：{surr['tips']}")
+        for rest in surr.get("recommended_restaurants", []):
+            note = f"（{rest['note']}）" if rest.get("note") else ""
+            parts.append(f"  {rest['name']}：{rest['cuisine']}，人均{rest['avg_price']}{note}")
+
+        chunk_content = "\n".join(parts)
+        chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
+        chunks.append({"content": chunk_content, "chunk_id": chunk_id, "source_tag": "surrounding"})
+
+        # Node + edge to museum
+        surr_name = surr["name"]
+        nodes.append((
+            surr_name,
+            _node_data(surr_name, "Surrounding", surr["description"],
+                       source_id=chunk_id, category=surr["category"],
+                       distance=surr["distance"]),
+        ))
+        edges.append((
+            surr_name, museum_name,
+            _edge_data(f"{surr_name}位于{museum_name}周边，{surr['distance']}",
+                       "周边,附近,推荐,出行",
+                       source_id=chunk_id),
+        ))
+
+    # ===================================================================
+    # 12. Holidays 2026
+    # ===================================================================
+    holidays = museum.get("holidays_2026", [])
+    if holidays:
+        parts = [f"{museum_name}2026年节假日开闭馆安排"]
+        for h in holidays:
+            parts.append(f"{h['name']}（{h['dates']}）：{h['museum_status']}")
+        chunk_content = "\n".join(parts)
+        chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
+        chunks.append({"content": chunk_content, "chunk_id": chunk_id, "source_tag": "holidays"})
+
+    # ===================================================================
+    # Artifact relations (artifact <-> artifact)
     # ===================================================================
     for rel in museum.get("artifact_relations", []):
         src_name = art_id_to_name.get(rel["source_artifact_id"])
@@ -405,7 +610,7 @@ def build_graph_data(museum: dict):
         ))
 
     # ===================================================================
-    # 8. Spatial topology edges (horizontal + vertical)
+    # Spatial topology edges (horizontal + vertical)
     # ===================================================================
     horizontal = [
         ("CN_NMC_ZONE_B1_NORTH", "CN_NMC_ZONE_B1_SOUTH", 5),
