@@ -11,6 +11,41 @@ from lightrag import QueryParam
 logger = logging.getLogger(__name__)
 
 
+def _summarize_retrieval(key: str, result: dict[str, Any]) -> None:
+    """Log a human-readable summary of what was retrieved for a given query."""
+    if result.get("status") != "success":
+        logger.info("  [%s] retrieval failed or empty", key)
+        return
+
+    data = result.get("data", {})
+    entities = data.get("entities", [])
+    relationships = data.get("relationships", [])
+    chunks = data.get("chunks", [])
+
+    # Summarize entity types
+    type_counts: dict[str, int] = {}
+    entity_names: list[str] = []
+    for e in entities:
+        etype = e.get("entity_type", "unknown")
+        type_counts[etype] = type_counts.get(etype, 0) + 1
+        entity_names.append(e.get("entity_name", "?"))
+    type_summary = ", ".join(f"{t}:{c}" for t, c in sorted(type_counts.items()))
+
+    # Summarize chunk content (first line of each)
+    chunk_previews: list[str] = []
+    for c in chunks[:5]:
+        content = c.get("content", "").strip()
+        first_line = content.split("\n")[0][:80] if content else "(empty)"
+        chunk_previews.append(first_line)
+
+    logger.info("  [%s] %d entities {%s}, %d relations, %d chunks",
+                key, len(entities), type_summary, len(relationships), len(chunks))
+    if entity_names:
+        logger.info("  [%s] top entities: %s", key, ", ".join(entity_names[:10]))
+    for i, preview in enumerate(chunk_previews):
+        logger.info("  [%s] chunk[%d]: %s", key, i, preview)
+
+
 def _format_retrieval_block(result: dict[str, Any]) -> str:
     """Convert aquery_data result into a readable text block for the LLM planner."""
     if result.get("status") != "success":
@@ -115,9 +150,15 @@ async def parallel_retrieve(
     tasks = [_do_query(key, q, p) for key, (q, p) in queries.items()]
     results = await asyncio.gather(*tasks)
 
-    # Format each result into a text block
+    # Log detailed summaries and format each result into a text block
+    logger.info("=" * 50)
+    logger.info("Retrieval Results Summary")
+    logger.info("=" * 50)
     formatted = {}
     for key, result in results:
+        _summarize_retrieval(key, result)
         formatted[key] = _format_retrieval_block(result)
+        logger.info("  [%s] formatted text: %d chars", key, len(formatted[key]))
+    logger.info("=" * 50)
 
     return formatted

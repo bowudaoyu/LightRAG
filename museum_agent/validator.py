@@ -78,13 +78,37 @@ def validate_plan(plan: Plan, time_budget_min: int, start_time: str) -> list[str
     errors: list[str] = []
     stops = plan.stops
 
+    logger.info("=" * 50)
+    logger.info("Plan Validation")
+    logger.info("=" * 50)
+    logger.info("  Time budget: %d min, start: %s", time_budget_min, start_time)
+    logger.info("  Total stops: %d, planned duration: %d min", len(stops), plan.total_duration_min)
+    logger.info("  Entrance hint: %s", plan.entrance_hint)
+
     if not stops:
         errors.append("Plan has no stops")
+        logger.warning("  FAIL: plan has no stops")
         return errors
+
+    # Log plan structure
+    logger.info("  Plan stops:")
+    for i, stop in enumerate(stops):
+        event_tag = f" [EVENT: {stop.anchor_event}]" if stop.anchor_event else ""
+        floor = _get_floor(stop.zone_id) or "?"
+        logger.info("    %d. %s-%s %s (%s, %dmin)%s",
+                     i + 1, stop.arrive_time, stop.depart_time,
+                     stop.zone_name, floor, stop.duration_min, event_tag)
+        if stop.artifacts:
+            logger.info("       artifacts: %s", ", ".join(stop.artifacts[:5]))
+        if stop.notices:
+            logger.info("       notices: %s", ", ".join(stop.notices[:3]))
+        if stop.stories:
+            logger.info("       stories: %s", ", ".join(stop.stories[:3]))
 
     start_minutes = _parse_hhmm(start_time)
     museum_close = _parse_hhmm("17:00")
 
+    # Check each stop
     for i, stop in enumerate(stops):
         label = f"Stop {i + 1} ({stop.zone_name})"
 
@@ -123,13 +147,20 @@ def validate_plan(plan: Plan, time_budget_min: int, start_time: str) -> list[str
                     f"previous stop departs {prev.depart_time}, "
                     f"travel ~{travel}min, earliest arrival {_fmt_hhmm(earliest_arrive)}"
                 )
+            else:
+                gap = arrive - earliest_arrive
+                if gap > 0:
+                    logger.info("  check [%s]: %dmin gap between stops (travel=%dmin)", label, gap, travel)
 
-    # Backtracking detection: check if floor sequence has unnecessary reversals
+    # Backtracking detection
     floors = []
     for stop in stops:
         f = _get_floor(stop.zone_id)
         if f and (not floors or floors[-1] != f):
             floors.append(f)
+
+    floor_path = " → ".join(floors)
+    logger.info("  Floor path: %s", floor_path)
 
     if len(floors) >= 3:
         orders = [FLOOR_ORDER.get(f, -1) for f in floors]
@@ -140,11 +171,15 @@ def validate_plan(plan: Plan, time_budget_min: int, start_time: str) -> list[str
                 d_curr = orders[i] - orders[i - 1]
                 if d_prev != 0 and d_curr != 0 and (d_prev > 0) != (d_curr > 0):
                     reversals += 1
+                    logger.info("  check: direction reversal at %s→%s→%s",
+                                floors[i - 2], floors[i - 1], floors[i])
         if reversals > 1:
             errors.append(
-                f"Route has {reversals} direction reversals (floors: {' → '.join(floors)}); "
+                f"Route has {reversals} direction reversals (floors: {floor_path}); "
                 "consider a more linear path to avoid backtracking"
             )
+        elif reversals == 1:
+            logger.info("  check: 1 reversal detected (acceptable for anchor-based routing)")
 
     # Total duration check (allow 10% overflow for flexibility)
     if plan.total_duration_min > time_budget_min * 1.10:
@@ -153,4 +188,18 @@ def validate_plan(plan: Plan, time_budget_min: int, start_time: str) -> list[str
             f"{time_budget_min}min by more than 10%"
         )
 
+    # Summary
+    if errors:
+        logger.warning("  Validation FAILED with %d errors:", len(errors))
+        for e in errors:
+            logger.warning("    - %s", e)
+    else:
+        logger.info("  Validation PASSED (0 errors)")
+
+    if plan.skipped_events:
+        logger.info("  Skipped events: %s", ", ".join(plan.skipped_events))
+    if plan.post_visit_tips:
+        logger.info("  Post-visit tips: %s", ", ".join(plan.post_visit_tips[:3]))
+
+    logger.info("=" * 50)
     return errors

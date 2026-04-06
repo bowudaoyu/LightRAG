@@ -175,24 +175,39 @@ class MuseumAgent:
         timings: dict[str, float] = {}
 
         # Step 1 + Step 2: Run intent parsing and retrieval in parallel
+        logger.info("=" * 60)
+        logger.info("[Step 1+2] Starting intent parsing + parallel retrieval")
+        logger.info("=" * 60)
         t0 = time.monotonic()
         import asyncio
         intent_task = asyncio.create_task(self.parse_intent(user_message, date))
         retrieval_task = asyncio.create_task(self.retrieve(date))
         intent, retrieval = await asyncio.gather(intent_task, retrieval_task)
         timings["step1_2_intent_and_retrieval"] = time.monotonic() - t0
-        logger.info(
-            "[Step 1+2] Intent + Retrieval done in %.2fs",
-            timings["step1_2_intent_and_retrieval"],
-        )
+        logger.info("[Step 1+2] Done in %.2fs", timings["step1_2_intent_and_retrieval"])
+        logger.info("  Intent: budget=%dmin, start=%s, audience=%s, child=%s, elderly=%s, interests=%s",
+                     intent.time_budget_min, intent.start_time, intent.audience,
+                     intent.has_child, intent.has_elderly, intent.interests)
+        for key in ["route_data", "event_data", "notice_data", "story_data"]:
+            chars = len(retrieval.get(key, ""))
+            logger.info("  Retrieval [%s]: %d chars", key, chars)
 
         # Step 3: LLM planning + generation
+        logger.info("=" * 60)
+        logger.info("[Step 3] Starting LLM planning + generation")
+        logger.info("=" * 60)
         t0 = time.monotonic()
         plan, plan_text, raw_response = await self.plan(intent, retrieval)
         timings["step3_planning"] = time.monotonic() - t0
-        logger.info("[Step 3] Planning done in %.2fs", timings["step3_planning"])
+        logger.info("[Step 3] Done in %.2fs", timings["step3_planning"])
+        logger.info("  Plan JSON parsed: %s", "yes" if plan else "NO")
+        logger.info("  Plan text length: %d chars", len(plan_text))
+        logger.info("  Raw LLM response: %d chars", len(raw_response))
 
         # Step 4: Validation
+        logger.info("=" * 60)
+        logger.info("[Step 4] Starting code validation")
+        logger.info("=" * 60)
         t0 = time.monotonic()
         errors: list[str] = []
         if plan:

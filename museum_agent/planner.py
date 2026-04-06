@@ -127,7 +127,16 @@ async def run_planner(
 
     # The user message contains all context; system prompt has instructions
     user_content = messages[1]["content"]
-    logger.info("Planner prompt: ~%d chars", len(user_content))
+    logger.info("Planner input summary:")
+    logger.info("  System prompt: %d chars", len(PLANNER_SYSTEM_PROMPT))
+    logger.info("  User prompt: %d chars", len(user_content))
+    logger.info("  User info: budget=%dmin, start=%s, audience=%s",
+                intent.time_budget_min, intent.start_time, intent.audience)
+    for key in ["route_data", "event_data", "notice_data", "story_data"]:
+        data_block = retrieval.get(key, "")
+        # Show first 100 chars of each block as preview
+        preview = data_block[:100].replace("\n", " ") + "..." if len(data_block) > 100 else data_block.replace("\n", " ")
+        logger.info("  [%s] %d chars: %s", key, len(data_block), preview)
 
     raw = await llm_complete(
         prompt=user_content,
@@ -135,9 +144,19 @@ async def run_planner(
         model=llm_model,
     )
 
+    logger.info("Planner LLM response: %d chars", len(raw))
     plan_dict, plan_text = parse_llm_response(raw)
-    plan = dict_to_plan(plan_dict) if plan_dict else None
 
+    if plan_dict:
+        n_stops = len(plan_dict.get("stops", []))
+        logger.info("  Parsed Plan JSON: %d stops, total %d min",
+                     n_stops, plan_dict.get("total_duration_min", 0))
+    else:
+        logger.warning("  Failed to parse Plan JSON from LLM response")
+        # Log a snippet of the raw response to help debug
+        logger.warning("  Response starts with: %s", raw[:200].replace("\n", " "))
+
+    plan = dict_to_plan(plan_dict) if plan_dict else None
     return plan, plan_text, raw
 
 
