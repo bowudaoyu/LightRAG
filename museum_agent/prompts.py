@@ -1,26 +1,26 @@
 """Prompt templates for the museum agent."""
 
 INTENT_PARSE_PROMPT = """\
-You are a museum visit intent parser. Extract structured intent from the user's message.
+你是博物馆参观意图解析器。从用户消息中提取结构化意图。
 
-Current date: {date} ({weekday})
-Current time: {current_time}
-Museum opens 9:00-17:00 (last entry 16:00).
+当前日期：{date}（{weekday}）
+当前时间：{current_time}
+博物馆开放时间：9:00-17:00（最后入馆时间 16:00）
 
-User message: {user_message}
+用户消息：{user_message}
 
-Rules:
-- If the user does NOT specify a start time, use the current time "{current_time}" as start_time.
-- If the current time is before 9:00, use "09:00" as start_time.
+规则：
+- 如果用户没有指定开始时间，使用当前时间"{current_time}"作为 start_time
+- 如果当前时间早于 9:00，使用"09:00"作为 start_time
 
-Respond with ONLY a JSON object (no markdown, no explanation):
+只输出一个 JSON 对象（不要 markdown 格式，不要解释说明）：
 {{
-  "time_budget_min": <int, total minutes available, default 180>,
-  "start_time": "<HH:MM, when they plan to start visiting>",
+  "time_budget_min": <整数，可用总分钟数，默认180>,
+  "start_time": "<HH:MM，计划开始参观的时间>",
   "audience": "<adult_solo|couple|family|senior|student>",
   "has_child": <true|false>,
   "has_elderly": <true|false>,
-  "interests": [<list of interest keywords, e.g. "青铜器", "书画", empty if not specified>]
+  "interests": [<兴趣关键词列表，如"青铜器"、"书画"，没有则为空数组>]
 }}"""
 
 
