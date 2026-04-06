@@ -38,7 +38,7 @@ MUSEUM_JSON = os.path.join(PROJECT_ROOT, "museum.json")
 DYNAMIC_JSON = os.path.join(PROJECT_ROOT, "museum_dynamic.json")
 WORKING_DIR = os.path.join(PROJECT_ROOT, "rag_storage")
 
-DOC_ID = "museum_dynamic_import"
+DOC_ID_PREFIX = "museum_dynamic"
 
 
 # ---------------------------------------------------------------------------
@@ -137,12 +137,17 @@ def _edge_data(description: str, keywords: str, weight: float = 1.0, **extra) ->
     return data
 
 
+def make_doc_id(date_tag: str, seq: int) -> str:
+    """Generate per-item doc_id: museum_dynamic-{date}-{seq:03d}"""
+    return f"{DOC_ID_PREFIX}-{date_tag}-{seq:03d}"
+
+
 def build_dynamic_graph(items: list[dict], lookups: dict):
     """
     Returns:
         nodes: list of (node_id, node_data_dict)
         edges: list of (src_id, tgt_id, edge_data_dict)
-        chunks: list of dict with keys: content, chunk_id
+        chunks: list of dict with keys: content, chunk_id, doc_id, valid_to
     """
     nodes = []
     edges = []
@@ -152,6 +157,9 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
     art_map = lookups["artifact"]
     exh_map = lookups["exhibition"]
     theme_map = lookups["theme"]
+
+    # Track per-date sequence numbers for doc_id generation
+    date_seq: dict[str, int] = {}
 
     for item in items:
         if item.get("status") != "active":
@@ -174,12 +182,15 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
         ]
         primary_zone = item_zone_names[0] if item_zone_names else ""
 
-        # Determine file_path tag
+        # Determine file_path tag and per-item doc_id
         try:
             date_tag = datetime.fromisoformat(valid_from).strftime("%Y-%m-%d")
         except (ValueError, TypeError):
             date_tag = "undated"
         file_path_tag = f"museum:dynamic:{node_type.lower()}:{date_tag}"
+
+        date_seq[date_tag] = date_seq.get(date_tag, 0) + 1
+        item_doc_id = make_doc_id(date_tag, date_seq[date_tag])
 
         # --- Build chunk text ---
         time_str = format_time_range(valid_from, valid_to)
@@ -227,7 +238,14 @@ def build_dynamic_graph(items: list[dict], lookups: dict):
 
         chunk_id = compute_mdhash_id(chunk_content, prefix="chunk-")
 
-        chunks.append({"content": chunk_content, "chunk_id": chunk_id})
+        chunks.append({
+            "content": chunk_content,
+            "chunk_id": chunk_id,
+            "doc_id": item_doc_id,
+            "valid_to": valid_to,
+            "item_id": item_id,
+            "node_type": node_type,
+        })
 
         # --- Node ---
         node_desc = f"{prefix}\n{body}"
@@ -381,19 +399,20 @@ async def do_import():
         chunk_vdb = {}
         for c in chunks:
             cid = c["chunk_id"]
+            doc_id = c["doc_id"]
             tok_count = len(rag.tokenizer.encode(c["content"]))
             chunk_kv[cid] = {
                 "content": c["content"],
                 "tokens": tok_count,
                 "chunk_order_index": 0,
-                "full_doc_id": DOC_ID,
+                "full_doc_id": doc_id,
                 "file_path": "museum:dynamic",
             }
             chunk_vdb[cid] = {
                 "content": c["content"],
                 "tokens": tok_count,
                 "chunk_order_index": 0,
-                "full_doc_id": DOC_ID,
+                "full_doc_id": doc_id,
                 "file_path": "museum:dynamic",
             }
         await asyncio.gather(
@@ -463,54 +482,58 @@ async def do_import():
         )
         logger.info(f"  {len(ent_chunks_kv)} entity_chunks, {len(rel_chunks_kv)} relation_chunks done")
 
-        # 7. Write full_entities & full_relations
-        logger.info("Writing full_entities and full_relations ...")
-        all_entity_names = [nid for nid, _ in nodes]
-        all_relation_pairs = [[src, tgt] for src, tgt, _ in edges]
-        await asyncio.gather(
-            rag.full_entities.upsert({
-                DOC_ID: {
-                    "entity_names": all_entity_names,
-                    "count": len(all_entity_names),
-                }
-            }),
-            rag.full_relations.upsert({
-                DOC_ID: {
-                    "relation_pairs": all_relation_pairs,
-                    "count": len(all_relation_pairs),
-                }
-            }),
-        )
-        logger.info(f"  {len(all_entity_names)} entities, {len(all_relation_pairs)} relations indexed")
+        # 7. Write per-item full_entities, full_relations, full_docs, doc_status
+        logger.info("Writing per-item doc records ...")
 
-        # 8. Write doc_full & doc_status
-        logger.info("Writing doc_full and doc_status ...")
-        with open(DYNAMIC_JSON, "r", encoding="utf-8") as f:
-            raw_content = f.read()
+        # Group nodes/edges by doc_id
+        doc_entities: dict[str, list[str]] = {}
+        doc_relations: dict[str, list[list[str]]] = {}
+        doc_contents: dict[str, str] = {}
+        for c in chunks:
+            doc_id = c["doc_id"]
+            doc_contents[doc_id] = c["content"]
+            if doc_id not in doc_entities:
+                doc_entities[doc_id] = []
+                doc_relations[doc_id] = []
+
+        # Each item has exactly 1 node — map node to its doc_id via chunk
+        chunk_to_doc = {c["chunk_id"]: c["doc_id"] for c in chunks}
+        for node_id, nd in nodes:
+            d = chunk_to_doc.get(nd["source_id"])
+            if d:
+                doc_entities.setdefault(d, []).append(node_id)
+        for src, tgt, ed in edges:
+            d = chunk_to_doc.get(ed.get("source_id", ""))
+            if d:
+                doc_relations.setdefault(d, []).append([src, tgt])
+
+        ent_upsert = {}
+        rel_upsert = {}
+        doc_upsert = {}
+        status_upsert = {}
+        for doc_id in doc_contents:
+            ent_names = doc_entities.get(doc_id, [])
+            rel_pairs = doc_relations.get(doc_id, [])
+            ent_upsert[doc_id] = {"entity_names": ent_names, "count": len(ent_names)}
+            rel_upsert[doc_id] = {"relation_pairs": rel_pairs, "count": len(rel_pairs)}
+            doc_upsert[doc_id] = {"content": doc_contents[doc_id], "file_path": "museum_dynamic.json"}
+            status_upsert[doc_id] = {
+                "status": "PROCESSED",
+                "content_summary": f"Dynamic item: {doc_id}",
+                "content_length": len(doc_contents[doc_id]),
+                "chunks_count": 1,
+                "created_at": now_iso,
+                "updated_at": now_iso,
+                "file_path": "museum_dynamic.json",
+            }
 
         await asyncio.gather(
-            rag.full_docs.upsert({
-                DOC_ID: {
-                    "content": raw_content,
-                    "file_path": "museum_dynamic.json",
-                }
-            }),
-            rag.doc_status.upsert({
-                DOC_ID: {
-                    "status": "PROCESSED",
-                    "content_summary": (
-                        f"Dynamic museum import: "
-                        f"{len(nodes)} nodes, {len(edges)} edges, {len(chunks)} chunks"
-                    ),
-                    "content_length": len(raw_content),
-                    "chunks_count": len(chunks),
-                    "created_at": now_iso,
-                    "updated_at": now_iso,
-                    "file_path": "museum_dynamic.json",
-                }
-            }),
+            rag.full_entities.upsert(ent_upsert),
+            rag.full_relations.upsert(rel_upsert),
+            rag.full_docs.upsert(doc_upsert),
+            rag.doc_status.upsert(status_upsert),
         )
-        logger.info("  doc_full and doc_status done")
+        logger.info(f"  {len(doc_contents)} per-item doc records done")
 
         logger.info("Dynamic museum data import complete!")
 
