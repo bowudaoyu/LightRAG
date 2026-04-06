@@ -26,6 +26,7 @@ from museum_agent.planner import (
 )
 from museum_agent.prompts import INTENT_PARSE_PROMPT
 from museum_agent.retrieval import parallel_retrieve
+from museum_agent.utils import compute_weekday, compute_current_time, compute_end_time
 from museum_agent.validator import validate_plan
 
 logger = logging.getLogger(__name__)
@@ -102,7 +103,14 @@ class MuseumAgent:
     # ------------------------------------------------------------------
     async def parse_intent(self, user_message: str, date: str) -> UserIntent:
         """Parse user's natural language input into structured intent."""
-        prompt = INTENT_PARSE_PROMPT.format(date=date, user_message=user_message)
+        current_time = compute_current_time()
+        weekday = compute_weekday(date)
+        prompt = INTENT_PARSE_PROMPT.format(
+            date=date,
+            weekday=weekday,
+            current_time=current_time,
+            user_message=user_message,
+        )
 
         try:
             raw = await llm_complete(prompt, model=self.llm_model)

@@ -131,7 +131,56 @@ def _summarize_retrieval(key: str, result: dict[str, Any]) -> None:
         logger.info("  [%s] chunk[%d]: %s", key, i, preview)
 
 
-def _format_retrieval_block(result: dict[str, Any]) -> str:
+def _annotate_chunk_temporal(content: str, today: str) -> str:
+    """Add temporal validity annotation to a chunk based on date comparison.
+
+    Chunks have prefixes like:
+      【2026-04-05 15:00-16:00｜B1北区｜提示】
+      【2026-04-01至2026-04-30｜游客接待台｜活动】
+      【2026-04-03发布｜B1北区｜curator_insight】
+
+    This function compares dates against `today` and prepends [有效] or [已过期].
+    """
+    # Try to extract date range from chunk prefix
+    # Pattern 1: single date with time 【2026-04-05 15:00-16:00｜...】
+    m = re.match(r"【(\d{4}-\d{2}-\d{2})\s+\d{2}:\d{2}", content)
+    if m:
+        chunk_date = m.group(1)
+        if chunk_date < today:
+            return f"[已过期：该信息适用于{chunk_date}，今天是{today}] {content}"
+        elif chunk_date == today:
+            return f"[有效：今日{today}] {content}"
+        else:
+            return f"[有效：适用于{chunk_date}] {content}"
+
+    # Pattern 2: date range 【2026-04-05至2026-04-06｜...】
+    m = re.match(r"【(\d{4}-\d{2}-\d{2})至(\d{4}-\d{2}-\d{2})｜", content)
+    if m:
+        start_date, end_date = m.group(1), m.group(2)
+        if end_date < today:
+            return f"[已过期：有效期{start_date}至{end_date}，今天是{today}] {content}"
+        elif start_date <= today <= end_date:
+            return f"[有效：{start_date}至{end_date}，今天{today}在有效期内] {content}"
+        else:
+            return f"[未生效：{start_date}起生效] {content}"
+
+    # Pattern 3: published date 【2026-04-03发布｜...】 (stories, no expiry — always valid)
+    m = re.match(r"【(\d{4}-\d{2}-\d{2})发布｜", content)
+    if m:
+        return f"[有效：长期内容] {content}"
+
+    # Pattern 4: multi-time schedule 【2026-04-05 10:00/14:00/16:00｜...】
+    m = re.match(r"【(\d{4}-\d{2}-\d{2})\s+\d{2}:\d{2}", content)
+    if m:
+        chunk_date = m.group(1)
+        if chunk_date < today:
+            return f"[已过期：该信息适用于{chunk_date}] {content}"
+
+    # No date prefix found (static content) — always valid
+    return f"[有效] {content}"
+
+
+def _format_retrieval_block(result: dict[str, Any], today: str = "") -> str:
     """Convert aquery_data result into a readable text block for the LLM planner."""
     if result.get("status") != "success":
         return "(no data retrieved)"
@@ -139,10 +188,12 @@ def _format_retrieval_block(result: dict[str, Any]) -> str:
     data = result.get("data", {})
     parts: list[str] = []
 
-    # Chunks carry the richest context
+    # Chunks carry the richest context — annotate with temporal validity
     for chunk in data.get("chunks", []):
         content = chunk.get("content", "").strip()
         if content:
+            if today:
+                content = _annotate_chunk_temporal(content, today)
             parts.append(content)
 
     # Entities provide structured info
@@ -314,7 +365,7 @@ async def parallel_retrieve(
     formatted = {}
     for key, result in results:
         _summarize_retrieval(key, result)
-        formatted[key] = _format_retrieval_block(result)
+        formatted[key] = _format_retrieval_block(result, today=date)
         logger.info("  [%s] formatted text: %d chars", key, len(formatted[key]))
     logger.info("=" * 50)
 

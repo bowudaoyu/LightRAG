@@ -181,12 +181,29 @@ def validate_plan(plan: Plan, time_budget_min: int, start_time: str) -> list[str
         elif reversals == 1:
             logger.info("  check: 1 reversal detected (acceptable for anchor-based routing)")
 
-    # Total duration check (allow 10% overflow for flexibility)
-    if plan.total_duration_min > time_budget_min * 1.10:
+    # Total duration check (max 15 minutes over budget)
+    max_allowed = time_budget_min + 15
+    if plan.total_duration_min > max_allowed:
         errors.append(
             f"Total duration {plan.total_duration_min}min exceeds budget "
-            f"{time_budget_min}min by more than 10%"
+            f"{time_budget_min}min by {plan.total_duration_min - time_budget_min}min "
+            f"(max allowed: {max_allowed}min)"
         )
+
+    # Check last stop doesn't exceed end time
+    if stops:
+        last_stop = stops[-1]
+        try:
+            last_depart = _parse_hhmm(last_stop.depart_time)
+            budget_end = start_minutes + time_budget_min
+            if last_depart > budget_end + 15:
+                errors.append(
+                    f"Last stop departs at {last_stop.depart_time}, "
+                    f"which is more than 15min past the budget end time "
+                    f"{_fmt_hhmm(budget_end)}"
+                )
+        except (ValueError, IndexError):
+            pass
 
     # Summary
     if errors:

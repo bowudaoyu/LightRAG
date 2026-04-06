@@ -12,6 +12,7 @@ from collections.abc import AsyncIterator
 from museum_agent.llm import llm_complete, llm_complete_stream
 from museum_agent.models import Plan, PlanStop, UserIntent
 from museum_agent.prompts import PLANNER_SYSTEM_PROMPT, PLANNER_USER_PROMPT, VALIDATION_FIX_PROMPT
+from museum_agent.utils import compute_weekday, compute_current_time, compute_end_time
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +22,24 @@ def _build_planner_messages(
     retrieval: dict[str, str],
 ) -> list[dict[str, str]]:
     """Build the chat messages for the planner LLM call."""
-    user_msg = PLANNER_USER_PROMPT.format(
-        date=intent.date,
+    weekday = compute_weekday(intent.date)
+    current_time = compute_current_time()
+    end_time = compute_end_time(intent.start_time, intent.time_budget_min)
+
+    system_msg = PLANNER_SYSTEM_PROMPT.format(
         time_budget_min=intent.time_budget_min,
         start_time=intent.start_time,
+        end_time=end_time,
+        date=intent.date,
+        weekday=weekday,
+    )
+    user_msg = PLANNER_USER_PROMPT.format(
+        date=intent.date,
+        weekday=weekday,
+        current_time=current_time,
+        time_budget_min=intent.time_budget_min,
+        start_time=intent.start_time,
+        end_time=end_time,
         audience=intent.audience,
         has_child=intent.has_child,
         has_elderly=intent.has_elderly,
@@ -35,7 +50,7 @@ def _build_planner_messages(
         story_data=retrieval.get("story_data", "(no data)"),
     )
     return [
-        {"role": "system", "content": PLANNER_SYSTEM_PROMPT},
+        {"role": "system", "content": system_msg},
         {"role": "user", "content": user_msg},
     ]
 
@@ -126,23 +141,22 @@ async def run_planner(
     - raw_response: full LLM output
     """
     messages = _build_planner_messages(intent, retrieval)
-
-    # The user message contains all context; system prompt has instructions
+    system_content = messages[0]["content"]
     user_content = messages[1]["content"]
+
     logger.info("Planner input summary:")
-    logger.info("  System prompt: %d chars", len(PLANNER_SYSTEM_PROMPT))
+    logger.info("  System prompt: %d chars", len(system_content))
     logger.info("  User prompt: %d chars", len(user_content))
     logger.info("  User info: budget=%dmin, start=%s, audience=%s",
                 intent.time_budget_min, intent.start_time, intent.audience)
     for key in ["route_data", "event_data", "notice_data", "story_data"]:
         data_block = retrieval.get(key, "")
-        # Show first 100 chars of each block as preview
         preview = data_block[:100].replace("\n", " ") + "..." if len(data_block) > 100 else data_block.replace("\n", " ")
         logger.info("  [%s] %d chars: %s", key, len(data_block), preview)
 
     raw = await llm_complete(
         prompt=user_content,
-        system_prompt=PLANNER_SYSTEM_PROMPT,
+        system_prompt=system_content,
         model=llm_model,
     )
 
@@ -173,17 +187,18 @@ async def run_planner_stream(
     then call parse_llm_response() on the accumulated text.
     """
     messages = _build_planner_messages(intent, retrieval)
+    system_content = messages[0]["content"]
     user_content = messages[1]["content"]
 
     logger.info("Planner input summary (stream mode):")
-    logger.info("  System prompt: %d chars", len(PLANNER_SYSTEM_PROMPT))
+    logger.info("  System prompt: %d chars", len(system_content))
     logger.info("  User prompt: %d chars", len(user_content))
     logger.info("  User info: budget=%dmin, start=%s, audience=%s",
                 intent.time_budget_min, intent.start_time, intent.audience)
 
     async for chunk in llm_complete_stream(
         prompt=user_content,
-        system_prompt=PLANNER_SYSTEM_PROMPT,
+        system_prompt=system_content,
         model=llm_model,
     ):
         yield chunk
