@@ -580,6 +580,279 @@
     }
   ],
 
+  "crowd_patterns": {
+    "description": "客流规律模型，基于国博历年数据统计。用于预估排队时间和展厅拥挤度，帮助规划最佳参观时段。",
+    "daily_capacity": 30000,
+    "by_day_type": {
+      "weekday": {
+        "label": "工作日（周二至周五）",
+        "avg_visitors": 8000,
+        "capacity_pct": 27,
+        "experience": "舒适，大部分展厅可从容参观",
+        "peak_hours": "10:00-11:30",
+        "best_hours": "14:30-16:00"
+      },
+      "weekend": {
+        "label": "周末（周六、周日）",
+        "avg_visitors": 22000,
+        "capacity_pct": 73,
+        "experience": "较拥挤，热门展厅需排队",
+        "peak_hours": "10:00-12:00",
+        "best_hours": "14:00-15:30"
+      },
+      "holiday": {
+        "label": "法定节假日（国庆、五一、春节等）",
+        "avg_visitors": 28000,
+        "capacity_pct": 93,
+        "experience": "非常拥挤，建议避开或做好心理准备",
+        "peak_hours": "09:30-13:00",
+        "best_hours": "15:00-16:00"
+      }
+    },
+    "hourly_distribution": [
+      {"time": "09:00-10:00", "pct": 15, "note": "开馆首批入场，安检排队较长但馆内人少"},
+      {"time": "10:00-11:00", "pct": 20, "note": "上午高峰开始，热门展品前聚集人流"},
+      {"time": "11:00-12:00", "pct": 18, "note": "上午高峰持续"},
+      {"time": "12:00-13:00", "pct": 12, "note": "午间低谷，很多人去用餐，展厅相对空旷"},
+      {"time": "13:00-14:00", "pct": 15, "note": "下午场观众入场，人流回升"},
+      {"time": "14:00-15:00", "pct": 12, "note": "下午平稳期"},
+      {"time": "15:00-16:00", "pct": 8, "note": "临近停止入馆，人流明显减少，参观体验最佳"}
+    ],
+    "zone_hotspots": [
+      {"zone_id": "CN_NMC_ZONE_B1_NORTH", "heat_level": "高", "note": "后母戊鼎和四羊方尊是全馆最热门打卡点，周末常需排队拍照"},
+      {"zone_id": "CN_NMC_ZONE_B1_SOUTH", "heat_level": "中", "note": "击鼓说唱俑人气高，但展厅面积大，不显拥挤"},
+      {"zone_id": "CN_NMC_ZONE_F1_NORTH", "heat_level": "低", "note": "佛造像展厅较为冷门，通常人很少，适合安静欣赏"},
+      {"zone_id": "CN_NMC_ZONE_F1_SOUTH", "heat_level": "中", "note": "瓷器展厅人流适中，粉彩转心瓶前常有驻足"},
+      {"zone_id": "CN_NMC_ZONE_F2_NORTH", "heat_level": "低", "note": "书画展厅光线暗、节奏慢，多数游客会快速通过"},
+      {"zone_id": "CN_NMC_ZONE_F2_SOUTH", "heat_level": "低", "note": "玉器展厅人流较少，可细细品味"},
+      {"zone_id": "CN_NMC_ZONE_F3_NORTH", "heat_level": "低", "note": "钱币展厅是全馆最冷门的区域之一"},
+      {"zone_id": "CN_NMC_ZONE_F3_SOUTH", "heat_level": "高", "note": "庞贝特展人气极高，周末高峰期可能需排队30分钟以上入场"}
+    ]
+  },
+
+  "facilities": [
+    {
+      "facility_id": "CN_NMC_FAC_CAFETERIA",
+      "name": "国博食堂",
+      "zone_id": "CN_NMC_FAC_CAFETERIA",
+      "floor": "B1",
+      "type": "餐饮",
+      "hours": "10:30-14:00",
+      "description": "位于地下一层南端，提供中式套餐和面食，价格实惠。",
+      "menu_highlights": [
+        {"item": "红烧牛肉套餐", "price": 38, "note": "招牌菜，分量足"},
+        {"item": "番茄鸡蛋面", "price": 22, "note": "适合简单快餐"},
+        {"item": "宫保鸡丁套餐", "price": 35, "note": "配米饭和时蔬"},
+        {"item": "儿童套餐", "price": 28, "note": "含卡通造型饭团、小菜和酸奶"}
+      ],
+      "avg_price_range": "22-45元/人",
+      "seating_capacity": 200,
+      "peak_hours": "11:30-13:00",
+      "tips": "11:30前或13:00后就餐可避开排队。高峰期等位约10-15分钟。"
+    },
+    {
+      "facility_id": "CN_NMC_FAC_CAFE",
+      "name": "国博咖啡厅",
+      "zone_id": "CN_NMC_FAC_CAFE",
+      "floor": "F3",
+      "type": "餐饮",
+      "hours": "09:00-16:30",
+      "description": "位于三层东侧，落地窗可远眺长安街。环境雅致，适合参观间歇休息。",
+      "menu_highlights": [
+        {"item": "国博特调拿铁", "price": 38, "note": "拉花为后母戊鼎纹样，社交媒体爆款"},
+        {"item": "抹茶蛋糕", "price": 32, "note": "自制甜品，搭配咖啡"},
+        {"item": "美式咖啡", "price": 28, "note": ""},
+        {"item": "鲜榨橙汁", "price": 25, "note": "适合儿童"},
+        {"item": "「星空特调」系列", "price": 42, "note": "周五夜场限定，灵感来自庞贝壁画星空图"}
+      ],
+      "avg_price_range": "25-45元/人",
+      "seating_capacity": 60,
+      "peak_hours": "14:00-15:30",
+      "tips": "靠窗座位最受欢迎，建议非高峰时段前来。可以带饮品进展厅（需加盖）。"
+    },
+    {
+      "facility_id": "CN_NMC_FAC_VISITOR_CENTER",
+      "name": "游客接待台",
+      "zone_id": "CN_NMC_FAC_VISITOR_CENTER",
+      "floor": "F1",
+      "type": "服务",
+      "hours": "09:00-16:30",
+      "description": "位于一层大厅正中，提供咨询、投诉、失物招领等服务。",
+      "services": [
+        "免费中英文导览图",
+        "语音导览器租借（20元/台，押金100元或押身份证）",
+        "轮椅借用（免费，押身份证）",
+        "婴儿车借用（免费，押身份证）",
+        "失物招领",
+        "应急药箱"
+      ]
+    },
+    {
+      "facility_id": "CN_NMC_FAC_LUGGAGE",
+      "name": "行李寄存处",
+      "zone_id": "CN_NMC_FAC_LUGGAGE",
+      "floor": "F1",
+      "type": "服务",
+      "hours": "09:00-17:00",
+      "description": "位于一层东门入口右侧。",
+      "services": [
+        "人工寄存窗口（免费，可存大件行李）",
+        "电子储物柜（中号，扫码使用，4小时内免费，超时2元/小时）"
+      ],
+      "tips": "超过24寸的拉杆箱需至人工窗口办理。建议入馆后第一时间寄存，轻装参观。"
+    },
+    {
+      "facility_id": "CN_NMC_FAC_GIFT_SHOP",
+      "name": "国博文创旗舰店",
+      "zone_id": "CN_NMC_FAC_GIFT_SHOP",
+      "floor": "F2",
+      "type": "购物",
+      "hours": "09:00-16:45",
+      "description": "位于二层中部连廊，是全馆最大的文创商品销售区。",
+      "product_categories": [
+        {"category": "冰箱贴/书签", "price_range": "15-35元", "note": "最受欢迎的伴手礼，后母戊鼎、击鼓说唱俑系列常断货"},
+        {"category": "丝巾/围巾", "price_range": "128-368元", "note": "以馆藏书画纹样为设计元素"},
+        {"category": "文具套装", "price_range": "39-89元", "note": "适合学生，含国博定制笔记本和书签"},
+        {"category": "考古盲盒", "price_range": "59元/个", "note": "亲子热门，模拟考古挖掘体验，随机开出微缩文物"},
+        {"category": "纪念徽章", "price_range": "25-128元", "note": "收藏爱好者首选，部分限量编号"},
+        {"category": "茶具/瓷器", "price_range": "168-688元", "note": "以馆藏瓷器为灵感的实用器皿"}
+      ],
+      "tips": "16:00后部分热门商品可能已售罄。击鼓说唱俑表情包系列冰箱贴是社交媒体出镜率最高的伴手礼。"
+    },
+    {
+      "facility_id": "CN_NMC_FAC_RESTROOM",
+      "name": "洗手间",
+      "type": "服务",
+      "locations": [
+        {"floor": "B1", "position": "南北区连廊", "note": "含无障碍卫生间和母婴室"},
+        {"floor": "F1", "position": "东侧大厅、西侧大厅各一处", "note": "东侧有母婴室"},
+        {"floor": "F2", "position": "中部连廊（文创店旁）", "note": ""},
+        {"floor": "F3", "position": "咖啡厅旁", "note": ""}
+      ]
+    },
+    {
+      "facility_id": "CN_NMC_FAC_CHARGING",
+      "name": "手机充电站",
+      "type": "服务",
+      "locations": [
+        {"floor": "F1", "position": "游客接待台旁", "note": "免费共享充电宝，扫码借用"},
+        {"floor": "F3", "position": "咖啡厅内", "note": "座位旁有USB充电口"}
+      ]
+    },
+    {
+      "facility_id": "CN_NMC_FAC_WATER",
+      "name": "直饮水点",
+      "type": "服务",
+      "locations": [
+        {"floor": "B1", "position": "食堂入口处"},
+        {"floor": "F1", "position": "东侧洗手间旁"},
+        {"floor": "F2", "position": "文创店对面休息区"},
+        {"floor": "F3", "position": "咖啡厅门口"}
+      ],
+      "note": "每层均设有直饮水点，可自带水杯接水。馆内禁止携带未密封饮料入展厅。"
+    }
+  ],
+
+  "visitor_rules": {
+    "prohibited_items": [
+      "打火机、火柴等易燃物品",
+      "管制刀具及尖锐金属物品",
+      "已开封液体饮料（未开封矿泉水可带入）",
+      "自拍杆、三脚架、独脚架",
+      "超过A4尺寸的包袋（需寄存）",
+      "宠物（导盲犬除外）",
+      "滑板车、平衡车、轮滑鞋",
+      "外部食品（婴儿辅食和特殊医疗饮食除外）"
+    ],
+    "photography_rules": {
+      "general": "常设展厅允许拍照，禁止使用闪光灯和三脚架",
+      "special_exhibitions": "特展需看展厅门口提示，部分特展（如庞贝特展）允许拍照但禁止闪光灯，少数展品旁标注「禁止拍照」",
+      "commercial": "商业拍摄需提前向国博宣传部门申请许可",
+      "tips": [
+        "展厅内光线较暗，建议使用手机夜景模式或提高ISO",
+        "玻璃展柜拍摄时将手机/镜头贴近玻璃可减少反光",
+        "B1北区后母戊鼎东侧自然光最佳，适合拍摄",
+        "书画展厅（F2北区）为保护文物光线极暗，拍照效果有限，建议用眼睛欣赏"
+      ]
+    },
+    "accessibility": {
+      "wheelchair": "全馆无障碍通道覆盖，每层设有无障碍电梯（东侧和西侧各一部）",
+      "wheelchair_rental": "一层游客接待台免费借用轮椅，押身份证",
+      "stroller": "一层游客接待台免费借用婴儿车，押身份证",
+      "elevator_locations": [
+        {"floor_range": "B1-F3", "position": "东侧", "type": "无障碍直梯"},
+        {"floor_range": "B1-F3", "position": "西侧", "type": "无障碍直梯"},
+        {"floor_range": "F1-F3", "position": "中部", "type": "扶梯（非无障碍）"}
+      ],
+      "rest_areas": [
+        {"floor": "B1", "position": "南北区连廊", "seating": 20},
+        {"floor": "F1", "position": "大厅两侧", "seating": 40},
+        {"floor": "F2", "position": "文创店对面", "seating": 15},
+        {"floor": "F3", "position": "咖啡厅", "seating": 60}
+      ],
+      "tips": "建议行动不便的老人或轮椅使用者从东门进入（有坡道），避开高峰时段。每层休息区均有座椅，B1和F3有餐饮设施可补充体力。"
+    }
+  },
+
+  "surroundings": [
+    {
+      "name": "天安门广场",
+      "category": "景点",
+      "distance": "步行3分钟（国博西门出）",
+      "description": "世界最大的城市中心广场，可远眺天安门城楼、人民英雄纪念碑、毛主席纪念堂。",
+      "tips": "广场安检独立于国博，需重新排队。建议参观国博前或后顺路游览，无需预约。",
+      "time_needed": "20-40分钟"
+    },
+    {
+      "name": "故宫博物院",
+      "category": "景点",
+      "distance": "步行约15分钟（经天安门城楼至午门）",
+      "description": "明清两代皇家宫殿，世界五大博物馆之一。",
+      "tips": "必须提前在「故宫博物院」微信小程序预约，周一闭馆（与国博相同）。旺季门票紧张，建议至少提前3-5天预约。全程参观需2-4小时。",
+      "time_needed": "2-4小时"
+    },
+    {
+      "name": "前门大街",
+      "category": "餐饮/购物",
+      "distance": "步行约10分钟（国博南行）",
+      "description": "北京著名的历史商业街，汇集老字号餐馆和特色店铺。",
+      "tips": "推荐：全聚德烤鸭（前门店）、都一处烧麦、便宜坊烤鸭。午餐高峰需排队30-60分钟，建议11:00前或13:30后前往。",
+      "recommended_restaurants": [
+        {"name": "全聚德（前门店）", "cuisine": "北京烤鸭", "avg_price": "150-200元/人", "note": "北京最著名的烤鸭品牌，前门店是总店"},
+        {"name": "都一处烧麦馆", "cuisine": "烧麦/京菜", "avg_price": "60-90元/人", "note": "乾隆皇帝赐名的老字号，招牌三鲜烧麦"},
+        {"name": "便宜坊（前门店）", "cuisine": "焖炉烤鸭", "avg_price": "120-160元/人", "note": "600年历史，焖炉烤鸭与全聚德挂炉烤鸭风格不同"}
+      ],
+      "time_needed": "1-2小时"
+    },
+    {
+      "name": "王府井大街",
+      "category": "餐饮/购物",
+      "distance": "步行约15分钟（国博东北方向）或地铁1号线一站",
+      "description": "北京最著名的商业街之一，有百货商场、小吃街和各类餐饮。",
+      "tips": "王府井小吃街适合体验，但性价比一般。推荐东方广场地下一层的美食城，选择多且价格合理。",
+      "time_needed": "1-2小时"
+    },
+    {
+      "name": "南池子大街/菖蒲河公园",
+      "category": "休闲",
+      "distance": "步行约10分钟（国博东北方向）",
+      "description": "紧邻故宫东墙的安静胡同和河畔公园，适合参观后散步放松。",
+      "tips": "免费开放，人少景美。春季柳树成荫，秋季银杏金黄。从国博走过去途经皇城根遗址公园，一路都有树荫。",
+      "time_needed": "30-60分钟"
+    }
+  ],
+
+  "holidays_2026": [
+    {"name": "元旦", "dates": "2026-01-01至2026-01-03", "museum_status": "1月1日-3日正常开放（周四至周六），1月5日周一正常闭馆"},
+    {"name": "春节", "dates": "2026-02-14至2026-02-20", "museum_status": "除夕（2月16日）和初一（2月17日）闭馆，初二至初六（2月18日-22日）正常开放，2月23日周一正常闭馆"},
+    {"name": "清明节", "dates": "2026-04-04至2026-04-06", "museum_status": "4月4日（周六）、4月5日（周日）正常开放，4月6日（周一）正常闭馆"},
+    {"name": "劳动节", "dates": "2026-05-01至2026-05-05", "museum_status": "5月1日-3日正常开放，5月4日（周一）正常闭馆，5月5日正常开放"},
+    {"name": "端午节", "dates": "2026-06-19至2026-06-21", "museum_status": "6月19日-21日（周五至周日）正常开放，6月22日周一正常闭馆"},
+    {"name": "中秋节", "dates": "2026-09-25至2026-09-27", "museum_status": "9月25日-27日（周五至周日）正常开放，9月28日周一正常闭馆"},
+    {"name": "国庆节", "dates": "2026-10-01至2026-10-07", "museum_status": "10月1日-7日全部开放（含10月5日周一），10月12日周一正常闭馆（补休）"},
+    {"name": "暑假", "dates": "2026-07-01至2026-08-31", "museum_status": "暑期参观高峰，每日限流可能上调。周一仍然闭馆。建议工作日上午参观以避开人流。"}
+  ],
+
   "artifact_relations":[
     {
       "source_artifact_id": "ART_NMC_001",
