@@ -199,6 +199,7 @@ def _format_retrieval_block(result: dict[str, Any], today: str = "") -> str:
 
     # Entities provide structured info — also filter expired ones
     expired_entity_count = 0
+    expired_entity_names: set[str] = set()
     for entity in data.get("entities", []):
         desc = entity.get("description", "").strip()
         if not desc:
@@ -207,6 +208,7 @@ def _format_retrieval_block(result: dict[str, Any], today: str = "") -> str:
             desc, is_valid = _check_chunk_temporal(desc, today)
             if not is_valid:
                 expired_entity_count += 1
+                expired_entity_names.add(entity.get("entity_name", ""))
                 continue
         name = entity.get("entity_name", "")
         etype = entity.get("entity_type", "")
@@ -214,11 +216,21 @@ def _format_retrieval_block(result: dict[str, Any], today: str = "") -> str:
     if expired_entity_count:
         logger.info("  Filtered out %d expired entities (today=%s)", expired_entity_count, today)
 
-    # Relationships provide connections
+    # Relationships provide connections — drop edges involving expired entities
+    expired_rel_count = 0
     for rel in data.get("relationships", []):
         desc = rel.get("description", "").strip()
-        if desc:
-            parts.append(desc)
+        if not desc:
+            continue
+        if expired_entity_names and (
+            rel.get("src_id", "") in expired_entity_names
+            or rel.get("tgt_id", "") in expired_entity_names
+        ):
+            expired_rel_count += 1
+            continue
+        parts.append(desc)
+    if expired_rel_count:
+        logger.info("  Filtered out %d expired relationships (today=%s)", expired_rel_count, today)
 
     # Limit total output to avoid oversized LLM prompts
     text = "\n\n".join(parts) if parts else "(no data retrieved)"
