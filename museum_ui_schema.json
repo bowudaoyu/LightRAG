@@ -150,7 +150,7 @@
                       "description": "展品名称",
                       "examples": ["西周大克鼎"]
                     },
-                    "imageUrl": {
+                    "image": {
                       "type": "string",
                       "format": "uri",
                       "description": "展品图片 URL",
