@@ -182,9 +182,8 @@ def build_graph_data(museum: dict):
             _node_data(
                 art_name, "Artifact", art["description"],
                 source_id=chunk_id,
-                code=art["artifact_id"],
+                code=art.get("uuid", art["artifact_id"]),
                 category=category,
-                image_url=art.get("image_url", ""),
             ),
         ))
         edges.append((

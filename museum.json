@@ -200,7 +200,8 @@
       "category": "青铜器",
       "image_url": "https://oss.yourdomain.com/mock/houmuwuding.jpg",
       "description": "商代晚期青铜器，中国迄今出土最大、最重的青铜礼器，享有“镇国之宝”美誉。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "uuid": "59fb21a9-f1f7-4805-8105-18d9054b0638"
     },
     {
       "artifact_id": "ART_NMC_002",
@@ -208,7 +209,8 @@
       "category": "青铜器",
       "image_url": "https://oss.yourdomain.com/mock/siyangfangzun.jpg",
       "description": "商代晚期青铜礼器，四周边缘铸有四只栩栩如生的卷角羊，代表了商代青铜铸造工艺的巅峰。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "uuid": "43bf8e65-cb3d-4752-b7e9-6e843dcb1ea9"
     },
     {
       "artifact_id": "ART_NMC_003",
@@ -216,7 +218,8 @@
       "category": "陶塑",
       "image_url": "https://oss.yourdomain.com/mock/jigushuochangyong.jpg",
       "description": "东汉时期泥质灰陶，生动展现了汉代俳优（滑稽戏演员）眉飞色舞的表演瞬间，极具感染力。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH",
+      "uuid": "bd253323-db2a-4432-8174-3ca2e846ea31"
     },
     {
       "artifact_id": "ART_NMC_004",
@@ -224,7 +227,8 @@
       "category": "陶塑",
       "image_url": "https://oss.yourdomain.com/mock/renmianyuwen.jpg",
       "description": "新石器时代仰韶文化，内壁绘有神秘的人面与鱼纹交织图案，是史前原始信仰的珍贵物证。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "uuid": "6a2eb7f2-0ae5-479a-9c90-c7b64ea2ac93"
     },
     {
       "artifact_id": "ART_NMC_005",
@@ -232,7 +236,8 @@
       "category": "玉器",
       "image_url": "https://oss.yourdomain.com/mock/yulong.jpg",
       "description": "新石器时代红山文化，整体呈“C”字形，被誉为“中华第一龙”，是早期龙图腾的雏形。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "uuid": "b1b682f9-f9ad-451a-be58-b86aeb339a2f"
     },
     {
       "artifact_id": "ART_NMC_006",
@@ -240,7 +245,8 @@
       "category": "青铜器",
       "image_url": "https://oss.yourdomain.com/mock/dayuding.jpg",
       "description": "西周早期青铜重器，内壁铸有291字长篇铭文，记载了周康王向盂讲述文王、武王建国经验的历史。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "uuid": "540f7313-a7ed-43c1-9bc4-89adb44c73ad"
     },
     {
       "artifact_id": "ART_NMC_007",
@@ -248,7 +254,8 @@
       "category": "青铜器",
       "image_url": "https://oss.yourdomain.com/mock/xizun.jpg",
       "description": "西汉时期酒器，造型为一头健硕的犀牛，通体饰满错金银流云纹，华丽至极。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH",
+      "uuid": "c9359084-0f1a-44b6-b07f-df5b75f15a59"
     },
     {
       "artifact_id": "ART_NMC_008",
@@ -256,7 +263,8 @@
       "category": "陶塑",
       "image_url": "https://oss.yourdomain.com/mock/yingxingtaoding.jpg",
       "description": "新石器时代仰韶文化，将鼎的造型巧妙融入一只威武的雄鹰之中，兼具实用与雕塑美感。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_NORTH",
+      "uuid": "9d4c7a03-923b-4d06-b8f8-eb20aef86419"
     },
     {
       "artifact_id": "ART_NMC_009",
@@ -264,7 +272,8 @@
       "category": "青铜器",
       "image_url": "https://oss.yourdomain.com/mock/changxingongdeng.jpg",
       "description": "西汉鎏金铜灯，宫女提灯造型，设计有精妙的排烟导水环保装置，汉代审美的代表作。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH",
+      "uuid": "b959dc6c-109c-4589-a356-f4cd776c3edf"
     },
     {
       "artifact_id": "ART_NMC_010",
@@ -272,7 +281,8 @@
       "category": "金银首饰",
       "image_url": "https://oss.yourdomain.com/mock/jiulongjiufengguan.jpg",
       "description": "明代孝端皇后御用，采用点翠、花丝镶嵌工艺，镶嵌百余颗红蓝宝石及数千颗珍珠，极其奢华。",
-      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_B1_SOUTH",
+      "uuid": "fcd9fe99-86f5-4749-b34a-71e0b1c874bb"
     },
     {
       "artifact_id": "ART_NMC_011",
@@ -280,7 +290,8 @@
       "category": "佛造像",
       "image_url": "https://oss.yourdomain.com/mock/mudiaoguanyin.jpg",
       "description": "宋代木雕彩绘，观音姿态闲适安详（水月观音），打破了早期佛教造像的僵硬感，极具世俗人情味。",
-      "located_in_zone_id": "CN_NMC_ZONE_F1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F1_NORTH",
+      "uuid": "dd2fd4d2-8501-4755-8dfd-fa31089e7fc8"
     },
     {
       "artifact_id": "ART_NMC_012",
@@ -288,7 +299,8 @@
       "category": "佛造像",
       "image_url": "https://oss.yourdomain.com/mock/lvdumu.jpg",
       "description": "明代永乐年间宫廷造像，工艺精湛，度母身姿婀娜，面相慈悲，代表了明代藏传佛教金铜造像的最高水准。",
-      "located_in_zone_id": "CN_NMC_ZONE_F1_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F1_NORTH",
+      "uuid": "5c559252-c52c-420d-b6be-d516b4a7625e"
     },
     {
       "artifact_id": "ART_NMC_013",
@@ -296,7 +308,8 @@
       "category": "瓷器",
       "image_url": "https://oss.yourdomain.com/mock/qinghuabianhu.jpg",
       "description": "明代永乐时期，使用进口“苏麻离青”料烧制，发色浓艳，白龙穿梭于青花海水之中，气势磅礴。",
-      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH",
+      "uuid": "46a70db4-164b-45e8-9579-f63ac3d44ec9"
     },
     {
       "artifact_id": "ART_NMC_014",
@@ -304,7 +317,8 @@
       "category": "瓷器",
       "image_url": "https://oss.yourdomain.com/mock/zhuanxinping.jpg",
       "description": "清代乾隆时期御窑炫技之作，内胆可转动，透过外瓶镂空处可见内瓶绘制的连环画，工艺巧夺天工。",
-      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH",
+      "uuid": "434b5cf2-5453-4d1e-80c9-d0c5ebbf010b"
     },
     {
       "artifact_id": "ART_NMC_015",
@@ -312,7 +326,8 @@
       "category": "瓷器",
       "image_url": "https://oss.yourdomain.com/mock/junyaozun.jpg",
       "description": "宋代五大名窑之一钧窑代表作，“入窑一色，出窑万彩”，釉面呈现出如晚霞般绚丽的玫瑰紫色。",
-      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F1_SOUTH",
+      "uuid": "0e1402d3-28cf-4b01-9ecd-c762b39cf99c"
     },
     {
       "artifact_id": "ART_NMC_016",
@@ -320,7 +335,8 @@
       "category": "书画",
       "image_url": "https://oss.yourdomain.com/mock/zhenshangzhaitu.jpg",
       "description": "明代吴门画派领袖文徵明晚年杰作，描绘了文人雅士在庭院中鉴赏金石书画的清雅生活。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH",
+      "uuid": "81620b60-f1ee-44e6-a193-5cccf6f3d54b"
     },
     {
       "artifact_id": "ART_NMC_017",
@@ -328,7 +344,8 @@
       "category": "书画",
       "image_url": "https://oss.yourdomain.com/mock/zhushitu.jpg",
       "description": "扬州八怪之一郑板桥代表作，以水墨撇写幽竹怪石，笔力挺拔，彰显文人傲骨气节。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH",
+      "uuid": "37196e36-9d3e-4507-8684-897bc702acee"
     },
     {
       "artifact_id": "ART_NMC_018",
@@ -336,7 +353,8 @@
       "category": "书画",
       "image_url": "https://oss.yourdomain.com/mock/wangchuantu.jpg",
       "description": "临摹唐代王维的名作，全景式展现了辋川别墅的二十景，是研究唐宋山水园林的重要图像史料。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH",
+      "uuid": "2cc46fb2-306f-4071-bdbc-9f2308dbd4d4"
     },
     {
       "artifact_id": "ART_NMC_019",
@@ -344,7 +362,8 @@
       "category": "书画",
       "image_url": "https://oss.yourdomain.com/mock/qianlongnanxun.jpg",
       "description": "宫廷画师徐扬等人绘制的宏篇巨制，写实地记录了乾隆皇帝下江南沿途的繁华市井与壮丽山河。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH",
+      "uuid": "deb9e5b9-7d3e-4d2c-8610-7baf3df52639"
     },
     {
       "artifact_id": "ART_NMC_020",
@@ -352,7 +371,8 @@
       "category": "书画",
       "image_url": "https://oss.yourdomain.com/mock/wanganshi_shufa.jpg",
       "description": "北宋政治家王安石存世罕见的书法真迹，笔势清劲，结体紧凑，反映了其峭拔的个性。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_NORTH",
+      "uuid": "8309645a-c46a-4a7c-9323-e042fa8d26ff"
     },
     {
       "artifact_id": "ART_NMC_021",
@@ -360,7 +380,8 @@
       "category": "玉器",
       "image_url": "https://oss.yourdomain.com/mock/fuhaoyufeng.jpg",
       "description": "商代晚期玉器，造型优美流畅，凤鸟回首长翎，是商代玉雕线条艺术的巅峰之作。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH",
+      "uuid": "9c367a0c-ecc7-4aac-860c-c10cc2883328"
     },
     {
       "artifact_id": "ART_NMC_022",
@@ -368,7 +389,8 @@
       "category": "玉器",
       "image_url": "https://oss.yourdomain.com/mock/yucong.jpg",
       "description": "新石器时代良渚文化祭祀重器，外方内圆，表面精雕细琢了神秘的神人兽面徽记，象征神权。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH",
+      "uuid": "50477681-17bf-431d-a51f-6556c7a0cac5"
     },
     {
       "artifact_id": "ART_NMC_023",
@@ -376,7 +398,8 @@
       "category": "玉器",
       "image_url": "https://oss.yourdomain.com/mock/yulongpei.jpg",
       "description": "西汉玉器，采用游丝毛雕工艺，双龙蜿蜒交织，充满动感与张力，体现了大汉王朝的雄浑气魄。",
-      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F2_SOUTH",
+      "uuid": "4311f1a6-a281-4107-a70c-f3bb7d73ede5"
     },
     {
       "artifact_id": "ART_NMC_024",
@@ -384,7 +407,8 @@
       "category": "钱币",
       "image_url": "https://oss.yourdomain.com/mock/qidaobi.jpg",
       "description": "战国时期齐国铸造的青铜货币，形似环首刀，带有“齐大化”等铭文，是先秦货币史的重要实物。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH",
+      "uuid": "e0742265-3139-4680-aa25-c7a48a7f13ce"
     },
     {
       "artifact_id": "ART_NMC_025",
@@ -392,7 +416,8 @@
       "category": "钱币",
       "image_url": "https://oss.yourdomain.com/mock/yidaopingwuqian.jpg",
       "description": "新朝王莽时期铸造，造型独特，环首处用黄金错出“一刀”二字，极具艺术审美价值，存世稀少。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH",
+      "uuid": "a7fb8afa-c3e8-484b-a31f-a9a87ecf6cc9"
     },
     {
       "artifact_id": "ART_NMC_026",
@@ -400,7 +425,8 @@
       "category": "钱币",
       "image_url": "https://oss.yourdomain.com/mock/yingyuan.jpg",
       "description": "战国时期楚国发行的黄金货币，呈印子金状，使用时需要切割称重，是中国最早的原始黄金铸币。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH",
+      "uuid": "23d2f07c-7e79-4cca-a7e3-d06bc565896d"
     },
     {
       "artifact_id": "ART_NMC_027",
@@ -408,7 +434,8 @@
       "category": "钱币",
       "image_url": "https://oss.yourdomain.com/mock/daqing_tongbi.jpg",
       "description": "清末货币制度改革的产物，代表了当时中国近代机制币铸造工艺的引入与发展。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_NORTH",
+      "uuid": "c3dd2df2-3644-44ae-8905-b46aa037fdbe"
     },
     {
       "artifact_id": "ART_NMC_028",
@@ -416,7 +443,8 @@
       "category": "壁画",
       "image_url": "https://oss.yourdomain.com/mock/pompeii_fresco.jpg",
       "description": "古罗马时期庞贝城出土，色彩鲜艳，运用了高超的透视与光影画法，被维苏威火山灰封存近两千年。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH",
+      "uuid": "c11db7f0-072b-4614-9bca-45b26d3cb8d9"
     },
     {
       "artifact_id": "ART_NMC_029",
@@ -424,7 +452,8 @@
       "category": "青铜雕塑",
       "image_url": "https://oss.yourdomain.com/mock/faun_bronze.jpg",
       "description": "古罗马时期，出土于庞贝古城的“农牧神之家”，展现了古希腊罗马神话中神明醉酒狂欢的生动姿态。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH",
+      "uuid": "1ca2ab2f-d178-4e46-89f3-0461211c1b36"
     },
     {
       "artifact_id": "ART_NMC_030",
@@ -432,7 +461,8 @@
       "category": "石雕",
       "image_url": "https://oss.yourdomain.com/mock/venus_marble.jpg",
       "description": "古罗马时期大理石雕刻，展现了爱与美之神维纳斯沐浴时的优美体态，是古典写实主义雕塑的典范。",
-      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH"
+      "located_in_zone_id": "CN_NMC_ZONE_F3_SOUTH",
+      "uuid": "1ca4f0e1-f4b4-4b06-9774-67c8bda7b86f"
     }
   ],
   "exhibitions": [
