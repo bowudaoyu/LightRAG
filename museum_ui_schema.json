@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MuseumGuideUI",
+  "description": "博物馆导览 UI 数据结构，支撑最新动态和推荐参观路线两大模块",
+  "type": "object",
+  "required": ["announcements", "route"],
+  "properties": {
+    "announcements": {
+      "type": "object",
+      "description": "最新动态模块",
+      "required": ["title", "items"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "模块标题",
+          "example": "最新动态"
+        },
+        "icon": {
+          "type": "string",
+          "description": "模块图标标识",
+          "example": "megaphone"
+        },
+        "items": {
+          "type": "array",
+          "description": "动态条目列表",
+          "items": {
+            "type": "object",
+            "required": ["label", "content"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "条目前缀标签，如'今日15:00特展讲解'、'明日闭展提醒'",
+                "example": "今日15:00特展讲解"
+              },
+              "content": {
+                "type": "string",
+                "description": "条目正文",
+                "example": "敦煌飞天艺术解析"
+              }
+            }
+          }
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "description": "推荐参观路线模块",
+      "required": ["title", "subtitle", "stops"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "路线标题",
+          "example": "推荐参观路线"
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "路线摘要描述",
+          "example": "2小时精华路线 · 涵盖核心展品"
+        },
+        "stops": {
+          "type": "array",
+          "description": "路线站点列表，按参观顺序排列",
+          "items": {
+            "type": "object",
+            "required": ["order", "name", "location", "duration"],
+            "properties": {
+              "order": {
+                "type": "integer",
+                "description": "站点序号",
+                "minimum": 1
+              },
+              "name": {
+                "type": "string",
+                "description": "展厅/地点名称",
+                "example": "青铜器展厅"
+              },
+              "location": {
+                "type": "string",
+                "description": "位置描述",
+                "example": "北区二层"
+              },
+              "duration": {
+                "type": "string",
+                "description": "建议停留时间",
+                "example": "25分钟"
+              },
+              "tags": {
+                "type": "array",
+                "description": "标签列表，如'特展'",
+                "items": {
+                  "type": "string"
+                },
+                "example": ["特展"]
+              },
+              "openingHours": {
+                "type": "string",
+                "description": "开放时间",
+                "example": "09:00-17:00"
+              },
+              "limitedTime": {
+                "type": "string",
+                "description": "限时信息，如限时特展截止日期",
+                "example": "限时特展至12月31日"
+              },
+              "guidedTours": {
+                "type": "array",
+                "description": "讲解服务信息列表",
+                "items": {
+                  "type": "object",
+                  "required": ["description"],
+                  "properties": {
+                    "description": {
+                      "type": "string",
+                      "description": "讲解描述",
+                      "example": "10:00 / 14:00 有专业讲解员服务"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "description": "图标标识",
+                      "example": "clock"
+                    }
+                  }
+                }
+              },
+              "crowdStatus": {
+                "type": "object",
+                "description": "人流状态信息",
+                "properties": {
+                  "level": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high"],
+                    "description": "拥挤程度: low=人流较少, medium=适中, high=拥挤"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "显示文案",
+                    "example": "预计排队15分钟"
+                  }
+                }
+              },
+              "highlights": {
+                "type": "array",
+                "description": "重点展品/推荐项目",
+                "items": {
+                  "type": "object",
+                  "required": ["name"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "展品名称",
+                      "example": "西周大克鼎"
+                    },
+                    "image": {
+                      "type": "string",
+                      "description": "展品图片 URL 或路径",
+                      "example": "images/da_ke_ding.jpg"
+                    }
+                  }
+                }
+              },
+              "restStop": {
+                "type": "object",
+                "description": "休息点信息（如咖啡厅），嵌套在站点中作为中途休息建议",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "休息点名称",
+                    "example": "博物馆咖啡厅"
+                  },
+                  "suggestion": {
+                    "type": "string",
+                    "description": "建议说明",
+                    "example": "建议休息15分钟"
+                  },
+                  "waitTime": {
+                    "type": "string",
+                    "description": "预计等待时间",
+                    "example": "预计等位10分钟"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
