@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import logging
 import os
 import sys
@@ -206,6 +207,14 @@ async def run_streaming(agent: MuseumAgent, user_message: str, visit_date: str, 
             else:
                 print("\n  ✓ Validation passed")
 
+        elif event_type == "ui_json":
+            output_path = os.path.join(os.path.dirname(__file__), "..", "museum_ui_output.json")
+            output_path = os.path.abspath(output_path)
+            with open(output_path, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            print("\n" + "-" * 60)
+            print(f"UI JSON saved to: {output_path}")
+
         elif event_type == "timings":
             print("\n" + "-" * 60)
             print("TIMINGS")
@@ -263,6 +272,16 @@ async def run_batch(agent: MuseumAgent, user_message: str, visit_date: str, over
         for i, stop in enumerate(plan.stops):
             event_tag = f" [EVENT: {stop.anchor_event}]" if stop.anchor_event else ""
             print(f"    {i + 1}. {stop.arrive_time}-{stop.depart_time} {stop.zone_name} ({stop.duration_min}min){event_tag}")
+
+    # Save UI JSON
+    ui_json = result.get("ui_json")
+    if ui_json:
+        output_path = os.path.join(os.path.dirname(__file__), "..", "museum_ui_output.json")
+        output_path = os.path.abspath(output_path)
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(ui_json, f, ensure_ascii=False, indent=2)
+        print("\n" + "-" * 60)
+        print(f"UI JSON saved to: {output_path}")
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ from museum_agent.llm import llm_complete, llm_complete_stream
 from museum_agent.models import Plan, UserIntent
 from museum_agent.planner import (
     dict_to_plan,
+    generate_ui_json,
     parse_llm_response,
     run_planner,
     run_planner_fix,
@@ -422,13 +423,24 @@ class MuseumAgent:
             logger.warning("[Step 4] No Plan JSON parsed, skipping validation")
 
         timings["step4_validation"] = time.monotonic() - t0
+
+        # Step 5: Generate UI JSON
+        logger.info("=" * 60)
+        logger.info("[Step 5] Generating UI JSON")
+        logger.info("=" * 60)
+        t0 = time.monotonic()
+        ui_json = await self._generate_ui_json(plan_text, plan, raw_response)
+        timings["step5_ui_json"] = time.monotonic() - t0
+        logger.info("[Step 5] Done in %.2fs, result: %s", timings["step5_ui_json"], "ok" if ui_json else "FAILED")
+
         timings["total"] = sum(timings.values())
         logger.info(
-            "[Done] Total %.2fs (step1+2=%.2f, planning=%.2f, validation=%.2f)",
+            "[Done] Total %.2fs (step1+2=%.2f, planning=%.2f, validation=%.2f, ui_json=%.2f)",
             timings["total"],
             timings["step1_2_intent_and_retrieval"],
             timings["step3_planning"],
             timings["step4_validation"],
+            timings["step5_ui_json"],
         )
 
         return {
@@ -438,7 +450,53 @@ class MuseumAgent:
             "timings": timings,
             "intent": intent,
             "mode": "tour",
+            "ui_json": ui_json,
         }
+
+    # ------------------------------------------------------------------
+    # UI JSON generation
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _load_ui_schema() -> dict:
+        """Load the UI JSON schema from museum_ui_schema.json."""
+        schema_path = os.path.join(os.path.dirname(__file__), "..", "museum_ui_schema.json")
+        with open(schema_path, encoding="utf-8") as f:
+            return json.load(f)
+
+    async def _generate_ui_json(self, plan_text: str, plan: Plan | None, raw_response: str) -> dict | None:
+        """Generate UI-schema-compliant JSON from plan results."""
+        schema = self._load_ui_schema()
+
+        # Build plan_dict from Plan object for context
+        plan_dict = None
+        if plan:
+            plan_dict = {
+                "stops": [
+                    {
+                        "zone_id": s.zone_id,
+                        "zone_name": s.zone_name,
+                        "arrive_time": s.arrive_time,
+                        "depart_time": s.depart_time,
+                        "duration_min": s.duration_min,
+                        "anchor_event": s.anchor_event,
+                        "artifacts": s.artifacts,
+                        "notices": s.notices,
+                        "stories": s.stories,
+                    }
+                    for s in plan.stops
+                ],
+                "entrance_hint": plan.entrance_hint,
+                "total_duration_min": plan.total_duration_min,
+                "skipped_events": plan.skipped_events,
+                "post_visit_tips": plan.post_visit_tips,
+            }
+
+        return await generate_ui_json(
+            llm_model=self.llm_model,
+            plan_text=plan_text,
+            plan_dict=plan_dict,
+            schema=schema,
+        )
 
     # ------------------------------------------------------------------
     # Streaming pipeline
@@ -537,7 +595,16 @@ class MuseumAgent:
         if plan:
             errors = self.validate(plan, intent)
         timings["step4_validation"] = time.monotonic() - t0
-        timings["total"] = sum(timings.values())
 
         yield ("validation", errors)
+
+        # Step 5: Generate UI JSON
+        yield ("status", "Generating UI JSON...")
+        t0 = time.monotonic()
+        ui_json = await self._generate_ui_json(plan_text, plan, raw_response)
+        timings["step5_ui_json"] = time.monotonic() - t0
+        if ui_json:
+            yield ("ui_json", ui_json)
+
+        timings["total"] = sum(timings.values())
         yield ("timings", timings)

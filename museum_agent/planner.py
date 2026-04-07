@@ -11,7 +11,13 @@ from collections.abc import AsyncIterator
 
 from museum_agent.llm import llm_complete, llm_complete_stream
 from museum_agent.models import Plan, PlanStop, UserIntent
-from museum_agent.prompts import PLANNER_SYSTEM_PROMPT, PLANNER_USER_PROMPT, VALIDATION_FIX_PROMPT
+from museum_agent.prompts import (
+    PLANNER_SYSTEM_PROMPT,
+    PLANNER_USER_PROMPT,
+    UI_JSON_SYSTEM_PROMPT,
+    UI_JSON_USER_PROMPT,
+    VALIDATION_FIX_PROMPT,
+)
 from museum_agent.utils import compute_weekday, compute_current_time, compute_end_time
 
 logger = logging.getLogger(__name__)
@@ -224,3 +230,44 @@ async def run_planner_fix(
     plan = dict_to_plan(plan_dict) if plan_dict else None
 
     return plan, plan_text, raw
+
+
+async def generate_ui_json(
+    llm_model: str,
+    plan_text: str,
+    plan_dict: dict[str, Any] | None,
+    schema: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Convert plan text + plan data into UI-schema-compliant JSON via LLM.
+
+    Returns the parsed UI JSON dict, or None if generation/parsing failed.
+    """
+    plan_json_str = json.dumps(plan_dict, ensure_ascii=False, indent=2) if plan_dict else "(none)"
+    schema_str = json.dumps(schema, ensure_ascii=False, indent=2)
+
+    user_prompt = UI_JSON_USER_PROMPT.format(
+        plan_text=plan_text,
+        plan_json=plan_json_str,
+        schema=schema_str,
+    )
+
+    raw = await llm_complete(
+        prompt=user_prompt,
+        system_prompt=UI_JSON_SYSTEM_PROMPT,
+        model=llm_model,
+    )
+
+    # Clean markdown fences and <think> blocks
+    cleaned = raw.strip()
+    if cleaned.startswith("```"):
+        cleaned = cleaned.split("\n", 1)[1] if "\n" in cleaned else cleaned[3:]
+    if cleaned.endswith("```"):
+        cleaned = cleaned[: cleaned.rfind("```")]
+    cleaned = re.sub(r"<think>.*?</think>", "", cleaned, flags=re.DOTALL).strip()
+
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        logger.warning("Failed to parse UI JSON from LLM response")
+        logger.warning("  Response starts with: %s", cleaned[:200].replace("\n", " "))
+        return None

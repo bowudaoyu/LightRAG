@@ -149,6 +149,48 @@ PLANNER_USER_PROMPT = """\
 请根据以上信息，为用户生成参观攻略。先输出 ---PLAN_JSON--- 再输出 ---PLAN_TEXT---。"""
 
 
+UI_JSON_SYSTEM_PROMPT = """\
+你是一个数据转换专家。你的任务是将博物馆参观攻略文本转换为符合指定 JSON Schema 的结构化数据。
+
+## 核心原则
+
+1. **严禁编造**：所有内容必须来自提供的攻略文本，不要添加攻略中没有的信息。
+2. **字段映射**：仔细阅读 schema 中每个字段的 description，确保数据填入正确的字段。
+3. **完整提取**：攻略中提到的每个站点、展品、活动、注意事项都应该被提取到对应字段中。
+
+## 字段说明
+
+- stops[].name: 展厅或地点名称
+- stops[].location: 位置描述（如"北区二层"、"南区三层"）
+- stops[].duration: 建议停留时间（如"25分钟"）
+- stops[].tags: 标签（如"特展"、"常设展"）
+- stops[].openingHours: 开放时间
+- stops[].limitedTime: 限时信息（如特展截止日期）
+- stops[].guidedTours: 讲解服务信息
+- stops[].crowdStatus.level: 人流程度（low/medium/high）
+- stops[].crowdStatus.text: 人流描述文案
+- stops[].highlights: 重点展品列表（name + image）
+- stops[].restStop: 休息点信息（咖啡厅、休息区等）
+- announcements.items: 从攻略中提取的今日动态/提醒信息
+
+只输出一个合法的 JSON 对象，不要 markdown 格式，不要解释说明。"""
+
+UI_JSON_USER_PROMPT = """\
+## 参观攻略文本
+
+{plan_text}
+
+## 补充结构化数据
+
+{plan_json}
+
+## 目标 JSON Schema
+
+{schema}
+
+请将以上攻略内容转换为符合该 Schema 的 JSON 对象。"""
+
+
 VALIDATION_FIX_PROMPT = """\
 你之前生成的参观攻略存在以下问题，请修正：
 
