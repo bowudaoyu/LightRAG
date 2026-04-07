@@ -13,12 +13,12 @@
         "title": {
           "type": "string",
           "description": "模块标题",
-          "example": "最新动态"
+          "examples": ["最新动态"]
         },
         "icon": {
           "type": "string",
           "description": "模块图标标识",
-          "example": "megaphone"
+          "examples": ["megaphone"]
         },
         "items": {
           "type": "array",
@@ -30,12 +30,12 @@
               "label": {
                 "type": "string",
                 "description": "条目前缀标签，如'今日15:00特展讲解'、'明日闭展提醒'",
-                "example": "今日15:00特展讲解"
+                "examples": ["今日15:00特展讲解"]
               },
               "content": {
                 "type": "string",
                 "description": "条目正文",
-                "example": "敦煌飞天艺术解析"
+                "examples": ["敦煌飞天艺术解析"]
               }
             }
           }
@@ -50,12 +50,12 @@
         "title": {
           "type": "string",
           "description": "路线标题",
-          "example": "推荐参观路线"
+          "examples": ["推荐参观路线"]
         },
         "subtitle": {
           "type": "string",
           "description": "路线摘要描述",
-          "example": "2小时精华路线 · 涵盖核心展品"
+          "examples": ["2小时精华路线 · 涵盖核心展品"]
         },
         "stops": {
           "type": "array",
@@ -72,17 +72,17 @@
               "name": {
                 "type": "string",
                 "description": "展厅/地点名称",
-                "example": "青铜器展厅"
+                "examples": ["青铜器展厅"]
               },
               "location": {
                 "type": "string",
                 "description": "位置描述",
-                "example": "北区二层"
+                "examples": ["北区二层"]
               },
               "duration": {
                 "type": "string",
                 "description": "建议停留时间",
-                "example": "25分钟"
+                "examples": ["25分钟"]
               },
               "tags": {
                 "type": "array",
@@ -90,17 +90,17 @@
                 "items": {
                   "type": "string"
                 },
-                "example": ["特展"]
+                "examples": [["特展"]]
               },
               "openingHours": {
                 "type": "string",
                 "description": "开放时间",
-                "example": "09:00-17:00"
+                "examples": ["09:00-17:00"]
               },
               "limitedTime": {
                 "type": "string",
                 "description": "限时信息，如限时特展截止日期",
-                "example": "限时特展至12月31日"
+                "examples": ["限时特展至12月31日"]
               },
               "guidedTours": {
                 "type": "array",
@@ -112,12 +112,12 @@
                     "description": {
                       "type": "string",
                       "description": "讲解描述",
-                      "example": "10:00 / 14:00 有专业讲解员服务"
+                      "examples": ["10:00 / 14:00 有专业讲解员服务"]
                     },
                     "icon": {
                       "type": "string",
                       "description": "图标标识",
-                      "example": "clock"
+                      "examples": ["clock"]
                     }
                   }
                 }
@@ -134,7 +134,7 @@
                   "text": {
                     "type": "string",
                     "description": "显示文案",
-                    "example": "预计排队15分钟"
+                    "examples": ["预计排队15分钟"]
                   }
                 }
               },
@@ -148,12 +148,13 @@
                     "name": {
                       "type": "string",
                       "description": "展品名称",
-                      "example": "西周大克鼎"
+                      "examples": ["西周大克鼎"]
                     },
-                    "image": {
+                    "imageUrl": {
                       "type": "string",
-                      "description": "展品图片 URL 或路径",
-                      "example": "images/da_ke_ding.jpg"
+                      "format": "uri",
+                      "description": "展品图片 URL",
+                      "examples": ["https://example.com/images/da_ke_ding.jpg"]
                     }
                   }
                 }
@@ -165,17 +166,17 @@
                   "name": {
                     "type": "string",
                     "description": "休息点名称",
-                    "example": "博物馆咖啡厅"
+                    "examples": ["博物馆咖啡厅"]
                   },
                   "suggestion": {
                     "type": "string",
                     "description": "建议说明",
-                    "example": "建议休息15分钟"
+                    "examples": ["建议休息15分钟"]
                   },
                   "waitTime": {
                     "type": "string",
                     "description": "预计等待时间",
-                    "example": "预计等位10分钟"
+                    "examples": ["预计等位10分钟"]
                   }
                 }
               }
