@@ -13,6 +13,11 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
+def _normalize_node_id(node_id: str) -> str:
+    """Mirror PGGraphStorage._normalize_node_id: escape \\ and \" for Cypher."""
+    return node_id.replace("\\", "\\\\").replace('"', '\\"')
+
+
 async def pg_get_node_data_combined(
     graph_storage,
     node_ids: list[str],
@@ -36,6 +41,14 @@ async def pg_get_node_data_combined(
 
     gn = graph_storage.graph_name
     t0 = time.time()
+
+    # Normalize node_ids to match PGGraphStorage convention (escape \\ and \")
+    normalized_ids = [_normalize_node_id(nid) for nid in node_ids]
+    # Build reverse lookup: normalized → original
+    norm_to_orig: dict[str, str] = {}
+    for orig, norm in zip(node_ids, normalized_ids):
+        norm_to_orig[norm] = orig
+        norm_to_orig[orig] = orig  # also map original to itself
 
     # Single SQL: nodes + degrees + all connected edges with properties
     query = f"""
@@ -138,7 +151,7 @@ async def pg_get_node_data_combined(
     LEFT JOIN ep_deg td ON td.eid = er.tgt_eid;
     """
 
-    results = await graph_storage._query(query, params={"ids": node_ids})
+    results = await graph_storage._query(query, params={"ids": normalized_ids})
     elapsed = time.time() - t0
 
     # Build VDB lookup for created_at
@@ -149,7 +162,8 @@ async def pg_get_node_data_combined(
     for row in results:
         if row.get("rtype") != "N":
             continue
-        eid = _strip_agtype_quotes(row["col1"])
+        raw_eid = _strip_agtype_quotes(row["col1"])
+        eid = norm_to_orig.get(raw_eid, raw_eid)  # map back to original
         props = row["col2"]
         if isinstance(props, str):
             try:
@@ -171,8 +185,10 @@ async def pg_get_node_data_combined(
     for row in results:
         if row.get("rtype") != "E":
             continue
-        src = _strip_agtype_quotes(row["col1"])
-        tgt = _strip_agtype_quotes(row["col4"])
+        raw_src = _strip_agtype_quotes(row["col1"])
+        raw_tgt = _strip_agtype_quotes(row["col4"])
+        src = norm_to_orig.get(raw_src, raw_src)
+        tgt = norm_to_orig.get(raw_tgt, raw_tgt)
         edge_key = tuple(sorted((src, tgt)))
         if edge_key in seen_edges:
             continue
@@ -225,9 +241,15 @@ async def pg_get_edge_data_combined(
     gn = graph_storage.graph_name
     t0 = time.time()
 
-    # Two parallel arrays for PG UNNEST
-    src_ids = [p["src"] for p in edge_pairs]
-    tgt_ids = [p["tgt"] for p in edge_pairs]
+    # Normalize entity names and build reverse lookup
+    src_ids = [_normalize_node_id(p["src"]) for p in edge_pairs]
+    tgt_ids = [_normalize_node_id(p["tgt"]) for p in edge_pairs]
+    norm_to_orig: dict[str, str] = {}
+    for p in edge_pairs:
+        norm_to_orig[_normalize_node_id(p["src"])] = p["src"]
+        norm_to_orig[_normalize_node_id(p["tgt"])] = p["tgt"]
+        norm_to_orig[p["src"]] = p["src"]
+        norm_to_orig[p["tgt"]] = p["tgt"]
 
     query = f"""
     WITH input_pairs AS (
@@ -304,8 +326,10 @@ async def pg_get_edge_data_combined(
     for row in results:
         if row.get("rtype") != "E":
             continue
-        src = _strip_agtype_quotes(row["col1"])
-        tgt = _strip_agtype_quotes(row["col2"])
+        raw_src = _strip_agtype_quotes(row["col1"])
+        raw_tgt = _strip_agtype_quotes(row["col2"])
+        src = norm_to_orig.get(raw_src, raw_src)
+        tgt = norm_to_orig.get(raw_tgt, raw_tgt)
         eprops = row["col3"]
         if isinstance(eprops, str):
             try:
@@ -346,7 +370,8 @@ async def pg_get_edge_data_combined(
     for row in results:
         if row.get("rtype") != "N":
             continue
-        eid = _strip_agtype_quotes(row["col1"])
+        raw_eid = _strip_agtype_quotes(row["col1"])
+        eid = norm_to_orig.get(raw_eid, raw_eid)
         props = row["col2"]
         if isinstance(props, str):
             try:
