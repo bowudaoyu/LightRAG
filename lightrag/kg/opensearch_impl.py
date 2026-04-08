@@ -2544,7 +2544,8 @@ class OpenSearchVectorDBStorage(BaseVectorStorage):
             raise
 
     async def query(
-        self, query: str, top_k: int, query_embedding: list[float] = None
+        self, query: str, top_k: int, query_embedding: list[float] = None,
+        metadata_filter: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
         """k-NN similarity search with cosine score conversion for lucene engine."""
         if not self._index_ready:

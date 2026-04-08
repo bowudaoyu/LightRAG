@@ -1574,6 +1574,14 @@ class PostgreSQLDB:
         except Exception as e:
             logger.error(f"PostgreSQL, Failed to create pagination indexes: {e}")
 
+        # Migrate VDB tables to add metadata JSONB column
+        try:
+            await self._migrate_vdb_add_metadata()
+        except Exception as e:
+            logger.error(
+                f"PostgreSQL, Failed to migrate VDB metadata column: {e}"
+            )
+
         # Migrate to ensure new tables LIGHTRAG_FULL_ENTITIES and LIGHTRAG_FULL_RELATIONS exist
         try:
             await self._migrate_create_full_entities_relations_tables()
@@ -1581,6 +1589,47 @@ class PostgreSQLDB:
             logger.error(
                 f"PostgreSQL, Failed to create full entities/relations tables: {e}"
             )
+
+    async def _migrate_vdb_add_metadata(self):
+        """Add metadata JSONB column to VDB tables if they don't exist."""
+        vdb_tables = [
+            "lightrag_vdb_chunks",
+            "lightrag_vdb_entity",
+            "lightrag_vdb_relation",
+        ]
+        for table in vdb_tables:
+            try:
+                check_sql = """
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = $1
+                AND column_name = 'metadata'
+                """
+                result = await self.db.query(check_sql, [table])
+                if not result:
+                    alter_sql = f"""
+                    ALTER TABLE {table}
+                    ADD COLUMN metadata JSONB NULL DEFAULT '{{}}'::jsonb
+                    """
+                    await self.db.execute(alter_sql)
+                    # Add GIN index for metadata filtering
+                    idx_name = f"idx_{table}_metadata"
+                    idx_sql = f"""
+                    CREATE INDEX IF NOT EXISTS {idx_name}
+                    ON {table} USING GIN(metadata)
+                    """
+                    await self.db.execute(idx_sql)
+                    logger.info(
+                        f"Added metadata column and GIN index to {table}"
+                    )
+                else:
+                    logger.info(
+                        f"metadata column already exists in {table}"
+                    )
+            except Exception as e:
+                logger.warning(
+                    f"Failed to add metadata column to {table}: {e}"
+                )
 
     async def _migrate_create_full_entities_relations_tables(self):
         """Create LIGHTRAG_FULL_ENTITIES and LIGHTRAG_FULL_RELATIONS tables if they don't exist"""
@@ -3426,7 +3475,11 @@ class PGVectorStorage(BaseVectorStorage):
 
     #################### query method ###############
     async def query(
-        self, query: str, top_k: int, query_embedding: list[float] = None
+        self,
+        query: str,
+        top_k: int,
+        query_embedding: list[float] = None,
+        metadata_filter: dict[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
         if query_embedding is not None:
             embedding = query_embedding
@@ -3443,17 +3496,34 @@ class PGVectorStorage(BaseVectorStorage):
             if getattr(self.db, "vector_index_type", None) == "HNSW_HALFVEC"
             else "vector"
         )
+
+        # Build metadata filter clause and extra params
+        metadata_filter_clause = ""
+        extra_params: list[Any] = []
+        if metadata_filter:
+            conditions = []
+            for key, value in metadata_filter.items():
+                # Use @> containment operator for exact match on JSONB
+                # e.g. metadata @> '{"museum_id": "CN_NMC"}'::jsonb
+                param_idx = 4 + len(extra_params)  # $4, $5, ...
+                conditions.append(
+                    f"AND metadata @> ${param_idx}::jsonb"
+                )
+                extra_params.append(json.dumps({key: value}))
+            metadata_filter_clause = " ".join(conditions)
+
         sql = SQL_TEMPLATES[self.namespace].format(
             embedding_string=embedding_string,
             table_name=self.table_name,
             vector_cast=vector_cast,
+            metadata_filter_clause=metadata_filter_clause,
         )
-        params = {
-            "workspace": self.workspace,
-            "closer_than_threshold": 1 - self.cosine_better_than_threshold,
-            "top_k": top_k,
-        }
-        results = await self.db.query(sql, params=list(params.values()), multirows=True)
+        params: list[Any] = [
+            self.workspace,
+            1 - self.cosine_better_than_threshold,
+            top_k,
+        ] + extra_params
+        results = await self.db.query(sql, params=params, multirows=True)
         return results
 
     async def index_done_callback(self) -> None:
@@ -6188,6 +6258,7 @@ TABLES = {
                     content TEXT,
                     content_vector VECTOR(dimension),
                     file_path TEXT NULL,
+                    metadata JSONB NULL DEFAULT '{}'::jsonb,
                     create_time TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP,
                     update_time TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP,
 	                CONSTRAINT LIGHTRAG_VDB_CHUNKS_PK PRIMARY KEY (workspace, id)
@@ -6204,6 +6275,7 @@ TABLES = {
                     update_time TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP,
                     chunk_ids VARCHAR(255)[] NULL,
                     file_path TEXT NULL,
+                    metadata JSONB NULL DEFAULT '{}'::jsonb,
 	                CONSTRAINT LIGHTRAG_VDB_ENTITY_PK PRIMARY KEY (workspace, id)
                     )"""
     },
@@ -6219,6 +6291,7 @@ TABLES = {
                     update_time TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP,
                     chunk_ids VARCHAR(255)[] NULL,
                     file_path TEXT NULL,
+                    metadata JSONB NULL DEFAULT '{}'::jsonb,
 	                CONSTRAINT LIGHTRAG_VDB_RELATION_PK PRIMARY KEY (workspace, id)
                     )"""
     },
@@ -6482,6 +6555,7 @@ SQL_TEMPLATES = {
                      FROM {table_name} r
                      WHERE r.workspace = $1
                        AND r.content_vector <=> '[{embedding_string}]'::{vector_cast} < $2
+                       {metadata_filter_clause}
                      ORDER BY r.content_vector <=> '[{embedding_string}]'::{vector_cast}
                      LIMIT $3;
                      """,
@@ -6491,6 +6565,7 @@ SQL_TEMPLATES = {
                 FROM {table_name} e
                 WHERE e.workspace = $1
                   AND e.content_vector <=> '[{embedding_string}]'::{vector_cast} < $2
+                  {metadata_filter_clause}
                 ORDER BY e.content_vector <=> '[{embedding_string}]'::{vector_cast}
                 LIMIT $3;
                 """,
@@ -6502,6 +6577,7 @@ SQL_TEMPLATES = {
               FROM {table_name} c
               WHERE c.workspace = $1
                 AND c.content_vector <=> '[{embedding_string}]'::{vector_cast} < $2
+                {metadata_filter_clause}
               ORDER BY c.content_vector <=> '[{embedding_string}]'::{vector_cast}
               LIMIT $3;
               """,

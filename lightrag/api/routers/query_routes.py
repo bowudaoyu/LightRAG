@@ -110,6 +110,11 @@ class QueryRequest(BaseModel):
         description="If True, enables streaming output for real-time responses. Only affects /query/stream endpoint.",
     )
 
+    metadata_filter: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Metadata filter for narrowing search results. Applied as exact-match conditions on the metadata JSONB column. Example: {'museum_id': 'CN_NMC'}",
+    )
+
     @field_validator("query", mode="after")
     @classmethod
     def query_strip_after(cls, query: str) -> str:
