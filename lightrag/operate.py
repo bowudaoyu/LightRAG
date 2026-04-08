@@ -76,7 +76,10 @@ _kg_search_cache: dict[str, tuple[float, dict]] = {}
 _KG_SEARCH_CACHE_TTL = 600  # 10 minutes
 
 try:
-    from lightrag.kg.postgres_ext import pg_get_node_data_combined as _pg_combined
+    from lightrag.kg.postgres_ext import (
+        pg_get_node_data_combined as _pg_node_combined,
+        pg_get_edge_data_combined as _pg_edge_combined,
+    )
     _HAS_PG_EXT = True
 except Exception:
     _HAS_PG_EXT = False
@@ -4457,7 +4460,7 @@ async def _get_node_data(
     # --- Fast path: combined PG query (Solution 1) ---
     if _HAS_PG_EXT and hasattr(knowledge_graph_inst, "graph_name"):
         try:
-            return await _pg_combined(knowledge_graph_inst, node_ids, results)
+            return await _pg_node_combined(knowledge_graph_inst, node_ids, results)
         except Exception as e:
             logger.warning("pg_get_node_data_combined failed, falling back: %s", e)
     # --- end fast path ---
@@ -4737,6 +4740,15 @@ async def _get_edge_data(
     # Prepare edge pairs in two forms:
     # For the batch edge properties function, use dicts.
     edge_pairs_dicts = [{"src": r["src_id"], "tgt": r["tgt_id"]} for r in results]
+
+    # --- Fast path: combined PG query (Solution 1) ---
+    if _HAS_PG_EXT and hasattr(knowledge_graph_inst, "graph_name"):
+        try:
+            return await _pg_edge_combined(knowledge_graph_inst, edge_pairs_dicts, results)
+        except Exception as e:
+            logger.warning("pg_get_edge_data_combined failed, falling back: %s", e)
+    # --- end fast path ---
+
     edge_data_dict = await knowledge_graph_inst.get_edges_batch(edge_pairs_dicts)
 
     # Reconstruct edge_datas list in the same order as results.

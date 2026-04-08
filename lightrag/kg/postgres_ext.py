@@ -203,6 +203,180 @@ async def pg_get_node_data_combined(
     return node_datas, edge_datas
 
 
+async def pg_get_edge_data_combined(
+    graph_storage,
+    edge_pairs: list[dict[str, str]],
+    vdb_results: list[dict],
+) -> tuple[list[dict], list[dict]]:
+    """Replacement for _get_edge_data's 4-query chain — does it in 1 SQL.
+
+    Combines: get_edges_batch (fwd+bwd) + _find_most_related_entities_from_relationships
+              (get_nodes_batch)
+
+    Uses direct AGE table access (same as pg_get_node_data_combined), avoiding
+    cypher() function calls that have agtype casting issues with SQL CTEs.
+
+    Returns:
+        (edge_datas, entity_datas) matching _get_edge_data's return format.
+    """
+    if not edge_pairs:
+        return [], []
+
+    gn = graph_storage.graph_name
+    t0 = time.time()
+
+    # Two parallel arrays for PG UNNEST
+    src_ids = [p["src"] for p in edge_pairs]
+    tgt_ids = [p["tgt"] for p in edge_pairs]
+
+    query = f"""
+    WITH input_pairs AS (
+        SELECT s AS src_eid, t AS tgt_eid, ord
+        FROM unnest($1::text[], $2::text[]) WITH ORDINALITY AS t(s, t, ord)
+    ),
+    -- Resolve src entity_id → vertex id
+    src_vids AS (
+        SELECT ip.src_eid, ip.tgt_eid, ip.ord, b.id AS src_vid
+        FROM input_pairs ip
+        JOIN {gn}.base b ON ag_catalog.agtype_access_operator(
+            VARIADIC ARRAY[b.properties, '"entity_id"'::agtype]
+        ) = (to_json(ip.src_eid)::text)::agtype
+    ),
+    -- Resolve tgt entity_id → vertex id
+    pair_vids AS (
+        SELECT sv.src_eid, sv.tgt_eid, sv.ord, sv.src_vid, b.id AS tgt_vid
+        FROM src_vids sv
+        JOIN {gn}.base b ON ag_catalog.agtype_access_operator(
+            VARIADIC ARRAY[b.properties, '"entity_id"'::agtype]
+        ) = (to_json(sv.tgt_eid)::text)::agtype
+    ),
+    -- Find edges (both directions: src→tgt OR tgt→src)
+    matched_edges AS (
+        SELECT DISTINCT pv.src_eid, pv.tgt_eid, pv.ord, d.properties::text AS eprops
+        FROM pair_vids pv
+        JOIN {gn}."DIRECTED" d
+          ON (d.start_id = pv.src_vid AND d.end_id = pv.tgt_vid)
+          OR (d.start_id = pv.tgt_vid AND d.end_id = pv.src_vid)
+    ),
+    -- All unique entity names from both sides
+    all_eids AS (
+        SELECT DISTINCT eid FROM (
+            SELECT src_eid AS eid FROM input_pairs
+            UNION
+            SELECT tgt_eid AS eid FROM input_pairs
+        ) t
+    ),
+    -- Node properties for endpoint entities
+    entity_props AS (
+        SELECT
+            ag_catalog.agtype_access_operator(
+                VARIADIC ARRAY[b.properties, '"entity_id"'::agtype]
+            )::text AS eid,
+            b.properties::text AS props
+        FROM {gn}.base b
+        JOIN all_eids ae ON ag_catalog.agtype_access_operator(
+            VARIADIC ARRAY[b.properties, '"entity_id"'::agtype]
+        ) = (to_json(ae.eid)::text)::agtype
+    )
+    -- Edges then Entities
+    SELECT * FROM (
+        SELECT 'E'::text AS rtype, me.src_eid AS col1, me.tgt_eid AS col2, me.eprops AS col3
+        FROM matched_edges me
+        ORDER BY me.ord
+    ) edge_rows
+
+    UNION ALL
+
+    SELECT 'N'::text AS rtype, ep.eid AS col1, ep.props AS col2, NULL AS col3
+    FROM entity_props ep;
+    """
+
+    results = await graph_storage._query(
+        query, params={"src_ids": src_ids, "tgt_ids": tgt_ids}
+    )
+    elapsed = time.time() - t0
+
+    # Build VDB lookup for ordering and created_at
+    vdb_lookup = {(r["src_id"], r["tgt_id"]): r for r in vdb_results}
+
+    # Parse edges (preserve VDB order)
+    edge_map: dict[tuple[str, str], dict] = {}  # (src, tgt) → props
+    for row in results:
+        if row.get("rtype") != "E":
+            continue
+        src = _strip_agtype_quotes(row["col1"])
+        tgt = _strip_agtype_quotes(row["col2"])
+        eprops = row["col3"]
+        if isinstance(eprops, str):
+            try:
+                eprops = json.loads(eprops)
+            except json.JSONDecodeError:
+                eprops = {}
+        eprops = eprops or {}
+        edge_map[(src, tgt)] = eprops
+
+    # Reconstruct edge_datas in VDB result order
+    edge_datas: list[dict[str, Any]] = []
+    for vdb_r in vdb_results:
+        pair = (vdb_r["src_id"], vdb_r["tgt_id"])
+        eprops = edge_map.get(pair)
+        if eprops is None:
+            continue
+        if "weight" not in eprops:
+            eprops["weight"] = 1.0
+        edge_datas.append({
+            "src_id": pair[0],
+            "tgt_id": pair[1],
+            "created_at": vdb_r.get("created_at"),
+            **eprops,
+        })
+
+    # Parse entities
+    entity_datas: list[dict[str, Any]] = []
+    seen_entities: set[str] = set()
+    # Preserve entity order from edges (src first, then tgt)
+    ordered_names: list[str] = []
+    for e in edge_datas:
+        for name in (e["src_id"], e["tgt_id"]):
+            if name not in seen_entities:
+                seen_entities.add(name)
+                ordered_names.append(name)
+
+    entity_props_map: dict[str, dict] = {}
+    for row in results:
+        if row.get("rtype") != "N":
+            continue
+        eid = _strip_agtype_quotes(row["col1"])
+        props = row["col2"]
+        if isinstance(props, str):
+            try:
+                props = json.loads(props)
+            except json.JSONDecodeError:
+                props = {}
+        entity_props_map[eid] = props
+
+    for name in ordered_names:
+        props = entity_props_map.get(name)
+        if props is not None:
+            entity_datas.append({**props, "entity_name": name})
+
+    logger.info(
+        "[Perf] pg_get_edge_data_combined: %.3fs → %d edges, %d entities (1 SQL)",
+        elapsed, len(edge_datas), len(entity_datas),
+    )
+    return edge_datas, entity_datas
+
+
+def _dollar_quote(s: str) -> str:
+    """Wrap string in PostgreSQL dollar-quoting for safe embedding in SQL."""
+    tag = "$$"
+    i = 0
+    while tag in s:
+        i += 1
+        tag = f"${i}$"
+    return f"{tag}{s}{tag}"
+
+
 def _strip_agtype_quotes(val: str | None) -> str:
     """Strip surrounding double-quotes added by AGE agtype→text cast."""
     if not val:
