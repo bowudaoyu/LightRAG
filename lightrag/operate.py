@@ -71,6 +71,17 @@ from lightrag.kg.shared_storage import get_storage_keyed_lock
 import time
 from dotenv import load_dotenv
 
+# --- KG search cache (Solution 3) & combined query (Solution 1) ---
+_kg_search_cache: dict[str, tuple[float, dict]] = {}
+_KG_SEARCH_CACHE_TTL = 600  # 10 minutes
+
+try:
+    from lightrag.kg.postgres_ext import pg_get_node_data_combined as _pg_combined
+    _HAS_PG_EXT = True
+except Exception:
+    _HAS_PG_EXT = False
+# --- end ---
+
 # use the .env that is inside the current folder
 # allows to use different .env file for each lightrag instance
 # the OS environment variables take precedence over the .env file
@@ -3588,6 +3599,20 @@ async def _perform_kg_search(
     Pure search logic that retrieves raw entities, relations, and vector chunks.
     No token truncation or formatting - just raw search results.
     """
+    # --- Cache layer (Solution 3) ---
+    import hashlib, copy
+    cache_key = hashlib.md5(
+        f"{query}|{ll_keywords}|{hl_keywords}|{query_param.mode}|{query_param.top_k}".encode()
+    ).hexdigest()
+    cached = _kg_search_cache.get(cache_key)
+    if cached is not None:
+        cache_ts, cache_val = cached
+        if time.time() - cache_ts < _KG_SEARCH_CACHE_TTL:
+            logger.info("[Perf] _perform_kg_search cache HIT (key=%s)", cache_key[:8])
+            return copy.deepcopy(cache_val)
+        else:
+            del _kg_search_cache[cache_key]
+    # --- end cache check ---
 
     # Initialize result containers
     local_entities = []
@@ -3814,13 +3839,22 @@ async def _perform_kg_search(
         f"Raw search results: {len(final_entities)} entities, {len(final_relations)} relations, {len(vector_chunks)} vector chunks"
     )
 
-    return {
+    result = {
         "final_entities": final_entities,
         "final_relations": final_relations,
         "vector_chunks": vector_chunks,
         "chunk_tracking": chunk_tracking,
         "query_embedding": query_embedding,
     }
+
+    # --- Cache store ---
+    _kg_search_cache[cache_key] = (time.time(), copy.deepcopy(result))
+    if len(_kg_search_cache) > 100:
+        oldest = min(_kg_search_cache, key=lambda k: _kg_search_cache[k][0])
+        del _kg_search_cache[oldest]
+    # --- end cache store ---
+
+    return result
 
 
 async def _apply_token_truncation(
@@ -4419,6 +4453,14 @@ async def _get_node_data(
 
     # Extract all entity IDs from your results list
     node_ids = [r["entity_name"] for r in results]
+
+    # --- Fast path: combined PG query (Solution 1) ---
+    if _HAS_PG_EXT and hasattr(knowledge_graph_inst, "graph_name"):
+        try:
+            return await _pg_combined(knowledge_graph_inst, node_ids, results)
+        except Exception as e:
+            logger.warning("pg_get_node_data_combined failed, falling back: %s", e)
+    # --- end fast path ---
 
     # Call the batch node retrieval and degree functions concurrently.
     nodes_dict, degrees_dict = await asyncio.gather(
