@@ -3621,6 +3621,8 @@ async def _perform_kg_search(
     need_ll = mode in ("local", "hybrid", "mix") and bool(ll_keywords)
     need_hl = mode in ("global", "hybrid", "mix") and bool(hl_keywords)
 
+    _perf_timings: dict[str, float] = {}
+
     if actual_embedding_func:
         texts_to_embed: list[str] = []
         text_purposes: list[str] = []
@@ -3639,9 +3641,11 @@ async def _perform_kg_search(
 
         if texts_to_embed:
             try:
+                _t0 = time.time()
                 all_embeddings = await actual_embedding_func(
                     texts_to_embed, _priority=5
                 )
+                _perf_timings["embedding"] = time.time() - _t0
                 for i, purpose in enumerate(text_purposes):
                     if purpose == "query":
                         query_embedding = all_embeddings[i]
@@ -3649,8 +3653,9 @@ async def _perform_kg_search(
                         ll_embedding = all_embeddings[i]
                     elif purpose == "hl":
                         hl_embedding = all_embeddings[i]
-                logger.debug(
-                    "Pre-computed %d embeddings in single batch (purposes: %s)",
+                logger.info(
+                    "[Perf] Embedding: %.3fs for %d texts (%s)",
+                    _perf_timings["embedding"],
                     len(texts_to_embed),
                     ", ".join(text_purposes),
                 )
@@ -3658,6 +3663,7 @@ async def _perform_kg_search(
                 logger.warning(f"Failed to batch pre-compute embeddings: {e}")
 
     # Handle local and global modes
+    _t0 = time.time()
     if query_param.mode == "local" and len(ll_keywords) > 0:
         local_entities, local_relations = await _get_node_data(
             ll_keywords,
@@ -3676,43 +3682,77 @@ async def _perform_kg_search(
             query_embedding=hl_embedding,
         )
 
-    else:  # hybrid or mix mode
-        if len(ll_keywords) > 0:
-            local_entities, local_relations = await _get_node_data(
-                ll_keywords,
-                knowledge_graph_inst,
-                entities_vdb,
-                query_param,
-                query_embedding=ll_embedding,
+    else:  # hybrid or mix mode — run node/edge/vector searches in parallel
+        async def _timed_node_data():
+            _t1 = time.time()
+            result = await _get_node_data(
+                ll_keywords, knowledge_graph_inst, entities_vdb,
+                query_param, query_embedding=ll_embedding,
             )
-        if len(hl_keywords) > 0:
-            global_relations, global_entities = await _get_edge_data(
-                hl_keywords,
-                knowledge_graph_inst,
-                relationships_vdb,
-                query_param,
-                query_embedding=hl_embedding,
-            )
+            logger.info("[Perf] _get_node_data: %.3fs", time.time() - _t1)
+            return result
 
-        # Get vector chunks for mix mode
-        if query_param.mode == "mix" and chunks_vdb:
-            vector_chunks = await _get_vector_context(
-                query,
-                chunks_vdb,
-                query_param,
-                query_embedding,
+        async def _timed_edge_data():
+            _t1 = time.time()
+            result = await _get_edge_data(
+                hl_keywords, knowledge_graph_inst, relationships_vdb,
+                query_param, query_embedding=hl_embedding,
             )
-            # Track vector chunks with source metadata
-            for i, chunk in enumerate(vector_chunks):
-                chunk_id = chunk.get("chunk_id") or chunk.get("id")
-                if chunk_id:
-                    chunk_tracking[chunk_id] = {
-                        "source": "C",
-                        "frequency": 1,  # Vector chunks always have frequency 1
-                        "order": i + 1,  # 1-based order in vector search results
-                    }
-                else:
-                    logger.warning(f"Vector chunk missing chunk_id: {chunk}")
+            logger.info("[Perf] _get_edge_data: %.3fs", time.time() - _t1)
+            return result
+
+        async def _timed_vector_context():
+            _t1 = time.time()
+            result = await _get_vector_context(
+                query, chunks_vdb, query_param, query_embedding,
+            )
+            logger.info("[Perf] _get_vector_context: %.3fs", time.time() - _t1)
+            return result
+
+        # Build parallel tasks
+        tasks = []
+        task_names = []
+        if len(ll_keywords) > 0:
+            tasks.append(_timed_node_data())
+            task_names.append("node")
+        if len(hl_keywords) > 0:
+            tasks.append(_timed_edge_data())
+            task_names.append("edge")
+        if query_param.mode == "mix" and chunks_vdb:
+            tasks.append(_timed_vector_context())
+            task_names.append("vector")
+
+        results = await asyncio.gather(*tasks)
+
+        # Unpack results by name
+        for name, result in zip(task_names, results):
+            if name == "node":
+                local_entities, local_relations = result
+            elif name == "edge":
+                global_relations, global_entities = result
+            elif name == "vector":
+                vector_chunks = result
+    _perf_timings["kg_search"] = time.time() - _t0
+    logger.info(
+        "[Perf] KG search: %.3fs (mode=%s, local_e=%d, local_r=%d, global_e=%d, global_r=%d, vec_chunks=%d)",
+        _perf_timings["kg_search"], mode,
+        len(local_entities), len(local_relations),
+        len(global_entities), len(global_relations),
+        len(vector_chunks),
+    )
+
+    # Track vector chunks with source metadata
+    if query_param.mode == "mix" and chunks_vdb:
+        for i, chunk in enumerate(vector_chunks):
+            chunk_id = chunk.get("chunk_id") or chunk.get("id")
+            if chunk_id:
+                chunk_tracking[chunk_id] = {
+                    "source": "C",
+                    "frequency": 1,  # Vector chunks always have frequency 1
+                    "order": i + 1,  # 1-based order in vector search results
+                }
+            else:
+                logger.warning(f"Vector chunk missing chunk_id: {chunk}")
 
     # Round-robin merge entities
     final_entities = []
