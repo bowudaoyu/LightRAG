@@ -68,6 +68,7 @@ from lightrag.constants import (
     DEFAULT_ENTITY_NAME_MAX_LENGTH,
 )
 from lightrag.kg.shared_storage import get_storage_keyed_lock
+import os
 import time
 from dotenv import load_dotenv
 
@@ -75,14 +76,21 @@ from dotenv import load_dotenv
 _kg_search_cache: dict[str, tuple[float, dict]] = {}
 _KG_SEARCH_CACHE_TTL = 600  # 10 minutes
 
-try:
-    from lightrag.kg.postgres_ext import (
-        pg_get_node_data_combined as _pg_node_combined,
-        pg_get_edge_data_combined as _pg_edge_combined,
-    )
-    _HAS_PG_EXT = True
-except Exception:
-    _HAS_PG_EXT = False
+# Combined SQL: merge 7+ PG round-trips into 1 per function.
+# Off by default — enable via env var for PG deployments where it has been validated.
+_ENABLE_PG_COMBINED_QUERY = os.getenv("ENABLE_PG_COMBINED_QUERY", "false").lower() in ("true", "1", "yes")
+
+_HAS_PG_EXT = False
+if _ENABLE_PG_COMBINED_QUERY:
+    try:
+        from lightrag.kg.postgres_ext import (
+            pg_get_node_data_combined as _pg_node_combined,
+            pg_get_edge_data_combined as _pg_edge_combined,
+        )
+        _HAS_PG_EXT = True
+        logger.info("PG combined query enabled (ENABLE_PG_COMBINED_QUERY=true)")
+    except Exception:
+        logger.warning("ENABLE_PG_COMBINED_QUERY=true but postgres_ext import failed, falling back")
 # --- end ---
 
 # use the .env that is inside the current folder
