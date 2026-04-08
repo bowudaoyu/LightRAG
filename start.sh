@@ -18,3 +18,4 @@ mkdir -p "$LOG_DIR"
 echo "Starting lightrag-server in background..."
 nohup lightrag-server > "$LOG_DIR/lightrag-server.log" 2>&1 &
 echo "lightrag-server started (PID: $!), log: $LOG_DIR/lightrag-server.log"
+echo "tail -f $LOG_DIR/lightrag-server.log"
