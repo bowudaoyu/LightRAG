@@ -1605,20 +1605,20 @@ class PostgreSQLDB:
                 WHERE table_name = $1
                 AND column_name = 'metadata'
                 """
-                result = await self.db.query(check_sql, [table])
+                result = await self.query(check_sql, [table])
                 if not result:
                     alter_sql = f"""
                     ALTER TABLE {table}
                     ADD COLUMN metadata JSONB NULL DEFAULT '{{}}'::jsonb
                     """
-                    await self.db.execute(alter_sql)
+                    await self.execute(alter_sql)
                     # Add GIN index for metadata filtering
                     idx_name = f"idx_{table}_metadata"
                     idx_sql = f"""
                     CREATE INDEX IF NOT EXISTS {idx_name}
                     ON {table} USING GIN(metadata)
                     """
-                    await self.db.execute(idx_sql)
+                    await self.execute(idx_sql)
                     logger.info(
                         f"Added metadata column and GIN index to {table}"
                     )
