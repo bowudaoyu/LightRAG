@@ -3917,12 +3917,14 @@ async def _apply_token_truncation(
             created_at = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(created_at))
 
         # Store mapping from entity name to original data
-        entity_id_to_original[entity_name] = entity
+        # Use the stripped display name as key so convert_to_user_format can find it
+        display_name = entity_name.rsplit("@", 1)[0]
+        entity_id_to_original[display_name] = entity
 
         # Strip @suffix from entity_name for cleaner LLM context
         entities_context.append(
             {
-                "entity": entity_name.rsplit("@", 1)[0],
+                "entity": display_name,
                 "type": entity.get("entity_type", "UNKNOWN"),
                 "description": entity.get("description", "UNKNOWN"),
                 "created_at": created_at,
@@ -3943,15 +3945,18 @@ async def _apply_token_truncation(
         else:
             entity1, entity2 = relation.get("src_id"), relation.get("tgt_id")
 
-        # Store mapping from relation pair to original data
-        relation_key = (entity1, entity2)
+        # Strip @suffix from entity names for cleaner LLM context
+        display1 = entity1.rsplit("@", 1)[0] if entity1 else entity1
+        display2 = entity2.rsplit("@", 1)[0] if entity2 else entity2
+
+        # Store mapping using stripped names so convert_to_user_format can find it
+        relation_key = (display1, display2)
         relation_id_to_original[relation_key] = relation
 
-        # Strip @suffix from entity names for cleaner LLM context
         relations_context.append(
             {
-                "entity1": entity1.rsplit("@", 1)[0] if entity1 else entity1,
-                "entity2": entity2.rsplit("@", 1)[0] if entity2 else entity2,
+                "entity1": display1,
+                "entity2": display2,
                 "description": relation.get("description", "UNKNOWN"),
                 "created_at": created_at,
                 "file_path": relation.get("file_path", "unknown_source"),
@@ -4004,17 +4009,19 @@ async def _apply_token_truncation(
     )
 
     # Create filtered original data based on truncated context
+    # Use display names (stripped @suffix) as keys to match entities_context
     filtered_entities = []
     filtered_entity_id_to_original = {}
     if entities_context:
         final_entity_names = {e["entity"] for e in entities_context}
         seen_nodes = set()
         for entity in final_entities:
-            name = entity.get("entity_name")
-            if name in final_entity_names and name not in seen_nodes:
+            raw_name = entity.get("entity_name", "")
+            display_name = raw_name.rsplit("@", 1)[0]
+            if display_name in final_entity_names and display_name not in seen_nodes:
                 filtered_entities.append(entity)
-                filtered_entity_id_to_original[name] = entity
-                seen_nodes.add(name)
+                filtered_entity_id_to_original[display_name] = entity
+                seen_nodes.add(display_name)
 
     filtered_relations = []
     filtered_relation_id_to_original = {}
@@ -4026,7 +4033,10 @@ async def _apply_token_truncation(
             if src is None or tgt is None:
                 src, tgt = relation.get("src_tgt", (None, None))
 
-            pair = (src, tgt)
+            # Strip @suffix to match the display names in relations_context
+            display_src = src.rsplit("@", 1)[0] if src else src
+            display_tgt = tgt.rsplit("@", 1)[0] if tgt else tgt
+            pair = (display_src, display_tgt)
             if pair in final_relation_pairs and pair not in seen_edges:
                 filtered_relations.append(relation)
                 filtered_relation_id_to_original[pair] = relation
