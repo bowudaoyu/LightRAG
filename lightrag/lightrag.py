@@ -2516,9 +2516,10 @@ class LightRAG:
                 update_storage = True
 
             # Insert entities into vector storage with consistent format
+            # Strip @suffix from entity_name in content for cleaner embeddings
             data_for_vdb = {
                 compute_mdhash_id(dp["entity_name"], prefix="ent-"): {
-                    "content": dp["entity_name"] + "\n" + dp["description"],
+                    "content": dp["entity_name"].rsplit("@", 1)[0] + "\n" + dp["description"],
                     "entity_name": dp["entity_name"],
                     "source_id": dp["source_id"],
                     "description": dp["description"],
@@ -2530,12 +2531,13 @@ class LightRAG:
             await self.entities_vdb.upsert(data_for_vdb)
 
             # Insert relationships into vector storage with consistent format
+            # Strip @suffix from src_id/tgt_id in content for cleaner embeddings
             data_for_vdb = {
                 compute_mdhash_id(dp["src_id"] + dp["tgt_id"], prefix="rel-"): {
                     "src_id": dp["src_id"],
                     "tgt_id": dp["tgt_id"],
                     "source_id": dp["source_id"],
-                    "content": f"{dp['keywords']}\t{dp['src_id']}\n{dp['tgt_id']}\n{dp['description']}",
+                    "content": f"{dp['keywords']}\t{dp['src_id'].rsplit('@', 1)[0]}\n{dp['tgt_id'].rsplit('@', 1)[0]}\n{dp['description']}",
                     "keywords": dp["keywords"],
                     "description": dp["description"],
                     "weight": dp["weight"],

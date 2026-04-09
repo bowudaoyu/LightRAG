@@ -3919,9 +3919,10 @@ async def _apply_token_truncation(
         # Store mapping from entity name to original data
         entity_id_to_original[entity_name] = entity
 
+        # Strip @suffix from entity_name for cleaner LLM context
         entities_context.append(
             {
-                "entity": entity_name,
+                "entity": entity_name.rsplit("@", 1)[0],
                 "type": entity.get("entity_type", "UNKNOWN"),
                 "description": entity.get("description", "UNKNOWN"),
                 "created_at": created_at,
@@ -3946,10 +3947,11 @@ async def _apply_token_truncation(
         relation_key = (entity1, entity2)
         relation_id_to_original[relation_key] = relation
 
+        # Strip @suffix from entity names for cleaner LLM context
         relations_context.append(
             {
-                "entity1": entity1,
-                "entity2": entity2,
+                "entity1": entity1.rsplit("@", 1)[0] if entity1 else entity1,
+                "entity2": entity2.rsplit("@", 1)[0] if entity2 else entity2,
                 "description": relation.get("description", "UNKNOWN"),
                 "created_at": created_at,
                 "file_path": relation.get("file_path", "unknown_source"),
