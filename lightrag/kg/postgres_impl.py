@@ -1599,6 +1599,15 @@ class PostgreSQLDB:
         ]
         for table in vdb_tables:
             try:
+                # Check if the table exists at all before attempting ALTER
+                table_exists_sql = """
+                SELECT 1 FROM information_schema.tables
+                WHERE table_schema = 'public' AND table_name = $1
+                """
+                table_exists = await self.query(table_exists_sql, [table])
+                if not table_exists:
+                    continue
+
                 check_sql = """
                 SELECT column_name
                 FROM information_schema.columns
@@ -1621,10 +1630,6 @@ class PostgreSQLDB:
                     await self.execute(idx_sql)
                     logger.info(
                         f"Added metadata column and GIN index to {table}"
-                    )
-                else:
-                    logger.info(
-                        f"metadata column already exists in {table}"
                     )
             except Exception as e:
                 logger.warning(
