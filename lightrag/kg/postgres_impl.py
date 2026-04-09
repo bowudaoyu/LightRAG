@@ -2897,6 +2897,7 @@ class PGVectorStorage(BaseVectorStorage):
         migrated_count = 0
         last_id: str | None = None
         batch_size = 500
+        target_columns: set | None = None
 
         while True:
             # Use keyset pagination with ORDER BY id for deterministic ordering
@@ -2931,9 +2932,20 @@ class PGVectorStorage(BaseVectorStorage):
             last_id = rows[-1]["id"]
 
             # Batch insert optimization: use executemany instead of individual inserts
-            # Get column names from the first row
+            # Get column names from the first row, filtered to only columns
+            # that exist in the target table (legacy table may have different schema)
             first_row = dict(rows[0])
-            columns = list(first_row.keys())
+            if target_columns is None:
+                # Query target table columns once
+                col_query = """
+                    SELECT column_name FROM information_schema.columns
+                    WHERE table_name = $1
+                """
+                col_rows = await db.query(
+                    col_query, [new_table_name.lower()], multirows=True
+                )
+                target_columns = {r["column_name"] for r in col_rows} if col_rows else set()
+            columns = [c for c in first_row.keys() if c in target_columns]
             columns_str = ", ".join(columns)
             placeholders = ", ".join([f"${i + 1}" for i in range(len(columns))])
 
@@ -3018,6 +3030,35 @@ class PGVectorStorage(BaseVectorStorage):
         legacy_exists = legacy_table_name and await db.check_table_exists(
             legacy_table_name
         )
+
+        # Ensure metadata column exists on the new table (may have been created
+        # before metadata support was added to the DDL template)
+        if new_table_exists:
+            try:
+                check_sql = """
+                    SELECT column_name FROM information_schema.columns
+                    WHERE table_name = $1 AND column_name = 'metadata'
+                """
+                result = await db.query(check_sql, [table_name.lower()])
+                if not result:
+                    alter_sql = f"""
+                        ALTER TABLE {table_name}
+                        ADD COLUMN metadata JSONB NULL DEFAULT '{{}}'::jsonb
+                    """
+                    await db.execute(alter_sql)
+                    idx_name = _safe_index_name(table_name, "metadata")
+                    idx_sql = f"""
+                        CREATE INDEX IF NOT EXISTS {idx_name}
+                        ON {table_name} USING GIN(metadata)
+                    """
+                    await db.execute(idx_sql)
+                    logger.info(
+                        f"PostgreSQL: Added metadata column and GIN index to {table_name}"
+                    )
+            except Exception as e:
+                logger.warning(
+                    f"PostgreSQL: Failed to add metadata column to {table_name}: {e}"
+                )
 
         # Case 1: Only new table exists or new table is the same as legacy table
         #         No data migration needed, ensuring index is created then return
