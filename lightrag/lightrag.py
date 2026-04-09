@@ -2420,8 +2420,15 @@ class LightRAG:
                     self.text_chunks.upsert(all_chunks_data),
                 )
 
-            # Insert entities into knowledge graph
+            # Insert entities into knowledge graph (parallel)
             all_entities_data: list[dict[str, str]] = []
+            node_upsert_tasks = []
+            inserted_node_ids: set[str] = set()
+            _graph_concurrency = int(
+                os.environ.get("LIGHTRAG_GRAPH_CONCURRENCY", "20")
+            )
+            _graph_sem = asyncio.Semaphore(_graph_concurrency)
+
             for entity_data in custom_kg.get("entities", []):
                 entity_name = entity_data["entity_name"]
                 entity_type = entity_data.get("entity_type", "UNKNOWN")
@@ -2430,13 +2437,11 @@ class LightRAG:
                 source_id = chunk_to_source_map.get(source_chunk_id, "UNKNOWN")
                 file_path = entity_data.get("file_path", "custom_kg")
 
-                # Log if source_id is UNKNOWN
                 if source_id == "UNKNOWN":
                     logger.warning(
                         f"Entity '{entity_name}' has an UNKNOWN source_id. Please check the source mapping."
                     )
 
-                # Prepare node data
                 node_data: dict[str, str] = {
                     "entity_id": entity_name,
                     "entity_type": entity_type,
@@ -2445,16 +2450,35 @@ class LightRAG:
                     "file_path": file_path,
                     "created_at": int(time.time()),
                 }
-                # Insert node data into the knowledge graph
-                await self.chunk_entity_relation_graph.upsert_node(
-                    entity_name, node_data=node_data
-                )
-                node_data["entity_name"] = entity_name
-                all_entities_data.append(node_data)
+
+                async def _upsert_node(name: str, data: dict) -> None:
+                    async with _graph_sem:
+                        await self.chunk_entity_relation_graph.upsert_node(
+                            name, node_data=data
+                        )
+
+                node_upsert_tasks.append(_upsert_node(entity_name, node_data))
+                inserted_node_ids.add(entity_name)
+
+                node_data_copy = dict(node_data)
+                node_data_copy["entity_name"] = entity_name
+                all_entities_data.append(node_data_copy)
                 update_storage = True
 
-            # Insert relationships into knowledge graph
+            if node_upsert_tasks:
+                logger.info(
+                    f"Upserting {len(node_upsert_tasks)} nodes (concurrency={_graph_concurrency})..."
+                )
+                t0 = time.time()
+                await asyncio.gather(*node_upsert_tasks)
+                logger.info(
+                    f"Node upsert done in {time.time() - t0:.1f}s"
+                )
+
+            # Insert relationships into knowledge graph (parallel, skip has_node)
             all_relationships_data: list[dict[str, str]] = []
+            edge_upsert_tasks = []
+
             for relationship_data in custom_kg.get("relationships", []):
                 src_id = relationship_data["src_id"]
                 tgt_id = relationship_data["tgt_id"]
@@ -2465,17 +2489,14 @@ class LightRAG:
                 source_id = chunk_to_source_map.get(source_chunk_id, "UNKNOWN")
                 file_path = relationship_data.get("file_path", "custom_kg")
 
-                # Log if source_id is UNKNOWN
                 if source_id == "UNKNOWN":
                     logger.warning(
                         f"Relationship from '{src_id}' to '{tgt_id}' has an UNKNOWN source_id. Please check the source mapping."
                     )
 
-                # Check if nodes exist in the knowledge graph
+                # Create missing nodes (only if not already inserted above)
                 for need_insert_id in [src_id, tgt_id]:
-                    if not (
-                        await self.chunk_entity_relation_graph.has_node(need_insert_id)
-                    ):
+                    if need_insert_id not in inserted_node_ids:
                         await self.chunk_entity_relation_graph.upsert_node(
                             need_insert_id,
                             node_data={
@@ -2487,22 +2508,26 @@ class LightRAG:
                                 "created_at": int(time.time()),
                             },
                         )
+                        inserted_node_ids.add(need_insert_id)
 
-                # Insert edge into the knowledge graph
-                await self.chunk_entity_relation_graph.upsert_edge(
-                    src_id,
-                    tgt_id,
-                    edge_data={
-                        "weight": weight,
-                        "description": description,
-                        "keywords": keywords,
-                        "source_id": source_id,
-                        "file_path": file_path,
-                        "created_at": int(time.time()),
-                    },
-                )
+                edge_data = {
+                    "weight": weight,
+                    "description": description,
+                    "keywords": keywords,
+                    "source_id": source_id,
+                    "file_path": file_path,
+                    "created_at": int(time.time()),
+                }
 
-                edge_data: dict[str, str] = {
+                async def _upsert_edge(s: str, t: str, data: dict) -> None:
+                    async with _graph_sem:
+                        await self.chunk_entity_relation_graph.upsert_edge(
+                            s, t, edge_data=data
+                        )
+
+                edge_upsert_tasks.append(_upsert_edge(src_id, tgt_id, edge_data))
+
+                all_relationships_data.append({
                     "src_id": src_id,
                     "tgt_id": tgt_id,
                     "description": description,
@@ -2511,9 +2536,18 @@ class LightRAG:
                     "weight": weight,
                     "file_path": file_path,
                     "created_at": int(time.time()),
-                }
-                all_relationships_data.append(edge_data)
+                })
                 update_storage = True
+
+            if edge_upsert_tasks:
+                logger.info(
+                    f"Upserting {len(edge_upsert_tasks)} edges (concurrency={_graph_concurrency})..."
+                )
+                t0 = time.time()
+                await asyncio.gather(*edge_upsert_tasks)
+                logger.info(
+                    f"Edge upsert done in {time.time() - t0:.1f}s"
+                )
 
             # Insert entities into vector storage with consistent format
             # Strip @suffix from entity_name in content for cleaner embeddings
