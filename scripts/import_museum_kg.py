@@ -46,6 +46,15 @@ FILE_PATH_TAG = "museum.json"  # stored as file_path in graph properties
 # A document-level source_id for the entire import batch
 DOC_ID = "museum_import"
 
+# Museum scope tag (env override: MUSEUM_ID). All chunks/entities/relations
+# ingested in this batch will have metadata={"museum_id": MUSEUM_ID} so
+# downstream queries can scope via LightRAG metadata_filter.
+#
+# Convention: use the numeric museum_id from bobo-agent's config/museums.yaml
+# (as a string), so bobo-agent requests carrying `req.museum_id` can be passed
+# verbatim to LightRAG's metadata_filter. Default "2" = 中国国家博物馆.
+MUSEUM_ID = os.getenv("MUSEUM_ID", "2")
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -877,6 +886,46 @@ async def do_import():
             }),
         )
         logger.info("  doc_full and doc_status done")
+
+        # ==============================================================
+        # 9. Tag ingested rows with metadata.museum_id for scoped retrieval
+        #
+        # Rationale: LightRAG's current PG upsert SQL (see postgres_impl.py,
+        # "upsert_chunk" / "upsert_entity" / "upsert_relationship") does NOT
+        # write to the metadata JSONB column. Rather than fork LightRAG, we
+        # populate the column here as a final step. LightRAG's query path DOES
+        # honor metadata_filter via JSONB @> containment, so scoping works
+        # once the column is set. The GIN index on metadata is already
+        # auto-created by LightRAG's migration on first boot.
+        # ==============================================================
+        logger.info("Tagging ingested rows with metadata.museum_id = %s ...", MUSEUM_ID)
+        db = rag.chunks_vdb.db  # shared PG client pool
+        chunks_table = rag.chunks_vdb.table_name
+        entities_table = rag.entities_vdb.table_name
+        relations_table = rag.relationships_vdb.table_name
+        workspace = rag.chunks_vdb.workspace
+        museum_payload = json.dumps({"museum_id": MUSEUM_ID})
+
+        tag_sql_tmpl = (
+            "UPDATE {table} SET metadata = metadata || $2::jsonb "
+            "WHERE workspace = $1 AND file_path = $3"
+        )
+        tagged_counts: dict[str, int] = {}
+        for table in (chunks_table, entities_table, relations_table):
+            sql = tag_sql_tmpl.format(table=table)
+            # Use execute() which returns the status string; count the affected
+            # rows by selecting back.
+            await db.execute(
+                sql,
+                {"workspace": workspace, "payload": museum_payload, "fp": FILE_PATH_TAG},
+            )
+            count_sql = (
+                f"SELECT count(*) AS n FROM {table} "
+                f"WHERE workspace = $1 AND metadata @> $2::jsonb"
+            )
+            res = await db.query(count_sql, params=[workspace, museum_payload])
+            tagged_counts[table] = (res or {}).get("n", 0) if isinstance(res, dict) else 0
+        logger.info("  metadata.museum_id tagged: %s", tagged_counts)
 
         logger.info("Museum knowledge graph import complete!")
 

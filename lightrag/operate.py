@@ -3612,9 +3612,15 @@ async def _perform_kg_search(
     No token truncation or formatting - just raw search results.
     """
     # --- Cache layer (Solution 3) ---
-    import hashlib, copy
+    # metadata_filter MUST be part of the cache key: without it, calls that
+    # scope to different museums collide on the same key and a later filtered
+    # call gets back stale results from an earlier unfiltered (or different-
+    # scope) call. Serialize with sort_keys for stable hashing.
+    import hashlib, copy, json as _json_mod
+    _mf = query_param.metadata_filter or {}
+    _mf_key = _json_mod.dumps(_mf, sort_keys=True, ensure_ascii=False)
     cache_key = hashlib.md5(
-        f"{query}|{ll_keywords}|{hl_keywords}|{query_param.mode}|{query_param.top_k}".encode()
+        f"{query}|{ll_keywords}|{hl_keywords}|{query_param.mode}|{query_param.top_k}|{_mf_key}".encode()
     ).hexdigest()
     cached = _kg_search_cache.get(cache_key)
     if cached is not None:

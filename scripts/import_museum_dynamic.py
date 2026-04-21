@@ -40,6 +40,10 @@ WORKING_DIR = os.path.join(PROJECT_ROOT, "rag_storage")
 
 DOC_ID_PREFIX = "museum_dynamic"
 
+# Same scope tag as import_museum_kg.py. Numeric string matching bobo-agent's
+# config/museums.yaml id. Default "2" = 中国国家博物馆.
+MUSEUM_ID = os.getenv("MUSEUM_ID", "2")
+
 
 # ---------------------------------------------------------------------------
 # Helpers: load static lookups
@@ -540,6 +544,42 @@ async def do_import():
             rag.doc_status.upsert(status_upsert),
         )
         logger.info(f"  {len(doc_contents)} per-item doc records done")
+
+        # ==============================================================
+        # Tag dynamic rows with metadata.museum_id for scoped retrieval.
+        # Dynamic chunks use file_path like "museum:dynamic:event:2026-04-20"
+        # while entity/relation vdb rows use "museum:dynamic". We match both
+        # by the "museum" prefix and only touch rows with empty metadata, so
+        # re-runs are idempotent and don't overwrite existing tags (matters
+        # for future multi-museum ingestion).
+        # ==============================================================
+        logger.info("Tagging dynamic rows with metadata.museum_id = %s ...", MUSEUM_ID)
+        db = rag.chunks_vdb.db
+        chunks_table = rag.chunks_vdb.table_name
+        entities_table = rag.entities_vdb.table_name
+        relations_table = rag.relationships_vdb.table_name
+        workspace = rag.chunks_vdb.workspace
+        museum_payload = json.dumps({"museum_id": MUSEUM_ID})
+
+        tag_sql_tmpl = (
+            "UPDATE {table} SET metadata = metadata || $2::jsonb "
+            "WHERE workspace = $1 AND (metadata IS NULL OR NOT (metadata ? 'museum_id')) "
+            "AND (file_path LIKE 'museum:%' OR file_path = 'museum_dynamic.json')"
+        )
+        tagged_counts: dict[str, int] = {}
+        for table in (chunks_table, entities_table, relations_table):
+            sql = tag_sql_tmpl.format(table=table)
+            await db.execute(
+                sql,
+                {"workspace": workspace, "payload": museum_payload},
+            )
+            count_sql = (
+                f"SELECT count(*) AS n FROM {table} "
+                f"WHERE workspace = $1 AND metadata @> $2::jsonb"
+            )
+            res = await db.query(count_sql, params=[workspace, museum_payload])
+            tagged_counts[table] = (res or {}).get("n", 0) if isinstance(res, dict) else 0
+        logger.info("  metadata.museum_id tagged (cumulative per table): %s", tagged_counts)
 
         logger.info("Dynamic museum data import complete!")
 
