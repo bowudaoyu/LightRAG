@@ -41,8 +41,9 @@ WORKING_DIR = os.path.join(PROJECT_ROOT, "rag_storage")
 DOC_ID_PREFIX = "museum_dynamic"
 
 # Same scope tag as import_museum_kg.py. Numeric string matching bobo-agent's
-# config/museums.yaml id. Default "2" = 中国国家博物馆.
-MUSEUM_ID = os.getenv("MUSEUM_ID", "2")
+# config/museums.yaml id. Default "15" = 中国国家博物馆 (2026-05 从 "2" 修正,
+# 见 import_museum_kg.py 的注释)。
+MUSEUM_ID = os.getenv("MUSEUM_ID", "15")
 
 
 # ---------------------------------------------------------------------------

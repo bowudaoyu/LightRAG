@@ -52,8 +52,10 @@ DOC_ID = "museum_import"
 #
 # Convention: use the numeric museum_id from bobo-agent's config/museums.yaml
 # (as a string), so bobo-agent requests carrying `req.museum_id` can be passed
-# verbatim to LightRAG's metadata_filter. Default "2" = 中国国家博物馆.
-MUSEUM_ID = os.getenv("MUSEUM_ID", "2")
+# verbatim to LightRAG's metadata_filter. Default "15" = 中国国家博物馆
+# (per bobo-agent/config/museums.yaml — 此前默认 "2" 已与 yaml 不一致,
+# 导致 metadata_filter 永远命中 0 条 chunk,2026-05 修正为 "15"。)
+MUSEUM_ID = os.getenv("MUSEUM_ID", "15")
 
 
 # ---------------------------------------------------------------------------
