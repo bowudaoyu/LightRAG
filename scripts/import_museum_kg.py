@@ -32,6 +32,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
 
 from lightrag import LightRAG
+from lightrag.base import DocStatus
 from lightrag.utils import EmbeddingFunc, compute_mdhash_id, logger
 from lightrag.constants import GRAPH_FIELD_SEP
 from lightrag.llm.openai import openai_embed, openai_complete
@@ -874,7 +875,7 @@ async def do_import():
             }),
             rag.doc_status.upsert({
                 DOC_ID: {
-                    "status": "PROCESSED",
+                    "status": DocStatus.PROCESSED.value,
                     "content_summary": (
                         f"Museum knowledge graph import: "
                         f"{len(nodes)} nodes, {len(edges)} edges, {len(chunks)} chunks"

@@ -27,6 +27,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(PROJECT_ROOT, ".env"), override=False)
 
 from lightrag import LightRAG
+from lightrag.base import DocStatus
 from lightrag.utils import EmbeddingFunc, compute_mdhash_id, logger
 from lightrag.constants import GRAPH_FIELD_SEP
 from lightrag.llm.openai import openai_embed, openai_complete
@@ -529,7 +530,7 @@ async def do_import():
             rel_upsert[doc_id] = {"relation_pairs": rel_pairs, "count": len(rel_pairs)}
             doc_upsert[doc_id] = {"content": doc_contents[doc_id], "file_path": "museum_dynamic.json"}
             status_upsert[doc_id] = {
-                "status": "PROCESSED",
+                "status": DocStatus.PROCESSED.value,
                 "content_summary": f"Dynamic item: {doc_id}",
                 "content_length": len(doc_contents[doc_id]),
                 "chunks_count": 1,
