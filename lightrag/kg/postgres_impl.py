@@ -6783,6 +6783,7 @@ SQL_TEMPLATES = {
               SELECT id,
                      content,
                      file_path,
+                     1 - (content_vector <=> $4::{vector_cast}) AS score,
                      EXTRACT(EPOCH FROM create_time)::BIGINT AS created_at
               FROM {table_name}
               WHERE workspace = $1
